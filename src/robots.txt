@@ -1,0 +1,5 @@
+# Robots.txt for Menyentuh
+User-agent: *
+Allow: /
+
+Sitemap: https://menyentuh.nl/sitemap.xml
