@@ -24,14 +24,13 @@ Een statische, meertalige (Nederlands) website voor de massagepraktijk **Menyent
 
 [## Structuur](docs/plan.md:29)
 ```
-src/
-  index.html
-  over.html
-  behandelingen.html
-  tarieven.html
-  contact.html
-  css/styles.css
-  js/main.js
+index.html
+over.html
+behandelingen.html
+tarieven.html
+contact.html
+css/styles.css
+js/main.js
 ```
 
 [## Implementatiestappen](docs/plan.md:39)

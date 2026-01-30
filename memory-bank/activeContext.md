@@ -1,8 +1,8 @@
 # Active Context
 
 ## Current Work
-- Delivered a luxury visual polish with warm gold + crème + deep green, adding subtle paper texture and refined lines.
-- Updated typography hierarchy, hero presentation, and component styling (buttons, cards, badges, forms).
+- Moved site files from `src/` to the repository root (HTML, css, assets, js, 404/robots/sitemap).
+- Updated documentation paths to match the new root-level structure.
 
 ## Next Steps
 - Verify content accuracy (contact details, pricing, opening hours).

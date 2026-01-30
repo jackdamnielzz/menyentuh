@@ -8,3 +8,7 @@
 - Added day selection with time-slot filtering and hero illustration update.
 - Moved AI hero illustration outside the card for improved layout balance.
 - Replaced hero illustration with user-provided PNG asset.
+
+## 2026-01-30
+- Moved website files from `src/` to repository root for deployment.
+- Updated docs to reference root-level file paths.
