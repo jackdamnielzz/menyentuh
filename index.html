@@ -3,43 +3,92 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Menyentuh | Holistische massagepraktijk Amsterdam</title>
+    <meta name="theme-color" content="#17372c" />
+    <title>Menyentuh | Holistische massagepraktijk Lelystad</title>
     <meta
       name="description"
       content="Menyentuh is de massagepraktijk van Quirina Maas. Zwangerschapsmassage, hoofdpijn massage, ontspanningsmassage en aromatherapie in een serene setting."
     />
     <!-- Open Graph -->
-    <meta property="og:title" content="Menyentuh | Holistische massagepraktijk Amsterdam" />
-    <meta property="og:description" content="Zwangerschapsmassage, hoofdpijn massage, ontspanningsmassage en aromatherapie door Quirina Maas in Amsterdam." />
+    <meta property="og:title" content="Menyentuh | Holistische massagepraktijk Lelystad" />
+    <meta property="og:description" content="Zwangerschapsmassage, hoofdpijn massage, ontspanningsmassage en aromatherapie door Quirina Maas in Lelystad." />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="nl_NL" />
+    <meta property="og:site_name" content="Menyentuh" />
+    <meta property="og:image" content="assets/social-preview-1200x630.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Menyentuh | Holistische massagepraktijk Lelystad" />
+    <meta name="twitter:description" content="Zwangerschapsmassage, hoofdpijn massage, ontspanningsmassage en aromatherapie door Quirina Maas in Lelystad." />
+    <meta name="twitter:image" content="assets/social-preview-1200x630.jpg" />
     <!-- Favicon -->
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="css/styles.css" />
+    <link rel="preload" as="image" href="assets/menyentuh-logo-720.png" type="image/png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap"
       rel="stylesheet"
     />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "HealthAndBeautyBusiness",
+        "name": "Menyentuh",
+        "description": "Holistische massagepraktijk voor ontspanning, herstel en zwangerschapsmassage.",
+        "telephone": "+31 6 57768109",
+        "email": "info@menyentuh.nl",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Lelystad",
+          "addressCountry": "NL"
+        },
+        "openingHoursSpecification": [
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+            "opens": "09:00",
+            "closes": "18:30"
+          },
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": "Saturday",
+            "opens": "10:00",
+            "closes": "16:00"
+          }
+        ],
+        "sameAs": ["https://wa.me/31657768109"]
+      }
+    </script>
   </head>
-  <body>
+  <body class="page-home">
     <a class="skip-link" href="#main">Ga naar inhoud</a>
 
     <header class="site-header">
       <div class="container header-inner">
         <a href="index.html" class="logo">Menyentuh</a>
-        <button class="nav-toggle" aria-label="Menu openen" aria-expanded="false">
+        <button class="nav-toggle" aria-label="Menu openen" aria-expanded="false" aria-controls="main-nav">
           <span class="nav-toggle-icon"></span>
         </button>
-        <nav class="nav" id="main-nav">
-          <a class="nav-link is-active" href="index.html">Home</a>
+        <nav class="nav" id="main-nav" aria-label="Hoofdmenu">
+          <a class="nav-link is-active" aria-current="page" href="index.html">Home</a>
           <a class="nav-link" href="over.html">Over</a>
           <a class="nav-link" href="behandelingen.html">Behandelingen</a>
           <a class="nav-link" href="tarieven.html">Tarieven</a>
+          <a class="nav-link" href="reviews.html">Reviews</a>
           <a class="nav-link" href="contact.html">Contact</a>
         </nav>
-        <a class="btn btn-primary header-cta" href="contact.html#afspraak">Afspraak maken</a>
+        <a
+          class="btn btn-whatsapp header-cta"
+          href="https://wa.me/31657768109"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          WhatsApp
+        </a>
       </div>
     </header>
 
@@ -48,7 +97,7 @@
         <div class="container hero-grid">
           <div>
             <span class="badge">Holistische zorg &amp; persoonlijke aandacht</span>
-            <h1 class="hero-title">Ontspan, herstel en voel je gedragen bij Menyentuh</h1>
+            <h1 class="hero-title">Ontspan, en voel je gedragen bij Menyentuh</h1>
             <p class="hero-text">
               Mijn naam is <strong>Quirina Maas</strong>. In mijn praktijk help ik je tot rust
               komen met zwangerschapsmassage, hoofdpijn massage, ontspanningsmassage en
@@ -56,7 +105,10 @@
               muziek.
             </p>
             <div class="hero-cta">
-              <a class="btn btn-primary" href="contact.html#afspraak">Plan je rustmoment</a>
+              <a class="btn btn-primary" href="contact.html#contact-form">Plan jouw rustmoment</a>
+              <a class="btn btn-whatsapp" href="https://wa.me/31657768109" target="_blank" rel="noopener noreferrer">
+                WhatsApp direct
+              </a>
               <a class="btn btn-outline" href="behandelingen.html">Bekijk behandelingen</a>
             </div>
             <div class="spacer-sm"></div>
@@ -70,9 +122,13 @@
             <div class="hero-illustration-wrap">
               <img
                 class="hero-illustration"
-                src="assets/menyentuh-hand-gold.png"
-                alt="Gouden lijntekening van een hand met botanische accenten"
+                src="assets/menyentuh-logo-720.png"
+                alt="Logo van Menyentuh"
                 loading="eager"
+                decoding="async"
+                fetchpriority="high"
+                width="720"
+                height="720"
               />
             </div>
             <div class="hero-card">
@@ -85,14 +141,14 @@
               <ul class="hero-list">
                 <li>Persoonlijk intakegesprek</li>
                 <li>Rustige, natuurlijke oliën</li>
-                <li>Praktijk in Amsterdam</li>
+                <li>Praktijk in Lelystad</li>
               </ul>
             </div>
           </div>
         </div>
       </section>
 
-      <section class="section">
+      <section class="section section-story">
         <div class="container">
           <span class="kicker">Menyentuh in het kort</span>
           <h2 class="section-title">Liefdevolle massages met aandacht voor jouw welzijn</h2>
@@ -122,13 +178,13 @@
               </p>
             </div>
           </div>
-          <div class="spacer-sm" style="text-align: center;">
+          <div class="spacer-sm text-center">
             <a class="btn btn-outline" href="behandelingen.html">Alle behandelingen bekijken</a>
           </div>
         </div>
       </section>
 
-      <section class="section section-muted">
+      <section class="section section-muted section-benefits">
         <div class="container">
           <span class="kicker">Waarom kiezen voor Menyentuh</span>
           <h2 class="section-title">Zachte aandacht met meetbaar effect</h2>
@@ -141,35 +197,116 @@
         </div>
       </section>
 
-      <section class="section">
+      <section class="section section-reviews">
         <div class="container">
-          <span class="kicker">Ervaringen</span>
-          <h2 class="section-title">Cliënten voelen zich gezien en gehoord</h2>
-          <div class="testimonials spacer-sm">
-            <div class="testimonial">
-              <p>
-                "Ik voelde me direct op mijn gemak. De zwangerschapsmassage gaf zoveel rust in
-                mijn rug en heupen."
-              </p>
-              <strong>— Sophie</strong>
+          <span class="kicker">Reviews</span>
+          <h2 class="section-title">Echte ervaringen van cliënten</h2>
+          <p class="section-lead">
+            Een kleine selectie van ervaringen. Bekijk de volledige verzameling op de reviewpagina.
+          </p>
+          <div class="reviews-layout spacer-sm">
+            <article class="review-featured">
+              <div class="review-rating" aria-label="5 van 5 sterren">★★★★★</div>
+              <blockquote class="review-quote">
+                “Vandaag een ontspanningsmassage gehad, wat een verschil een uurtje kan maken. Even
+                helemaal tot rust komen, spanning loslaten en weer opladen. Bij Menyentuh wordt je
+                direct op je gemak gesteld. Alles klopt: van de rust in de ruimte tot de kundige
+                handen die precies weten wat je nodig hebt.”
+              </blockquote>
+              <div class="review-author">
+                <strong>N. V.</strong>
+                <span>Ontspanningsmassage</span>
+              </div>
+              <p class="review-source">Bron: rechtstreeks gedeelde clientreview</p>
+            </article>
+
+            <div class="review-feed review-feed-home">
+              <article class="review-item">
+                <div class="review-item-top">
+                  <span class="review-rating" aria-hidden="true">★★★★★</span>
+                  <span class="review-tag">Ontspanningsmassage</span>
+                </div>
+                <p>
+                  “Quirina, dank je wel. Het was heerlijk. Ik was erg verrast. De heerlijk geurende
+                  olie, de sfeervolle muziek en de ontspannende massage deden wonderen. En wat een
+                  mooie ruimte. Ik kom gauw terug.”
+                </p>
+                <strong>J.</strong>
+              </article>
+
+              <article class="review-item">
+                <div class="review-item-top">
+                  <span class="review-rating" aria-hidden="true">★★★★★</span>
+                  <span class="review-tag">Hoofdmassage</span>
+                </div>
+                <p>
+                  “Ik had een heerlijke ontspannende hoofdmassage bij Quirina van Menyentuh. Een
+                  massage is best intiem, maar ik voelde vooraf al veel vertrouwen in haar en haar
+                  kwaliteiten. Dat voelde je bij binnenkomst direct.”
+                </p>
+                <p>
+                  “Een serene sfeer, fijne muziek en de sterrenhemel boven de serre. De massage was
+                  precies goed: niet te hard en niet te zacht. Het hoofd, de schouders en het haar
+                  werden meegenomen. Dikke aanrader.”
+                </p>
+                <strong>D.C.</strong>
+              </article>
+
+              <article class="review-item">
+                <div class="review-item-top">
+                  <span class="review-rating" aria-hidden="true">★★★★★</span>
+                  <span class="review-tag">Zwangerschapsmassage</span>
+                </div>
+                <p>
+                  “Gisteravond heb ik een heerlijke ontspanningsmassage gehad. Vooraf twijfelde ik
+                  erg of dit iets voor mij was nu ik zwanger ben, maar Quirina stelde mij enorm op
+                  mijn gemak en maakte het zo comfortabel mogelijk.”
+                </p>
+                <p>“De ruimte heeft een heel rustgevende sfeer. Ik heb er echt van genoten.”</p>
+                <strong>M.S.</strong>
+              </article>
+
+              <article class="review-item">
+                <div class="review-item-top">
+                  <span class="review-rating" aria-hidden="true">★★★★★</span>
+                  <span class="review-tag">Massage op maat</span>
+                </div>
+                <p>
+                  “Ik had een heel fijne massage van Quirina. Ik kon haar aanwezigheid in haar
+                  handen en aanraking goed voelen. De rust die ze zelf in zich draagt is voelbaar.”
+                </p>
+                <p>
+                  “Ik voelde me kwetsbaar, maar meteen veilig en op mijn gemak. Daardoor kon ik me
+                  overgeven aan ontspanning en kwam precies los wat los mocht komen.”
+                </p>
+                <strong>P.v.P.</strong>
+              </article>
+
+              <article class="review-item">
+                <div class="review-item-top">
+                  <span class="review-rating" aria-hidden="true">★★★★★</span>
+                  <span class="review-tag">Ontspanningsmassage</span>
+                </div>
+                <p>
+                  “Ik had een ontspanningsmassage en het was precies wat ik nodig had. Quirina is
+                  vriendelijk, professioneel en zorgt ervoor dat je je direct op je gemak voelt.”
+                </p>
+                <p>
+                  “Precies wat mijn lichaam nodig had na volle kantoordagen en een week slecht
+                  slapen. Ik ging volledig ontspannen naar buiten.”
+                </p>
+                <strong>A.N.</strong>
+              </article>
             </div>
-            <div class="testimonial">
-              <p>
-                "Mijn hoofdpijn zakte weg tijdens de sessie. De sfeer is zo kalm en verzorgend."
-              </p>
-              <strong>— Noura</strong>
-            </div>
-            <div class="testimonial">
-              <p>
-                "De aromatherapie maakte het helemaal af. Ik slaap sindsdien veel beter."
-              </p>
-              <strong>— Marieke</strong>
-            </div>
+          </div>
+          <div class="reviews-actions spacer-sm">
+            <a class="btn btn-primary" href="reviews.html">Bekijk alle reviews</a>
+            <a class="btn btn-outline" href="contact.html#contact-form">Plan je afspraak</a>
           </div>
         </div>
       </section>
 
-      <section class="section section-cta">
+      <section class="section section-cta section-booking">
         <div class="container">
           <div class="cta-card">
             <h2 class="section-title">Toe aan een moment voor jezelf?</h2>
@@ -178,8 +315,10 @@
               een bericht.
             </p>
             <div class="hero-cta">
-              <a class="btn btn-primary" href="contact.html#afspraak">Afspraak maken</a>
-              <a class="btn btn-outline" href="contact.html">Contact opnemen</a>
+              <a class="btn btn-primary" href="contact.html#contact-form">Plan je afspraak</a>
+              <a class="btn btn-whatsapp" href="https://wa.me/31657768109" target="_blank" rel="noopener noreferrer">
+                WhatsApp direct
+              </a>
             </div>
           </div>
         </div>
@@ -191,22 +330,21 @@
         <div>
           <h3>Menyentuh</h3>
           <p>Massagepraktijk van Quirina Maas</p>
-          <p>Voorbeeldstraat 1, 1234 AB Amsterdam</p>
         </div>
         <div>
           <h4>Contact</h4>
-          <p>Telefoon: 06‑12345678</p>
-          <p>E-mail: info@menyentuh.nl</p>
+          <p>Telefoon: <a href="tel:+31657768109">06‑57768109</a></p>
+          <p>E-mail: <a href="mailto:info@menyentuh.nl">info@menyentuh.nl</a></p>
         </div>
         <div>
           <h4>Openingstijden</h4>
-          <p>Ma – Vr: 09:00 – 18:00</p>
-          <p>Za: 10:00 – 14:00</p>
+          <p>Ma – Vr: 09:00 – 18:30</p>
+          <p>Za: 10:00 – 16:00</p>
         </div>
       </div>
     </footer>
 
-    <a class="whatsapp-fab" href="https://wa.me/31612345678" target="_blank" rel="noreferrer" aria-label="Contact via WhatsApp">
+    <a class="whatsapp-fab" href="https://wa.me/31657768109" target="_blank" rel="noopener noreferrer" aria-label="Contact via WhatsApp">
       WhatsApp
     </a>
 

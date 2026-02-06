@@ -3,369 +3,184 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#17372c" />
     <title>Contact & Afspraak | Menyentuh</title>
     <meta
       name="description"
-      content="Neem contact op met massagepraktijk Menyentuh of plan direct je afspraak. Quirina Maas in Amsterdam."
+      content="Neem contact op met massagepraktijk Menyentuh of plan direct je afspraak. Quirina Maas in Lelystad."
     />
+    <!-- Open Graph -->
+    <meta property="og:title" content="Contact & Afspraak | Menyentuh" />
+    <meta property="og:description" content="Neem contact op met massagepraktijk Menyentuh of plan direct je afspraak bij Quirina Maas in Lelystad." />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="nl_NL" />
+    <meta property="og:site_name" content="Menyentuh" />
+    <meta property="og:image" content="assets/social-preview-1200x630.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Contact & Afspraak | Menyentuh" />
+    <meta name="twitter:description" content="Neem contact op met massagepraktijk Menyentuh of plan direct je afspraak bij Quirina Maas in Lelystad." />
+    <meta name="twitter:image" content="assets/social-preview-1200x630.jpg" />
+    <!-- Favicon -->
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="css/styles.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap"
       rel="stylesheet"
     />
   </head>
-  <body>
+  <body class="page-contact">
+    <a class="skip-link" href="#main">Ga naar inhoud</a>
+
     <header class="site-header">
       <div class="container header-inner">
         <a href="index.html" class="logo">Menyentuh</a>
-        <nav class="nav">
+        <button class="nav-toggle" aria-label="Menu openen" aria-expanded="false" aria-controls="main-nav">
+          <span class="nav-toggle-icon"></span>
+        </button>
+        <nav class="nav" id="main-nav" aria-label="Hoofdmenu">
           <a class="nav-link" href="index.html">Home</a>
           <a class="nav-link" href="over.html">Over</a>
           <a class="nav-link" href="behandelingen.html">Behandelingen</a>
           <a class="nav-link" href="tarieven.html">Tarieven</a>
-          <a class="nav-link is-active" href="contact.html">Contact</a>
+          <a class="nav-link" href="reviews.html">Reviews</a>
+          <a class="nav-link is-active" aria-current="page" href="contact.html">Contact</a>
         </nav>
-        <a class="btn btn-primary" href="#afspraak">Afspraak maken</a>
+        <a class="btn btn-whatsapp header-cta" href="https://wa.me/31657768109" target="_blank" rel="noopener noreferrer">WhatsApp</a>
       </div>
     </header>
 
-    <main>
+    <main id="main">
       <section class="hero">
         <div class="container hero-grid">
           <div>
             <span class="kicker">Contact</span>
-            <h1 class="hero-title">Stel je vraag of plan je afspraak</h1>
+            <h1 class="hero-title">Plan je afspraak of stel je vraag</h1>
             <p class="hero-text">
-              Je bent welkom in mijn praktijk in Amsterdam. Stuur een bericht of bel me gerust.
+              Je bent welkom in mijn praktijk in Lelystad. Stuur een bericht of bel me gerust.
               Ik reageer meestal binnen 24 uur.
             </p>
             <div class="hero-cta">
-              <a class="btn btn-primary" href="#afspraak">Direct inplannen</a>
-              <a class="btn btn-outline" href="https://wa.me/31612345678">WhatsApp direct</a>
+              <a class="btn btn-primary" href="#contact-form">Ga naar formulier</a>
+              <a class="btn btn-whatsapp" href="https://wa.me/31657768109" target="_blank" rel="noopener noreferrer">
+                WhatsApp direct
+              </a>
             </div>
           </div>
           <div class="hero-visual">
             <div class="hero-card">
               <h2 class="section-title">Contactgegevens</h2>
               <ul class="hero-list">
-                <li>Telefoon: 06‑12345678</li>
-                <li>E-mail: info@menyentuh.nl</li>
-                <li>Adres: Voorbeeldstraat 1, 1234 AB Amsterdam</li>
+                <li>Telefoon: <a href="tel:+31657768109">06‑57768109</a></li>
+                <li>E-mail: <a href="mailto:info@menyentuh.nl">info@menyentuh.nl</a></li>
               </ul>
             </div>
           </div>
         </div>
       </section>
 
-      <section class="section section-muted">
-        <div class="container appointment" id="afspraak">
+      <section class="section section-muted section-contact-form">
+        <div class="container appointment" id="contact-form">
           <div class="appointment-grid">
             <div>
-              <span class="kicker">Afspraak plannen</span>
-              <h2 class="section-title">Kies een tijdslot en laat weten wat je nodig hebt</h2>
+              <span class="kicker">Contact</span>
+              <h2 class="section-title">Stuur een bericht</h2>
               <p class="section-lead">
-                Kies eerst een dag en daarna een tijdslot. Stuur je aanvraag per e‑mail of
-                WhatsApp.
+                Vul het formulier in of stuur me direct een WhatsApp. Ik reageer meestal binnen 24 uur.
               </p>
               <div class="opening-hours">
-                <div class="hour">Ma – Vr: 09:00 – 18:00</div>
-                <div class="hour">Za: 10:00 – 14:00</div>
+                <div class="hour">Ma – Vr: 09:00 – 18:30</div>
+                <div class="hour">Za: 10:00 – 16:00</div>
               </div>
-              <div>
-                <strong>Kies een dag</strong>
-                <div class="day-selector" role="group" aria-label="Kies een dag">
-                  <button class="day-button is-selected" type="button" data-day="Maandag">
-                    Ma
-                  </button>
-                  <button class="day-button" type="button" data-day="Dinsdag">Di</button>
-                  <button class="day-button" type="button" data-day="Woensdag">Wo</button>
-                  <button class="day-button" type="button" data-day="Donderdag">Do</button>
-                  <button class="day-button" type="button" data-day="Vrijdag">Vr</button>
-                  <button class="day-button" type="button" data-day="Zaterdag">Za</button>
-                </div>
-              </div>
-              <div class="spacer-sm">
-                <strong>Beschikbare tijdslots</strong>
-                <div class="time-slots">
-                  <button
-                    class="time-slot"
-                    type="button"
-                    data-slot="09:00"
-                    data-slot-day="Maandag"
-                  >
-                    09:00
-                  </button>
-                  <button
-                    class="time-slot"
-                    type="button"
-                    data-slot="10:30"
-                    data-slot-day="Maandag"
-                  >
-                    10:30
-                  </button>
-                  <button
-                    class="time-slot"
-                    type="button"
-                    data-slot="12:00"
-                    data-slot-day="Maandag"
-                  >
-                    12:00
-                  </button>
-                  <button
-                    class="time-slot"
-                    type="button"
-                    data-slot="14:00"
-                    data-slot-day="Maandag"
-                  >
-                    14:00
-                  </button>
-                  <button
-                    class="time-slot"
-                    type="button"
-                    data-slot="16:00"
-                    data-slot-day="Maandag"
-                  >
-                    16:00
-                  </button>
-
-                  <button
-                    class="time-slot"
-                    type="button"
-                    data-slot="09:00"
-                    data-slot-day="Dinsdag"
-                  >
-                    09:00
-                  </button>
-                  <button
-                    class="time-slot"
-                    type="button"
-                    data-slot="10:30"
-                    data-slot-day="Dinsdag"
-                  >
-                    10:30
-                  </button>
-                  <button
-                    class="time-slot"
-                    type="button"
-                    data-slot="12:00"
-                    data-slot-day="Dinsdag"
-                  >
-                    12:00
-                  </button>
-                  <button
-                    class="time-slot"
-                    type="button"
-                    data-slot="14:00"
-                    data-slot-day="Dinsdag"
-                  >
-                    14:00
-                  </button>
-                  <button
-                    class="time-slot"
-                    type="button"
-                    data-slot="16:00"
-                    data-slot-day="Dinsdag"
-                  >
-                    16:00
-                  </button>
-
-                  <button
-                    class="time-slot"
-                    type="button"
-                    data-slot="09:00"
-                    data-slot-day="Woensdag"
-                  >
-                    09:00
-                  </button>
-                  <button
-                    class="time-slot"
-                    type="button"
-                    data-slot="10:30"
-                    data-slot-day="Woensdag"
-                  >
-                    10:30
-                  </button>
-                  <button
-                    class="time-slot"
-                    type="button"
-                    data-slot="12:00"
-                    data-slot-day="Woensdag"
-                  >
-                    12:00
-                  </button>
-                  <button
-                    class="time-slot"
-                    type="button"
-                    data-slot="14:00"
-                    data-slot-day="Woensdag"
-                  >
-                    14:00
-                  </button>
-                  <button
-                    class="time-slot"
-                    type="button"
-                    data-slot="16:00"
-                    data-slot-day="Woensdag"
-                  >
-                    16:00
-                  </button>
-
-                  <button
-                    class="time-slot"
-                    type="button"
-                    data-slot="09:00"
-                    data-slot-day="Donderdag"
-                  >
-                    09:00
-                  </button>
-                  <button
-                    class="time-slot"
-                    type="button"
-                    data-slot="10:30"
-                    data-slot-day="Donderdag"
-                  >
-                    10:30
-                  </button>
-                  <button
-                    class="time-slot"
-                    type="button"
-                    data-slot="12:00"
-                    data-slot-day="Donderdag"
-                  >
-                    12:00
-                  </button>
-                  <button
-                    class="time-slot"
-                    type="button"
-                    data-slot="14:00"
-                    data-slot-day="Donderdag"
-                  >
-                    14:00
-                  </button>
-                  <button
-                    class="time-slot"
-                    type="button"
-                    data-slot="16:00"
-                    data-slot-day="Donderdag"
-                  >
-                    16:00
-                  </button>
-
-                  <button
-                    class="time-slot"
-                    type="button"
-                    data-slot="09:00"
-                    data-slot-day="Vrijdag"
-                  >
-                    09:00
-                  </button>
-                  <button
-                    class="time-slot"
-                    type="button"
-                    data-slot="10:30"
-                    data-slot-day="Vrijdag"
-                  >
-                    10:30
-                  </button>
-                  <button
-                    class="time-slot"
-                    type="button"
-                    data-slot="12:00"
-                    data-slot-day="Vrijdag"
-                  >
-                    12:00
-                  </button>
-                  <button
-                    class="time-slot"
-                    type="button"
-                    data-slot="14:00"
-                    data-slot-day="Vrijdag"
-                  >
-                    14:00
-                  </button>
-                  <button
-                    class="time-slot"
-                    type="button"
-                    data-slot="16:00"
-                    data-slot-day="Vrijdag"
-                  >
-                    16:00
-                  </button>
-
-                  <button
-                    class="time-slot"
-                    type="button"
-                    data-slot="10:00"
-                    data-slot-day="Zaterdag"
-                  >
-                    10:00
-                  </button>
-                  <button
-                    class="time-slot"
-                    type="button"
-                    data-slot="12:00"
-                    data-slot-day="Zaterdag"
-                  >
-                    12:00
-                  </button>
-                  <button
-                    class="time-slot"
-                    type="button"
-                    data-slot="14:00"
-                    data-slot-day="Zaterdag"
-                  >
-                    14:00
-                  </button>
-                </div>
+              <div class="hero-cta spacer-sm">
+                <a class="btn btn-whatsapp" href="https://wa.me/31657768109" target="_blank" rel="noopener noreferrer">
+                  WhatsApp direct
+                </a>
               </div>
             </div>
             <div>
-              <form class="form">
-                <label>
+              <form class="form" id="contact-form-form" novalidate>
+                <label for="naam">
                   Naam <span class="required">*</span>
-                  <input type="text" name="naam" placeholder="Jouw naam" required />
                 </label>
-                <label>
+                <input
+                  id="naam"
+                  type="text"
+                  name="naam"
+                  autocomplete="name"
+                  placeholder="Jouw naam"
+                  required
+                />
+
+                <label for="email">
                   E-mail <span class="required">*</span>
-                  <input type="email" name="email" placeholder="jij@email.nl" required />
                 </label>
-                <label>
-                  Telefoon
-                  <input type="tel" name="telefoon" placeholder="06 12345678" />
+                <input
+                  id="email"
+                  type="email"
+                  name="email"
+                  autocomplete="email"
+                  placeholder="jij@email.nl"
+                  required
+                />
+
+                <label for="telefoon">Telefoon</label>
+                <input
+                  id="telefoon"
+                  type="tel"
+                  name="telefoon"
+                  autocomplete="tel"
+                  placeholder="06 57768109"
+                />
+
+                <label for="onderwerp">
+                  Onderwerp <span class="required">*</span>
                 </label>
-                <label>
-                  Behandeling
-                  <select name="behandeling">
-                    <option>Zwangerschapsmassage</option>
-                    <option>Hoofdpijn massage</option>
-                    <option>Ontspanningsmassage</option>
-                    <option>Aromatherapie</option>
-                    <option>Combi-sessie</option>
-                    <option>Herstelmoment</option>
-                  </select>
+                <select id="onderwerp" name="onderwerp" required>
+                  <option value="" selected>Kies een onderwerp</option>
+                  <option value="Vraag">Vraag</option>
+                  <option value="Afspraak">Afspraak</option>
+                  <option value="Tarieven">Tarieven</option>
+                  <option value="Anders">Anders</option>
+                </select>
+
+                <label for="behandeling">Behandeling (optioneel)</label>
+                <select id="behandeling" name="behandeling">
+                  <option value="" selected>Geen voorkeur</option>
+                  <option>Zwangerschapsmassage</option>
+                  <option>Hoofdpijn massage</option>
+                  <option>Ontspanningsmassage</option>
+                  <option>Aromatherapie</option>
+                  <option>Combi-sessie</option>
+                  <option>Herstelmoment</option>
+                </select>
+
+                <label for="bericht">
+                  Bericht <span class="required">*</span>
                 </label>
-                <label>
-                  Jouw bericht
-                  <textarea name="bericht" placeholder="Vertel kort wat je nodig hebt"></textarea>
-                </label>
-                <input type="hidden" data-selected-day value="Maandag" />
-                <input type="hidden" data-selected-slot value="" />
+                <textarea
+                  id="bericht"
+                  name="bericht"
+                  placeholder="Waar kan ik je mee helpen?"
+                  required
+                ></textarea>
+
                 <p class="form-hint">
-                  Door te versturen ontvang ik je aanvraag en neem ik contact op om het moment te
-                  bevestigen.
+                  Dit formulier verstuurt geen data automatisch. Gebruik de knoppen hieronder om je bericht te versturen via e‑mail of WhatsApp.
                 </p>
+
+                <div class="form-feedback" aria-live="polite" role="status" id="form-feedback"></div>
+
                 <div class="form-actions">
-                  <a class="btn btn-primary" data-mailto="info@menyentuh.nl" href="#">
-                    Aanvraag per e‑mail
+                  <a class="btn btn-primary" data-mailto="info@menyentuh.nl" href="mailto:info@menyentuh.nl">
+                    Verstuur via e‑mail
                   </a>
-                  <a
-                    class="btn btn-outline"
-                    data-whatsapp="31612345678"
-                    href="https://wa.me/31612345678"
-                  >
-                    Aanvraag via WhatsApp
+                  <a class="btn btn-whatsapp" data-whatsapp="31657768109" href="https://wa.me/31657768109">
+                    Verstuur via WhatsApp
                   </a>
                 </div>
               </form>
@@ -374,15 +189,15 @@
         </div>
       </section>
 
-      <section class="section">
+      <section class="section section-practical">
         <div class="container">
           <span class="kicker">Praktische info</span>
           <h2 class="section-title">Alles wat je wilt weten</h2>
           <div class="contact-grid spacer-sm">
             <div class="info-card">
               <h3>Openingstijden</h3>
-              <p>Ma – Vr: 09:00 – 18:00</p>
-              <p>Za: 10:00 – 14:00</p>
+              <p>Ma – Vr: 09:00 – 18:30</p>
+              <p>Za: 10:00 – 16:00</p>
             </div>
             <div class="info-card">
               <h3>Bereikbaarheid</h3>
@@ -395,6 +210,59 @@
           </div>
         </div>
       </section>
+
+      <section class="section section-faq">
+        <div class="container">
+          <span class="kicker">FAQ</span>
+          <h2 class="section-title">Veelgestelde vragen</h2>
+          <p class="section-lead">
+            Handige antwoorden op vragen die ik vaak krijg. Staat jouw vraag er niet tussen? Stuur
+            me gerust een bericht.
+          </p>
+
+          <div class="faq-list spacer-sm">
+            <details class="faq-item" open>
+              <summary>Hoe snel kan ik een afspraak plannen?</summary>
+              <p>
+                Meestal is er binnen enkele dagen plek. Via WhatsApp kan ik je vaak direct laten
+                weten welke momenten beschikbaar zijn.
+              </p>
+            </details>
+
+            <details class="faq-item">
+              <summary>Welke behandeling past het beste bij mij?</summary>
+              <p>
+                Bij twijfel geef ik persoonlijk advies op basis van jouw klacht of doel. Je hoeft
+                dat vooraf nog niet precies te weten.
+              </p>
+            </details>
+
+            <details class="faq-item">
+              <summary>Wat trek ik aan tijdens de massage?</summary>
+              <p>
+                Draag iets comfortabels. Tijdens de behandeling zorg ik altijd voor privacy,
+                warmte en duidelijke uitleg over wat prettig voelt.
+              </p>
+            </details>
+
+            <details class="faq-item">
+              <summary>Kan ik ook terecht tijdens zwangerschap?</summary>
+              <p>
+                Ja, zwangerschapsmassage is een van mijn specialisaties. De behandeling wordt
+                veilig en rustig afgestemd op jouw fase en comfort.
+              </p>
+            </details>
+
+            <details class="faq-item">
+              <summary>Hoe werkt annuleren of verzetten?</summary>
+              <p>
+                Annuleren of verzetten kan kosteloos tot 24 uur vooraf. Daarna kijken we samen naar
+                een nieuw moment.
+              </p>
+            </details>
+          </div>
+        </div>
+      </section>
     </main>
 
     <footer class="site-footer">
@@ -402,22 +270,27 @@
         <div>
           <h3>Menyentuh</h3>
           <p>Massagepraktijk van Quirina Maas</p>
-          <p>Voorbeeldstraat 1, 1234 AB Amsterdam</p>
         </div>
         <div>
           <h4>Contact</h4>
-          <p>Telefoon: 06‑12345678</p>
-          <p>E-mail: info@menyentuh.nl</p>
+          <p>Telefoon: <a href="tel:+31657768109">06‑57768109</a></p>
+          <p>E-mail: <a href="mailto:info@menyentuh.nl">info@menyentuh.nl</a></p>
         </div>
         <div>
           <h4>Openingstijden</h4>
-          <p>Ma – Vr: 09:00 – 18:00</p>
-          <p>Za: 10:00 – 14:00</p>
+          <p>Ma – Vr: 09:00 – 18:30</p>
+          <p>Za: 10:00 – 16:00</p>
         </div>
       </div>
     </footer>
 
-    <a class="whatsapp-fab" href="https://wa.me/31612345678" target="_blank" rel="noreferrer" aria-label="Contact via WhatsApp">
+    <a
+      class="whatsapp-fab"
+      href="https://wa.me/31657768109"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Contact via WhatsApp"
+    >
       WhatsApp
     </a>
 

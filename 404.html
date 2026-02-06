@@ -3,44 +3,71 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#17372c" />
+    <meta name="robots" content="noindex, follow" />
     <title>Pagina niet gevonden | Menyentuh</title>
     <meta name="description" content="Deze pagina bestaat niet. Ga terug naar de homepagina van Menyentuh." />
+    <!-- Open Graph -->
+    <meta property="og:title" content="Pagina niet gevonden | Menyentuh" />
+    <meta property="og:description" content="Deze pagina bestaat niet. Ga terug naar de homepagina van Menyentuh." />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="nl_NL" />
+    <meta property="og:site_name" content="Menyentuh" />
+    <meta property="og:image" content="assets/social-preview-1200x630.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Pagina niet gevonden | Menyentuh" />
+    <meta name="twitter:description" content="Deze pagina bestaat niet. Ga terug naar de homepagina van Menyentuh." />
+    <meta name="twitter:image" content="assets/social-preview-1200x630.jpg" />
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="css/styles.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap"
       rel="stylesheet"
     />
   </head>
-  <body>
+  <body class="page-notfound">
     <a class="skip-link" href="#main">Ga naar inhoud</a>
 
     <header class="site-header">
       <div class="container header-inner">
         <a href="index.html" class="logo">Menyentuh</a>
-        <nav class="nav" id="main-nav">
+        <button class="nav-toggle" aria-label="Menu openen" aria-expanded="false" aria-controls="main-nav">
+          <span class="nav-toggle-icon"></span>
+        </button>
+        <nav class="nav" id="main-nav" aria-label="Hoofdmenu">
           <a class="nav-link" href="index.html">Home</a>
           <a class="nav-link" href="over.html">Over</a>
           <a class="nav-link" href="behandelingen.html">Behandelingen</a>
           <a class="nav-link" href="tarieven.html">Tarieven</a>
+          <a class="nav-link" href="reviews.html">Reviews</a>
           <a class="nav-link" href="contact.html">Contact</a>
         </nav>
-        <a class="btn btn-primary header-cta" href="contact.html#afspraak">Afspraak maken</a>
+        <a
+          class="btn btn-whatsapp header-cta"
+          href="https://wa.me/31657768109"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          WhatsApp
+        </a>
       </div>
     </header>
 
     <main id="main">
-      <section class="hero" style="min-height: 60vh; display: flex; align-items: center;">
-        <div class="container" style="text-align: center;">
+      <section class="hero hero-not-found">
+        <div class="container notfound-inner">
           <span class="kicker">Oeps</span>
           <h1 class="hero-title">Pagina niet gevonden</h1>
-          <p class="hero-text" style="max-width: 500px; margin: 0 auto 28px;">
+          <p class="hero-text notfound-text">
             De pagina die je zoekt bestaat niet of is verplaatst. Geen zorgen, je kunt hieronder
             terug naar de homepagina.
           </p>
-          <div class="hero-cta" style="justify-content: center;">
+          <div class="hero-cta notfound-actions">
             <a class="btn btn-primary" href="index.html">Terug naar home</a>
             <a class="btn btn-outline" href="contact.html">Contact opnemen</a>
           </div>
@@ -53,19 +80,20 @@
         <div>
           <h3>Menyentuh</h3>
           <p>Massagepraktijk van Quirina Maas</p>
-          <p>Voorbeeldstraat 1, 1234 AB Amsterdam</p>
         </div>
         <div>
           <h4>Contact</h4>
-          <p>Telefoon: 06‑12345678</p>
-          <p>E-mail: info@menyentuh.nl</p>
+          <p>Telefoon: <a href="tel:+31657768109">06‑57768109</a></p>
+          <p>E-mail: <a href="mailto:info@menyentuh.nl">info@menyentuh.nl</a></p>
         </div>
         <div>
           <h4>Openingstijden</h4>
-          <p>Ma – Vr: 09:00 – 18:00</p>
-          <p>Za: 10:00 – 14:00</p>
+          <p>Ma – Vr: 09:00 – 18:30</p>
+          <p>Za: 10:00 – 16:00</p>
         </div>
       </div>
     </footer>
+
+    <script src="js/main.js"></script>
   </body>
 </html>

@@ -3,43 +3,61 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#17372c" />
     <title>Over Menyentuh | Quirina Maas</title>
     <meta
       name="description"
-      content="Leer meer over Quirina Maas en haar holistische aanpak bij massagepraktijk Menyentuh in Amsterdam."
+      content="Leer meer over Quirina Maas en haar holistische aanpak bij massagepraktijk Menyentuh in Lelystad."
     />
     <!-- Open Graph -->
     <meta property="og:title" content="Over Menyentuh | Quirina Maas" />
-    <meta property="og:description" content="Leer meer over Quirina Maas en haar holistische aanpak bij massagepraktijk Menyentuh in Amsterdam." />
+    <meta property="og:description" content="Leer meer over Quirina Maas en haar holistische aanpak bij massagepraktijk Menyentuh in Lelystad." />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="nl_NL" />
+    <meta property="og:site_name" content="Menyentuh" />
+    <meta property="og:image" content="assets/social-preview-1200x630.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Over Menyentuh | Quirina Maas" />
+    <meta name="twitter:description" content="Leer meer over Quirina Maas en haar holistische aanpak bij massagepraktijk Menyentuh in Lelystad." />
+    <meta name="twitter:image" content="assets/social-preview-1200x630.jpg" />
     <!-- Favicon -->
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="css/styles.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap"
       rel="stylesheet"
     />
   </head>
-  <body>
+  <body class="page-over">
     <a class="skip-link" href="#main">Ga naar inhoud</a>
 
     <header class="site-header">
       <div class="container header-inner">
         <a href="index.html" class="logo">Menyentuh</a>
-        <button class="nav-toggle" aria-label="Menu openen" aria-expanded="false">
+        <button class="nav-toggle" aria-label="Menu openen" aria-expanded="false" aria-controls="main-nav">
           <span class="nav-toggle-icon"></span>
         </button>
-        <nav class="nav" id="main-nav">
+        <nav class="nav" id="main-nav" aria-label="Hoofdmenu">
           <a class="nav-link" href="index.html">Home</a>
-          <a class="nav-link is-active" href="over.html">Over</a>
+          <a class="nav-link is-active" aria-current="page" href="over.html">Over</a>
           <a class="nav-link" href="behandelingen.html">Behandelingen</a>
           <a class="nav-link" href="tarieven.html">Tarieven</a>
+          <a class="nav-link" href="reviews.html">Reviews</a>
           <a class="nav-link" href="contact.html">Contact</a>
         </nav>
-        <a class="btn btn-primary header-cta" href="contact.html#afspraak">Afspraak maken</a>
+        <a
+          class="btn btn-whatsapp header-cta"
+          href="https://wa.me/31657768109"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          WhatsApp
+        </a>
       </div>
     </header>
 
@@ -55,8 +73,10 @@
               veilig voelt en volledig kunt ontspannen.
             </p>
             <div class="hero-cta">
-              <a class="btn btn-primary" href="contact.html#afspraak">Plan een sessie</a>
-              <a class="btn btn-outline" href="contact.html">Stel een vraag</a>
+              <a class="btn btn-primary" href="contact.html#contact-form">Plan een kennismaking</a>
+              <a class="btn btn-whatsapp" href="https://wa.me/31657768109" target="_blank" rel="noopener noreferrer">
+                WhatsApp
+              </a>
             </div>
           </div>
           <div class="hero-visual">
@@ -72,27 +92,27 @@
         </div>
       </section>
 
-      <section class="section">
+      <section class="section section-process">
         <div class="container">
           <span class="kicker">Werkwijze</span>
           <h2 class="section-title">Zo ziet een sessie bij Menyentuh eruit</h2>
           <div class="grid grid-3 spacer-sm">
             <div class="card">
-              <h3>1. Kennismaken</h3>
+              <h3>Kennismaken</h3>
               <p>
                 We starten met een rustig intakegesprek. Jij vertelt wat je nodig hebt en waar je
                 spanning voelt.
               </p>
             </div>
             <div class="card">
-              <h3>2. Behandeling op maat</h3>
+              <h3>Behandeling op maat</h3>
               <p>
                 De massage wordt afgestemd op jouw lichaam, met aandacht voor ademhaling en
                 ontspanning.
               </p>
             </div>
             <div class="card">
-              <h3>3. Nabespreking</h3>
+              <h3>Nabespreking</h3>
               <p>
                 Na afloop bespreken we hoe je je voelt en geef ik tips om het effect te verlengen.
               </p>
@@ -101,7 +121,7 @@
         </div>
       </section>
 
-      <section class="section section-muted">
+      <section class="section section-muted section-values">
         <div class="container">
           <span class="kicker">Waarden</span>
           <h2 class="section-title">Wat je mag verwachten</h2>
@@ -113,6 +133,24 @@
           </div>
         </div>
       </section>
+
+      <section class="section section-cta section-booking">
+        <div class="container">
+          <div class="cta-card">
+            <h2 class="section-title">Benieuwd wat bij jouw lichaam past?</h2>
+            <p class="section-lead">
+              In een korte kennismaking kijken we samen welke behandeling het beste aansluit op
+              jouw behoefte.
+            </p>
+            <div class="hero-cta">
+              <a class="btn btn-primary" href="contact.html#contact-form">Plan een kennismaking</a>
+              <a class="btn btn-whatsapp" href="https://wa.me/31657768109" target="_blank" rel="noopener noreferrer">
+                WhatsApp direct
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
 
     <footer class="site-footer">
@@ -120,22 +158,21 @@
         <div>
           <h3>Menyentuh</h3>
           <p>Massagepraktijk van Quirina Maas</p>
-          <p>Voorbeeldstraat 1, 1234 AB Amsterdam</p>
         </div>
         <div>
           <h4>Contact</h4>
-          <p>Telefoon: 06‑12345678</p>
-          <p>E-mail: info@menyentuh.nl</p>
+          <p>Telefoon: <a href="tel:+31657768109">06‑57768109</a></p>
+          <p>E-mail: <a href="mailto:info@menyentuh.nl">info@menyentuh.nl</a></p>
         </div>
         <div>
           <h4>Openingstijden</h4>
-          <p>Ma – Vr: 09:00 – 18:00</p>
-          <p>Za: 10:00 – 14:00</p>
+          <p>Ma – Vr: 09:00 – 18:30</p>
+          <p>Za: 10:00 – 16:00</p>
         </div>
       </div>
     </footer>
 
-    <a class="whatsapp-fab" href="https://wa.me/31612345678" target="_blank" rel="noreferrer" aria-label="Contact via WhatsApp">
+    <a class="whatsapp-fab" href="https://wa.me/31657768109" target="_blank" rel="noopener noreferrer" aria-label="Contact via WhatsApp">
       WhatsApp
     </a>
 

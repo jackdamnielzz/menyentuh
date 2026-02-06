@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#17372c" />
     <title>Tarieven | Menyentuh</title>
     <meta
       name="description"
@@ -13,33 +14,50 @@
     <meta property="og:description" content="Bekijk de tarieven voor zwangerschapsmassage, hoofdpijn massage, ontspanningsmassage en aromatherapie bij Menyentuh." />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="nl_NL" />
+    <meta property="og:site_name" content="Menyentuh" />
+    <meta property="og:image" content="assets/social-preview-1200x630.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Tarieven | Menyentuh" />
+    <meta name="twitter:description" content="Bekijk de tarieven voor zwangerschapsmassage, hoofdpijn massage, ontspanningsmassage en aromatherapie bij Menyentuh." />
+    <meta name="twitter:image" content="assets/social-preview-1200x630.jpg" />
     <!-- Favicon -->
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="css/styles.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap"
       rel="stylesheet"
     />
   </head>
-  <body>
+  <body class="page-tarieven">
     <a class="skip-link" href="#main">Ga naar inhoud</a>
 
     <header class="site-header">
       <div class="container header-inner">
         <a href="index.html" class="logo">Menyentuh</a>
-        <button class="nav-toggle" aria-label="Menu openen" aria-expanded="false">
+        <button class="nav-toggle" aria-label="Menu openen" aria-expanded="false" aria-controls="main-nav">
           <span class="nav-toggle-icon"></span>
         </button>
-        <nav class="nav" id="main-nav">
+        <nav class="nav" id="main-nav" aria-label="Hoofdmenu">
           <a class="nav-link" href="index.html">Home</a>
           <a class="nav-link" href="over.html">Over</a>
           <a class="nav-link" href="behandelingen.html">Behandelingen</a>
-          <a class="nav-link is-active" href="tarieven.html">Tarieven</a>
+          <a class="nav-link is-active" aria-current="page" href="tarieven.html">Tarieven</a>
+          <a class="nav-link" href="reviews.html">Reviews</a>
           <a class="nav-link" href="contact.html">Contact</a>
         </nav>
-        <a class="btn btn-primary header-cta" href="contact.html#afspraak">Afspraak maken</a>
+        <a
+          class="btn btn-whatsapp header-cta"
+          href="https://wa.me/31657768109"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          WhatsApp
+        </a>
       </div>
     </header>
 
@@ -54,8 +72,10 @@
               combinatiesessie? Neem gerust contact op.
             </p>
             <div class="hero-cta">
-              <a class="btn btn-primary" href="contact.html#afspraak">Plan een sessie</a>
-              <a class="btn btn-outline" href="contact.html">Vraag om advies</a>
+              <a class="btn btn-primary" href="contact.html#contact-form">Plan je sessie</a>
+              <a class="btn btn-whatsapp" href="https://wa.me/31657768109" target="_blank" rel="noopener noreferrer">
+                WhatsApp
+              </a>
             </div>
           </div>
           <div class="hero-visual">
@@ -71,55 +91,75 @@
         </div>
       </section>
 
-      <section class="section">
+      <section class="section section-pricing">
         <div class="container">
           <span class="kicker">Prijsoverzicht</span>
           <h2 class="section-title">Tarieven per behandeling</h2>
-          <table class="price-table">
-            <thead>
-              <tr>
-                <th>Behandeling</th>
-                <th>Duur</th>
-                <th>Prijs</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Zwangerschapsmassage</td>
-                <td>60 minuten</td>
-                <td>€85</td>
-              </tr>
-              <tr>
-                <td>Hoofdpijn massage</td>
-                <td>45 minuten</td>
-                <td>€65</td>
-              </tr>
-              <tr>
-                <td>Ontspanningsmassage</td>
-                <td>60 minuten</td>
-                <td>€75</td>
-              </tr>
-              <tr>
-                <td>Aromatherapie</td>
-                <td>60 minuten</td>
-                <td>€80</td>
-              </tr>
-              <tr>
-                <td>Combi-sessie</td>
-                <td>75 minuten</td>
-                <td>€95</td>
-              </tr>
-              <tr>
-                <td>Herstelmoment</td>
-                <td>60 minuten</td>
-                <td>€75</td>
-              </tr>
-            </tbody>
-          </table>
-          <p class="form-hint spacer-sm">
+          <div class="price-table-wrap" role="region" aria-label="Tarieven tabel" tabindex="0">
+            <table class="price-table" aria-describedby="tarief-hint">
+              <thead>
+                <tr>
+                  <th scope="col">Behandeling</th>
+                  <th scope="col">Duur</th>
+                  <th scope="col">Prijs</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Zwangerschapsmassage</td>
+                  <td>60 minuten</td>
+                  <td>€85</td>
+                </tr>
+                <tr>
+                  <td>Hoofdpijn massage</td>
+                  <td>45 minuten</td>
+                  <td>€65</td>
+                </tr>
+                <tr>
+                  <td>Ontspanningsmassage</td>
+                  <td>60 minuten</td>
+                  <td>€75</td>
+                </tr>
+                <tr>
+                  <td>Aromatherapie</td>
+                  <td>60 minuten</td>
+                  <td>€80</td>
+                </tr>
+                <tr>
+                  <td>Combi-sessie</td>
+                  <td>75 minuten</td>
+                  <td>€95</td>
+                </tr>
+                <tr>
+                  <td>Herstelmoment</td>
+                  <td>60 minuten</td>
+                  <td>€75</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p id="tarief-hint" class="form-hint spacer-sm">
             Betaling kan vooraf of direct na de sessie. Wil je een langere sessie of combinatie?
             Vraag gerust naar de mogelijkheden.
           </p>
+        </div>
+      </section>
+
+      <section class="section section-cta section-booking">
+        <div class="container">
+          <div class="cta-card">
+            <h2 class="section-title">Niet zeker welke duur bij je past?</h2>
+            <p class="section-lead">
+              Stuur me een korte omschrijving van je klacht of doel. Dan krijg je persoonlijk
+              advies zonder verplichting.
+            </p>
+            <div class="hero-cta">
+              <a class="btn btn-primary" href="contact.html#contact-form">Vraag persoonlijk advies</a>
+              <a class="btn btn-whatsapp" href="https://wa.me/31657768109" target="_blank" rel="noopener noreferrer">
+                WhatsApp direct
+              </a>
+            </div>
+          </div>
         </div>
       </section>
     </main>
@@ -129,22 +169,21 @@
         <div>
           <h3>Menyentuh</h3>
           <p>Massagepraktijk van Quirina Maas</p>
-          <p>Voorbeeldstraat 1, 1234 AB Amsterdam</p>
         </div>
         <div>
           <h4>Contact</h4>
-          <p>Telefoon: 06‑12345678</p>
-          <p>E-mail: info@menyentuh.nl</p>
+          <p>Telefoon: <a href="tel:+31657768109">06‑57768109</a></p>
+          <p>E-mail: <a href="mailto:info@menyentuh.nl">info@menyentuh.nl</a></p>
         </div>
         <div>
           <h4>Openingstijden</h4>
-          <p>Ma – Vr: 09:00 – 18:00</p>
-          <p>Za: 10:00 – 14:00</p>
+          <p>Ma – Vr: 09:00 – 18:30</p>
+          <p>Za: 10:00 – 16:00</p>
         </div>
       </div>
     </footer>
 
-    <a class="whatsapp-fab" href="https://wa.me/31612345678" target="_blank" rel="noreferrer" aria-label="Contact via WhatsApp">
+    <a class="whatsapp-fab" href="https://wa.me/31657768109" target="_blank" rel="noopener noreferrer" aria-label="Contact via WhatsApp">
       WhatsApp
     </a>
 
