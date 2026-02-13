@@ -972,6 +972,7 @@ main {
 .section-treatment-showcase .treatment-card .card-meta {
   margin-top: auto;
   margin-bottom: 0;
+  height: 9rem;
 }
 
 .appointment {
