@@ -791,6 +791,7 @@ main {
   gap: 10px;
   width: 100%;
   max-width: 100%;
+  min-height: 5.8rem;
   margin-top: 18px;
   padding: 10px 16px;
   border-radius: 10px;
