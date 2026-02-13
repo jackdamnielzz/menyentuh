@@ -618,6 +618,15 @@ main {
   color: var(--muted);
 }
 
+.contact-hero-image {
+  width: 100%;
+  height: auto;
+  border-radius: 14px;
+  margin: 14px 0 0;
+  border: 1px solid rgba(201, 150, 66, 0.22);
+  box-shadow: 0 12px 24px rgba(23, 55, 44, 0.12);
+}
+
 .hero-list div,
 .hero-list li {
   display: flex;
