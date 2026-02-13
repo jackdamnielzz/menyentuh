@@ -787,13 +787,12 @@ main {
 }
 
 .treatment-card .card-meta {
-  display: inline-flex;
-  width: 100%;
-  box-sizing: border-box;
+  display: inline-block;
+  width: auto;
   max-width: 100%;
   margin-top: 18px;
   padding: 10px 16px;
-  border-radius: 999px;
+  border-radius: 12px;
   border: 1px solid rgba(201, 150, 66, 0.28);
   background: rgba(201, 150, 66, 0.14);
   color: var(--green-700);
@@ -803,7 +802,7 @@ main {
   white-space: normal;
   overflow-wrap: anywhere;
   word-break: break-word;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .treatment-card .card-meta strong {
