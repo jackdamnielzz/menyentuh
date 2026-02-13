@@ -788,16 +788,22 @@ main {
 
 .treatment-card .card-meta {
   display: inline-flex;
-  flex-wrap: wrap;
-  gap: 6px 10px;
+  width: 100%;
+  box-sizing: border-box;
+  max-width: 100%;
   margin-top: 18px;
-  padding: 8px 14px;
+  padding: 10px 16px;
   border-radius: 999px;
   border: 1px solid rgba(201, 150, 66, 0.28);
   background: rgba(201, 150, 66, 0.14);
   color: var(--green-700);
   font-weight: 600;
   font-size: 0.9rem;
+  line-height: 1.35;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  overflow: hidden;
 }
 
 .treatment-card .card-meta strong {
