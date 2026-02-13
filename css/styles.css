@@ -801,8 +801,8 @@ main {
   font-size: 0.9rem;
   line-height: 1.65;
   white-space: normal;
-  overflow-wrap: anywhere;
-  word-break: break-word;
+  overflow-wrap: normal;
+  word-break: normal;
   overflow: visible;
 }
 
@@ -816,8 +816,9 @@ main {
 }
 
 .treatment-card h3 {
-  word-break: break-word;
-  overflow-wrap: anywhere;
+  word-break: normal;
+  overflow-wrap: normal;
+  hyphens: auto;
 }
 
 .card h3,
