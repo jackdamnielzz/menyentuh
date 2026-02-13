@@ -960,6 +960,7 @@ main {
 
 .section-treatment-showcase .treatment-card h3 {
   margin-bottom: 10px;
+  min-height: 4.2rem;
 }
 
 .section-treatment-showcase .treatment-card p {
@@ -967,7 +968,12 @@ main {
 }
 
 .section-treatment-showcase .treatment-card .card-meta {
-  margin-top: 20px;
+  margin-top: auto;
+  margin-top: 18px;
+}
+
+.section-treatment-showcase .treatment-card > p:first-of-type {
+  min-height: 7rem;
 }
 
 .appointment {
