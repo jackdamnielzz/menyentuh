@@ -798,11 +798,13 @@ main {
   color: var(--green-700);
   font-weight: 600;
   font-size: 0.9rem;
-  line-height: 1.35;
+  line-height: 1.65;
   white-space: normal;
   overflow-wrap: anywhere;
   word-break: break-word;
   overflow: visible;
+  display: block;
+  max-width: 100%;
 }
 
 .treatment-card .card-meta strong {
