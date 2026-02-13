@@ -924,23 +924,6 @@ main {
   margin-bottom: 14px;
 }
 
-.section-process .card h3::before {
-  counter-increment: process;
-  content: counter(process, decimal-leading-zero);
-  min-width: 40px;
-  height: 30px;
-  border-radius: 999px;
-  border: 1px solid rgba(201, 150, 66, 0.38);
-  background: linear-gradient(135deg, rgba(201, 150, 66, 0.22), rgba(242, 222, 181, 0.26));
-  color: var(--green-700);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: 0.05em;
-}
-
 .section-process .card p {
   margin: 0;
 }
@@ -1499,30 +1482,6 @@ main {
   gap: 10px;
 }
 
-.section-practical .info-card h3::before {
-  content: "01";
-  min-width: 38px;
-  height: 28px;
-  border-radius: 999px;
-  border: 1px solid rgba(201, 150, 66, 0.34);
-  background: rgba(201, 150, 66, 0.18);
-  color: var(--green-700);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.7rem;
-  font-weight: 800;
-  letter-spacing: 0.06em;
-}
-
-.section-practical .contact-grid .info-card:nth-child(2) h3::before {
-  content: "02";
-}
-
-.section-practical .contact-grid .info-card:nth-child(3) h3::before {
-  content: "03";
-}
-
 .section-practical .info-card p {
   margin-bottom: 0;
 }
@@ -1756,46 +1715,8 @@ main {
   text-decoration-thickness: 1px;
 }
 
-.footer-socials {
-  margin-top: 12px;
-  display: grid;
-  gap: 8px;
-}
-
-.footer-social-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  text-decoration: none;
-  font-weight: 600;
-}
-
 .footer-grid a:hover {
   opacity: 0.85;
-}
-
-.footer-social-link:hover {
-  opacity: 0.95;
-  text-decoration: none;
-}
-
-.footer-social-icon {
-  width: 22px;
-  height: 22px;
-  border-radius: 999px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.68rem;
-  letter-spacing: 0.03em;
-}
-
-.footer-whatsapp .footer-social-icon {
-  background: linear-gradient(132deg, #33d971, #17b853);
-}
-
-.footer-instagram .footer-social-icon {
-  background: linear-gradient(132deg, #f58529, #dd2a7b 45%, #8134af);
 }
 
 .whatsapp-fab {
