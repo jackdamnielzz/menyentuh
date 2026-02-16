@@ -609,6 +609,27 @@ main {
   z-index: 1;
 }
 
+.contact-info-card {
+  background: transparent;
+  overflow: hidden;
+  color: var(--text);
+}
+
+.contact-info-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(165deg, rgba(255, 255, 255, 0.9), rgba(250, 245, 236, 0.95)),
+    url("../assets/contactgegevens-ontspanning.jpg") center / cover;
+  z-index: 0;
+}
+
+.contact-info-card > * {
+  position: relative;
+  z-index: 1;
+}
+
 .hero-list {
   list-style: none;
   padding: 0;
