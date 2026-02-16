@@ -1111,8 +1111,9 @@ main {
 }
 
 .form label {
-  display: grid;
-  gap: 7px;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
   font-weight: 600;
   color: var(--green-700);
 }
