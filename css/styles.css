@@ -621,9 +621,7 @@ main {
   inset: 0;
   background:
     linear-gradient(165deg, rgba(255, 255, 255, 0.55), rgba(250, 245, 236, 0.42)),
-    url("../WhatsApp%20Image%202026-02-13%20at%2020.14.31.jpeg") center / cover;
-  background-size: cover;
-  background-position: center;
+    url("../WhatsApp Image 2026-02-13 at 20.14.31.jpeg") center / cover;
   z-index: 0;
 }
 
@@ -738,6 +736,13 @@ main {
   );
   opacity: 0.75;
   pointer-events: none;
+}
+
+.hero-card.contact-info-card::before {
+  background:
+    linear-gradient(165deg, rgba(255, 255, 255, 0.55), rgba(250, 245, 236, 0.42)),
+    url("../WhatsApp Image 2026-02-13 at 20.14.31.jpeg") center / cover no-repeat;
+  opacity: 1;
 }
 
 .card > *,
