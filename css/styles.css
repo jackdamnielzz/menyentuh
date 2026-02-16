@@ -620,8 +620,10 @@ main {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(165deg, rgba(255, 255, 255, 0.9), rgba(250, 245, 236, 0.95)),
-    url("../assets/contactgegevens-ontspanning.jpg") center / cover;
+    linear-gradient(165deg, rgba(255, 255, 255, 0.55), rgba(250, 245, 236, 0.42)),
+    url("../WhatsApp%20Image%202026-02-13%20at%2020.14.31.jpeg") center / cover;
+  background-size: cover;
+  background-position: center;
   z-index: 0;
 }
 
