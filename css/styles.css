@@ -1730,6 +1730,7 @@ main {
 
 .site-footer h3,
 .site-footer h4 {
+  color: inherit;
   font-family: var(--font-display);
   letter-spacing: 0.01em;
 }
@@ -1741,10 +1742,14 @@ main {
 }
 
 .footer-grid a {
-  color: #fdfdfc;
+  color: inherit;
   text-decoration: underline;
   text-underline-offset: 3px;
   text-decoration-thickness: 1px;
+}
+
+.footer-grid a:visited {
+  color: inherit;
 }
 
 .footer-grid a:hover {
