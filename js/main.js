@@ -2,6 +2,7 @@
 const navToggle = document.querySelector(".nav-toggle");
 const nav = document.querySelector(".nav");
 const canUseMobileNav = Boolean(navToggle && nav);
+const MOBILE_NAV_BREAKPOINT = 900;
 let overlay = null;
 
 const openNav = () => {
@@ -57,7 +58,7 @@ if (canUseMobileNav) {
 
   // Ensure desktop state is reset when viewport grows.
   window.addEventListener("resize", () => {
-    if (window.innerWidth > 720 && nav.classList.contains("is-open")) {
+    if (window.innerWidth > MOBILE_NAV_BREAKPOINT && nav.classList.contains("is-open")) {
       closeNav();
     }
   });
