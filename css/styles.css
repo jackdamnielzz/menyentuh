@@ -620,8 +620,8 @@ main {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(165deg, rgba(255, 255, 255, 0.55), rgba(250, 245, 236, 0.42)),
-    url("../WhatsApp Image 2026-02-13 at 20.14.31.jpeg") center / cover;
+    linear-gradient(165deg, rgba(255, 255, 255, 0.2), rgba(250, 245, 236, 0.16)),
+    url("../WhatsApp Image 2026-02-13 at 20.14.31.jpeg") center / contain no-repeat;
   z-index: 0;
 }
 
@@ -740,9 +740,17 @@ main {
 
 .hero-card.contact-info-card::before {
   background:
-    linear-gradient(165deg, rgba(255, 255, 255, 0.55), rgba(250, 245, 236, 0.42)),
-    url("../WhatsApp Image 2026-02-13 at 20.14.31.jpeg") center / cover no-repeat;
+    linear-gradient(165deg, rgba(255, 255, 255, 0.2), rgba(250, 245, 236, 0.16)),
+    url("../WhatsApp Image 2026-02-13 at 20.14.31.jpeg") center / contain no-repeat;
   opacity: 1;
+}
+
+.hero-card.contact-info-card {
+  background: transparent;
+}
+
+.hero-card.contact-info-card::after {
+  opacity: 0.35;
 }
 
 .card > *,
