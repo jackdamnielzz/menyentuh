@@ -1437,7 +1437,7 @@ main {
   width: 100%;
   border-collapse: collapse;
   margin-top: 0;
-  min-width: 560px;
+  min-width: 0;
   background: rgba(255, 255, 255, 0.96);
   border-radius: var(--radius);
   overflow: hidden;
@@ -2095,7 +2095,7 @@ main {
   }
 
   .price-table {
-    min-width: 500px;
+    min-width: 0;
   }
 
   .section-practical .info-card h3::before {
@@ -2259,13 +2259,76 @@ main {
   }
 
   .price-table {
-    min-width: 460px;
     font-size: 0.92rem;
   }
 
   .price-table th,
   .price-table td {
     padding: 12px;
+  }
+
+  .section-pricing .price-table-wrap {
+    border-radius: var(--radius);
+    padding: 0;
+    overflow-x: visible;
+  }
+
+  .section-pricing .price-table thead {
+    display: none;
+  }
+
+  .section-pricing .price-table tr {
+    display: block;
+    margin-bottom: 12px;
+    border: 1px solid rgba(45, 86, 71, 0.14);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.94);
+    overflow: hidden;
+    box-shadow: 0 10px 22px rgba(23, 55, 44, 0.12);
+  }
+
+  .section-pricing .price-table tbody td {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: 8px;
+    border-bottom: 1px solid rgba(45, 86, 71, 0.1);
+    padding: 12px 12px 10px;
+    text-align: left;
+  }
+
+  .section-pricing .price-table tbody td:last-child {
+    border-bottom: none;
+  }
+
+  .section-pricing .price-table tbody td::before {
+    content: "";
+    color: var(--green-700);
+    font-weight: 700;
+    font-size: 0.74rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    align-self: center;
+  }
+
+  .section-pricing .price-table tbody td:nth-child(1)::before {
+    content: "Behandeling";
+  }
+
+  .section-pricing .price-table tbody td:nth-child(2)::before {
+    content: "Duur";
+  }
+
+  .section-pricing .price-table tbody td:nth-child(3)::before {
+    content: "Prijs";
+  }
+
+  .section-pricing .price-table tbody td:nth-child(2) {
+    font-size: 0.9rem;
+  }
+
+  .section-pricing .price-table tbody td:nth-child(3) {
+    font-weight: 700;
+    color: var(--green-900);
   }
 
   .form input,
