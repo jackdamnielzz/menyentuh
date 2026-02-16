@@ -610,19 +610,33 @@ main {
 }
 
 .contact-info-card {
-  background: transparent;
+  background: rgba(255, 255, 255, 0.88);
   overflow: hidden;
   color: var(--text);
+  position: relative;
+  z-index: 1;
 }
 
-.contact-info-card::before {
+.hero-bg-image {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.hero-bg-image::after {
   content: "";
   position: absolute;
   inset: 0;
-  background:
-    linear-gradient(165deg, rgba(255, 255, 255, 0.2), rgba(250, 245, 236, 0.16)),
-    url("../WhatsApp Image 2026-02-13 at 20.14.31.jpeg") center / contain no-repeat;
-  z-index: 0;
+  background: linear-gradient(165deg, rgba(255, 255, 255, 0.35), rgba(250, 245, 236, 0.4));
+}
+
+.hero-bg-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
 }
 
 .contact-info-card > * {
@@ -736,21 +750,6 @@ main {
   );
   opacity: 0.75;
   pointer-events: none;
-}
-
-.hero-card.contact-info-card::before {
-  background:
-    linear-gradient(165deg, rgba(255, 255, 255, 0.2), rgba(250, 245, 236, 0.16)),
-    url("../WhatsApp Image 2026-02-13 at 20.14.31.jpeg") center / contain no-repeat;
-  opacity: 1;
-}
-
-.hero-card.contact-info-card {
-  background: transparent;
-}
-
-.hero-card.contact-info-card::after {
-  opacity: 0.35;
 }
 
 .card > *,
