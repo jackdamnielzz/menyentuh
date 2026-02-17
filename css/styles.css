@@ -2096,7 +2096,6 @@ main {
   .review-quote,
   .faq-item summary,
   .faq-item p,
-  .price-table td,
   .footer-grid p,
   .footer-grid a {
     overflow-wrap: anywhere;
@@ -2320,7 +2319,7 @@ main {
 
   .section-pricing .price-table tbody td {
     display: grid;
-    grid-template-columns: 90px 1fr;
+    grid-template-columns: max-content minmax(0, 1fr);
     gap: 8px;
     border-bottom: 1px solid rgba(45, 86, 71, 0.1);
     padding: 12px 12px 10px;
@@ -2339,6 +2338,10 @@ main {
     text-transform: uppercase;
     letter-spacing: 0.07em;
     align-self: center;
+    white-space: nowrap;
+    overflow-wrap: normal;
+    word-break: keep-all;
+    hyphens: none;
   }
 
   .section-pricing .price-table tbody td:nth-child(1)::before {
@@ -2442,7 +2445,6 @@ main {
   }
 
   .section-pricing .price-table tbody td {
-    grid-template-columns: 82px 1fr;
     padding: 10px 10px 9px;
   }
 
