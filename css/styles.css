@@ -96,6 +96,10 @@ main {
   overflow: hidden;
 }
 
+:target {
+  scroll-margin-top: 104px;
+}
+
 /* Skip link for accessibility */
 .skip-link {
   position: absolute;
@@ -251,6 +255,7 @@ main {
     background 0.25s ease,
     border-color 0.25s ease;
   cursor: pointer;
+  touch-action: manipulation;
 }
 
 .btn:hover {
@@ -343,10 +348,13 @@ main {
   border: none;
   cursor: pointer;
   padding: 10px;
+  min-width: 44px;
+  min-height: 44px;
   z-index: 15;
   border-radius: 12px;
   background: rgba(255, 255, 255, 0.7);
   border: 1px solid rgba(45, 86, 71, 0.12);
+  touch-action: manipulation;
 }
 
 .nav-toggle-icon {
@@ -519,7 +527,7 @@ main {
 
 .hero-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
   gap: 56px;
   align-items: center;
   position: relative;
@@ -676,7 +684,7 @@ main {
 }
 
 .grid-3 {
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
 }
 
 .card,
@@ -943,7 +951,7 @@ main {
 }
 
 .section-values .feature-list {
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
   gap: 16px;
 }
 
@@ -999,7 +1007,8 @@ main {
 .section-treatment-showcase .treatment-card .card-meta {
   margin-top: auto;
   margin-bottom: 0;
-  height: 9rem;
+  min-height: 9rem;
+  height: auto;
 }
 
 .appointment {
@@ -1022,7 +1031,7 @@ main {
 
 .appointment-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
   gap: 30px;
 }
 
@@ -1195,7 +1204,7 @@ main {
 .testimonials {
   display: grid;
   gap: 24px;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
 }
 
 .testimonial {
@@ -1334,13 +1343,13 @@ main {
 
 .review-feed {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
   gap: 18px;
   align-items: stretch;
 }
 
 .review-feed-home {
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
 }
 
 .review-item {
@@ -1514,7 +1523,7 @@ main {
 .contact-grid {
   display: grid;
   gap: 24px;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
 }
 
 .info-card {
@@ -1736,7 +1745,7 @@ main {
 .footer-grid {
   display: grid;
   gap: 24px;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
 }
 
 .footer-grid a {
@@ -1766,6 +1775,7 @@ main {
   box-shadow: 0 20px 40px rgba(23, 55, 44, 0.2);
   z-index: 20;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
+  touch-action: manipulation;
 }
 
 .whatsapp-fab::before {
@@ -2075,6 +2085,21 @@ main {
     padding: 14px;
   }
 
+  .treatment-card .card-meta,
+  .review-item p,
+  .review-quote,
+  .faq-item summary,
+  .faq-item p,
+  .price-table td,
+  .footer-grid p,
+  .footer-grid a {
+    overflow-wrap: anywhere;
+  }
+
+  .section-treatment-showcase .treatment-card .card-meta {
+    min-height: 0;
+  }
+
   .section-process .card {
     padding-top: 26px;
   }
@@ -2344,6 +2369,115 @@ main {
 
   .whatsapp-fab::before {
     margin-right: 7px;
+  }
+}
+
+@media (max-width: 420px) {
+  .container {
+    width: min(1140px, 95.5%);
+  }
+
+  .section {
+    padding: 54px 0;
+  }
+
+  .hero {
+    padding: 72px 0 42px;
+  }
+
+  .header-inner {
+    gap: 10px;
+    padding: 12px 0;
+  }
+
+  .logo {
+    font-size: clamp(1.35rem, 7vw, 1.58rem);
+  }
+
+  .nav {
+    width: 100vw;
+    padding: 74px 18px calc(22px + env(safe-area-inset-bottom));
+  }
+
+  .hero-title {
+    font-size: clamp(1.68rem, 10.5vw, 2.1rem);
+  }
+
+  .hero-text {
+    font-size: 0.98rem;
+  }
+
+  .hero-visual {
+    padding: 16px;
+    border-radius: 20px;
+  }
+
+  .hero-illustration {
+    --hero-scale: 1.08;
+  }
+
+  .hero-card,
+  .cta-card,
+  .card,
+  .info-card,
+  .treatment-card,
+  .testimonial,
+  .appointment {
+    padding: 16px;
+  }
+
+  .review-featured {
+    padding: 18px 14px;
+  }
+
+  .review-quote {
+    font-size: clamp(1.05rem, 6.6vw, 1.3rem);
+    line-height: 1.36;
+  }
+
+  .section-pricing .price-table tbody td {
+    grid-template-columns: 82px 1fr;
+    padding: 10px 10px 9px;
+  }
+
+  .section-pricing .price-table tbody td::before {
+    font-size: 0.68rem;
+    letter-spacing: 0.05em;
+  }
+
+  .faq-item summary {
+    padding: 15px 44px 15px 16px;
+  }
+
+  .faq-item p {
+    padding: 0 14px 15px 16px;
+  }
+
+  .whatsapp-fab {
+    right: 10px;
+    bottom: calc(10px + env(safe-area-inset-bottom));
+    padding: 9px 12px;
+    font-size: 0.84rem;
+  }
+
+  .whatsapp-fab::before {
+    margin-right: 6px;
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .btn:hover,
+  .card:hover,
+  .info-card:hover,
+  .hero-card:hover,
+  .cta-card:hover,
+  .testimonial:hover,
+  .treatment-card:hover,
+  .review-item:hover,
+  .faq-item:hover,
+  .whatsapp-fab:hover,
+  .nav-link:hover {
+    transform: none;
   }
 }
 
