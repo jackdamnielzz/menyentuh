@@ -28,6 +28,10 @@
   box-sizing: border-box;
 }
 
+html {
+  overflow-x: hidden;
+}
+
 body {
   margin: 0;
   font-family: var(--font-body);
@@ -2035,7 +2039,8 @@ main {
   .nav {
     position: fixed;
     top: 0;
-    right: -100%;
+    right: 0;
+    transform: translateX(100%);
     width: min(340px, 88vw);
     max-width: none;
     height: 100dvh;
@@ -2049,12 +2054,13 @@ main {
     border: none;
     border-left: 1px solid rgba(45, 86, 71, 0.14);
     box-shadow: -10px 0 40px rgba(23, 55, 44, 0.18);
-    transition: right 0.3s ease;
+    transition: transform 0.3s ease;
+    will-change: transform;
     z-index: 12;
   }
 
   .nav.is-open {
-    right: 0;
+    transform: translateX(0);
   }
 
   .nav-link {
