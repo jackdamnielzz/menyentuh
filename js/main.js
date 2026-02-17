@@ -64,16 +64,30 @@ if (canUseMobileNav) {
   });
 }
 
-// Contact form (mailto + WhatsApp prefill)
+// Contact form (direct submit + WhatsApp prefill)
+const contactForm = document.querySelector("#contact-form-form");
 const whatsappButtons = document.querySelectorAll("[data-whatsapp]");
-const mailtoButton = document.querySelector("[data-mailto]");
+const feedback = document.querySelector("#form-feedback");
+
+const setFeedback = (text, type = "error") => {
+  if (!feedback) return;
+  feedback.textContent = text;
+  feedback.classList.add("is-visible");
+  feedback.classList.toggle("is-error", type === "error");
+  feedback.classList.toggle("is-success", type === "success");
+};
+
+const clearFeedback = () => {
+  if (!feedback) return;
+  feedback.classList.remove("is-visible", "is-error", "is-success");
+  feedback.textContent = "";
+};
 
 const buildMessage = () => {
   const name = document.querySelector("[name='naam']")?.value?.trim() || "";
   const email = document.querySelector("[name='email']")?.value?.trim() || "";
   const phone = document.querySelector("[name='telefoon']")?.value?.trim() || "";
   const subject = document.querySelector("[name='onderwerp']")?.value || "";
-  const treatment = document.querySelector("[name='behandeling']")?.value || "";
   const message = document.querySelector("[name='bericht']")?.value?.trim() || "";
 
   const parts = [
@@ -81,7 +95,6 @@ const buildMessage = () => {
     `E-mail: ${email}`,
     `Telefoon: ${phone}`,
     `Onderwerp: ${subject}`,
-    `Behandeling: ${treatment}`,
     `Bericht: ${message}`,
   ];
 
@@ -94,45 +107,39 @@ const validateForm = () => {
   const email = document.querySelector("[name='email']");
   const subject = document.querySelector("[name='onderwerp']");
   const message = document.querySelector("[name='bericht']");
-  const feedback = document.querySelector("#form-feedback");
-
-  let isValid = true;
-
-  const setFeedback = (text) => {
-    if (!feedback) return;
-    feedback.textContent = text;
-    feedback.classList.add("is-visible", "is-error");
-    feedback.classList.remove("is-success");
-  };
-
-  if (feedback) {
-    feedback.classList.remove("is-visible", "is-error", "is-success");
-    feedback.textContent = "";
-  }
+  clearFeedback();
 
   if (name && !name.value.trim()) {
-    setFeedback("Vul je naam in.");
+    setFeedback("Vul je naam in.", "error");
     name.focus();
-    isValid = false;
-  } else if (email && !email.value.trim()) {
-    setFeedback("Vul je e-mailadres in.");
-    email.focus();
-    isValid = false;
-  } else if (email && !email.validity.valid) {
-    setFeedback("Vul een geldig e-mailadres in.");
-    email.focus();
-    isValid = false;
-  } else if (subject && !subject.value) {
-    setFeedback("Kies een onderwerp.");
-    subject.focus();
-    isValid = false;
-  } else if (message && !message.value.trim()) {
-    setFeedback("Schrijf een kort bericht.");
-    message.focus();
-    isValid = false;
+    return false;
   }
 
-  return isValid;
+  if (email && !email.value.trim()) {
+    setFeedback("Vul je e-mailadres in.", "error");
+    email.focus();
+    return false;
+  }
+
+  if (email && !email.validity.valid) {
+    setFeedback("Vul een geldig e-mailadres in.", "error");
+    email.focus();
+    return false;
+  }
+
+  if (subject && !subject.value) {
+    setFeedback("Kies een onderwerp.", "error");
+    subject.focus();
+    return false;
+  }
+
+  if (message && !message.value.trim()) {
+    setFeedback("Schrijf een kort bericht.", "error");
+    message.focus();
+    return false;
+  }
+
+  return true;
 };
 
 whatsappButtons.forEach((button) => {
@@ -150,16 +157,52 @@ whatsappButtons.forEach((button) => {
   });
 });
 
-if (mailtoButton) {
-  mailtoButton.addEventListener("click", (event) => {
+if (contactForm) {
+  contactForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
     if (!validateForm()) {
-      event.preventDefault();
       return;
     }
-    const subject = encodeURIComponent("Contact – Menyentuh");
-    const body = encodeURIComponent(buildMessage());
-    const target = mailtoButton.dataset.mailto;
-    mailtoButton.href = `mailto:${target}?subject=${subject}&body=${body}`;
+
+    const submitButton = contactForm.querySelector("[data-submit-button]");
+    const originalButtonText = submitButton?.textContent || "Verstuur bericht";
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = "Versturen...";
+    }
+
+    setFeedback("Bericht wordt verstuurd...", "success");
+
+    try {
+      const formData = new FormData(contactForm);
+      const action = contactForm.getAttribute("action") || "";
+      const endpoint = action.includes("formsubmit.co/")
+        ? action.replace("formsubmit.co/", "formsubmit.co/ajax/")
+        : action;
+
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+        },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Form submission failed");
+      }
+
+      contactForm.reset();
+      setFeedback("Dankjewel. Je bericht is verstuurd naar info@menyentuh.nl.", "success");
+    } catch (error) {
+      setFeedback("Versturen lukt nu niet. Probeer het later opnieuw of gebruik WhatsApp.", "error");
+    } finally {
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = originalButtonText;
+      }
+    }
   });
 }
 

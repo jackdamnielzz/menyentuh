@@ -100,7 +100,25 @@
               </p>
             </div>
             <div>
-              <form class="form" id="contact-form-form" novalidate>
+              <form
+                class="form"
+                id="contact-form-form"
+                action="https://formsubmit.co/info@menyentuh.nl"
+                method="POST"
+                novalidate
+              >
+                <input type="hidden" name="_subject" value="Nieuw contactbericht via Menyentuh.nl" />
+                <input type="hidden" name="_template" value="table" />
+                <input type="hidden" name="_captcha" value="false" />
+                <input
+                  type="text"
+                  name="_honey"
+                  class="form-honeypot"
+                  tabindex="-1"
+                  autocomplete="off"
+                  aria-hidden="true"
+                />
+
                 <label for="naam">
                   Naam <span class="required">*</span>
                 </label>
@@ -156,15 +174,15 @@
                 ></textarea>
 
                 <p class="form-hint">
-                  Dit formulier verstuurt geen data automatisch. Gebruik de knoppen hieronder om je bericht te versturen via e‑mail of WhatsApp.
+                  Na verzenden komt je bericht direct binnen op info@menyentuh.nl. Je kunt ook WhatsApp gebruiken.
                 </p>
 
                 <div class="form-feedback" aria-live="polite" role="status" id="form-feedback"></div>
 
                 <div class="form-actions">
-                  <a class="btn btn-primary" data-mailto="info@menyentuh.nl" href="mailto:info@menyentuh.nl">
-                    Verstuur via e‑mail
-                  </a>
+                  <button type="submit" class="btn btn-primary" data-submit-button>
+                    Verstuur bericht
+                  </button>
                   <a class="btn btn-whatsapp" data-whatsapp="31657768109" href="https://wa.me/31657768109">
                     Verstuur via WhatsApp
                   </a>
