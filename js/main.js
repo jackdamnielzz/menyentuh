@@ -101,6 +101,22 @@ const buildMessage = () => {
   return parts.join("\n");
 };
 
+const getUrlParam = (key) => {
+  try {
+    return new URLSearchParams(window.location.search).get(key);
+  } catch (error) {
+    return null;
+  }
+};
+
+const showFormStatusFromQuery = () => {
+  if (!feedback) return;
+  const status = getUrlParam("form");
+  if (status === "success") {
+    setFeedback("Dankjewel. Je bericht is verstuurd naar info@menyentuh.nl.", "success");
+  }
+};
+
 // Validate required fields
 const validateForm = () => {
   const name = document.querySelector("[name='naam']");
@@ -158,6 +174,7 @@ whatsappButtons.forEach((button) => {
 });
 
 if (contactForm) {
+  showFormStatusFromQuery();
   contactForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
@@ -173,36 +190,7 @@ if (contactForm) {
     }
 
     setFeedback("Bericht wordt verstuurd...", "success");
-
-    try {
-      const formData = new FormData(contactForm);
-      const action = contactForm.getAttribute("action") || "";
-      const endpoint = action.includes("formsubmit.co/")
-        ? action.replace("formsubmit.co/", "formsubmit.co/ajax/")
-        : action;
-
-      const response = await fetch(endpoint, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-        },
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error("Form submission failed");
-      }
-
-      contactForm.reset();
-      setFeedback("Dankjewel. Je bericht is verstuurd naar info@menyentuh.nl.", "success");
-    } catch (error) {
-      setFeedback("Versturen lukt nu niet. Probeer het later opnieuw of gebruik WhatsApp.", "error");
-    } finally {
-      if (submitButton) {
-        submitButton.disabled = false;
-        submitButton.textContent = originalButtonText;
-      }
-    }
+    contactForm.submit();
   });
 }
 

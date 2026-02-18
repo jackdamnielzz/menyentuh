@@ -1,0 +1,426 @@
+{
+  "metadata": {
+    "title": "Menyentuh Intake en Anamneseformulier",
+    "subtitle": "Voor nieuwe clienten - vertrouwelijke informatie",
+    "version": "1.0.0",
+    "language": "nl-NL",
+    "practice_name": "Menyentuh",
+    "practitioner": "Quirina Maas",
+    "phone": "06-57768109",
+    "email": "info@menyentuh.nl"
+  },
+  "branding": {
+    "primary_color": "#17372c",
+    "secondary_color": "#2d5647",
+    "accent_color": "#c99642",
+    "surface_color": "#f9f5ed",
+    "text_color": "#1f332c",
+    "heading_font": "Cambria",
+    "body_font": "Calibri",
+    "logo_path": "assets/menyentuh-logo-720.png"
+  },
+  "document_layout": {
+    "page_size": "A4",
+    "margin_cm": 2.0,
+    "section_spacing_pt": 18
+  },
+  "sections": [
+    {
+      "id": "persoonsgegevens",
+      "title": "1. Persoonsgegevens",
+      "description": "Vul je basisgegevens volledig in.",
+      "fields": [
+        {
+          "id": "client_full_name",
+          "label": "Volledige naam",
+          "type": "text_short",
+          "required": true,
+          "help_text": ""
+        },
+        {
+          "id": "birth_date",
+          "label": "Geboortedatum",
+          "type": "date",
+          "required": true,
+          "help_text": "Gebruik formaat DD-MM-JJJJ."
+        },
+        {
+          "id": "phone",
+          "label": "Telefoonnummer",
+          "type": "text_short",
+          "required": true,
+          "help_text": ""
+        },
+        {
+          "id": "email",
+          "label": "E-mailadres",
+          "type": "text_short",
+          "required": true,
+          "help_text": ""
+        },
+        {
+          "id": "address",
+          "label": "Adres",
+          "type": "text_short",
+          "required": false,
+          "help_text": ""
+        },
+        {
+          "id": "city",
+          "label": "Woonplaats",
+          "type": "text_short",
+          "required": false,
+          "help_text": ""
+        }
+      ]
+    },
+    {
+      "id": "noodcontact",
+      "title": "2. Noodcontact",
+      "description": "Deze gegevens worden alleen gebruikt bij nood.",
+      "fields": [
+        {
+          "id": "emergency_contact_name",
+          "label": "Naam noodcontact",
+          "type": "text_short",
+          "required": true,
+          "help_text": ""
+        },
+        {
+          "id": "emergency_contact_phone",
+          "label": "Telefoon noodcontact",
+          "type": "text_short",
+          "required": true,
+          "help_text": ""
+        }
+      ]
+    },
+    {
+      "id": "aanmelding",
+      "title": "3. Aanmelding en behandeldoel",
+      "description": "Beschrijf je hulpvraag en voorkeuren.",
+      "fields": [
+        {
+          "id": "reason_for_registration",
+          "label": "Wat is de reden van je aanmelding?",
+          "type": "text_long",
+          "required": true,
+          "help_text": ""
+        },
+        {
+          "id": "treatment_goals",
+          "label": "Welke doelen wil je bereiken met de behandeling?",
+          "type": "text_long",
+          "required": true,
+          "help_text": ""
+        },
+        {
+          "id": "preferred_treatment",
+          "label": "Voorkeursbehandeling",
+          "type": "dropdown",
+          "required": true,
+          "help_text": "",
+          "options": [
+            "Zwangerschapsmassage",
+            "Hoofdpijn massage",
+            "Ontspanningsmassage",
+            "Aromatherapie",
+            "Combi-sessie",
+            "Herstelmoment"
+          ]
+        },
+        {
+          "id": "pressure_preference",
+          "label": "Voorkeur druk/intensiteit",
+          "type": "dropdown",
+          "required": false,
+          "help_text": "",
+          "options": [
+            "Zacht",
+            "Gemiddeld",
+            "Stevig",
+            "Wisselend"
+          ]
+        },
+        {
+          "id": "focus_areas",
+          "label": "Specifieke zones of aandachtspunten",
+          "type": "text_long",
+          "required": false,
+          "help_text": ""
+        }
+      ]
+    },
+    {
+      "id": "gezondheid",
+      "title": "4. Gezondheid en standaard anamnese",
+      "description": "Deze vragen helpen om de behandeling veilig af te stemmen.",
+      "fields": [
+        {
+          "id": "uses_medication",
+          "label": "Gebruik je momenteel medicatie?",
+          "type": "checkbox",
+          "required": false,
+          "help_text": ""
+        },
+        {
+          "id": "medication_details",
+          "label": "Zo ja, welke medicatie gebruik je?",
+          "type": "text_long",
+          "required": false,
+          "help_text": ""
+        },
+        {
+          "id": "has_allergies",
+          "label": "Heb je allergieen (bijv. olieen, geuren, latex)?",
+          "type": "checkbox",
+          "required": false,
+          "help_text": ""
+        },
+        {
+          "id": "allergy_details",
+          "label": "Zo ja, welke allergieen?",
+          "type": "text_long",
+          "required": false,
+          "help_text": ""
+        },
+        {
+          "id": "is_pregnant",
+          "label": "Ben je zwanger?",
+          "type": "checkbox",
+          "required": false,
+          "help_text": ""
+        },
+        {
+          "id": "pregnancy_weeks",
+          "label": "Zo ja, hoeveel weken?",
+          "type": "text_short",
+          "required": false,
+          "help_text": ""
+        },
+        {
+          "id": "under_medical_treatment",
+          "label": "Sta je onder medische behandeling?",
+          "type": "checkbox",
+          "required": false,
+          "help_text": ""
+        },
+        {
+          "id": "medical_treatment_details",
+          "label": "Zo ja, waarvoor?",
+          "type": "text_long",
+          "required": false,
+          "help_text": ""
+        },
+        {
+          "id": "pain_locations",
+          "label": "Waar ervaar je pijn, spanning of stijfheid?",
+          "type": "text_long",
+          "required": false,
+          "help_text": ""
+        },
+        {
+          "id": "previous_injuries",
+          "label": "Eerdere blessures, operaties of relevante klachten",
+          "type": "text_long",
+          "required": false,
+          "help_text": ""
+        }
+      ]
+    },
+    {
+      "id": "contraindicaties",
+      "title": "5. Contra-indicaties",
+      "description": "Vink aan wat nu van toepassing is.",
+      "fields": [
+        {
+          "id": "contraindications",
+          "label": "Aanvinken indien van toepassing",
+          "type": "checkbox_group",
+          "required": false,
+          "help_text": "Bij twijfel graag toelichten.",
+          "options": [
+            {
+              "id": "contra_fever",
+              "label": "Koorts of griepverschijnselen"
+            },
+            {
+              "id": "contra_infection",
+              "label": "Besmettelijke infectie"
+            },
+            {
+              "id": "contra_open_wound",
+              "label": "Open wond, huidinfectie of acute ontsteking"
+            },
+            {
+              "id": "contra_thrombosis",
+              "label": "Trombose of verhoogd tromboserisico"
+            },
+            {
+              "id": "contra_recent_surgery",
+              "label": "Recente operatie of ongeval"
+            },
+            {
+              "id": "contra_oncology",
+              "label": "Actieve oncologische behandeling"
+            },
+            {
+              "id": "contra_heart_issue",
+              "label": "Ernstige hartklachten"
+            },
+            {
+              "id": "contra_blood_pressure",
+              "label": "Onbehandelde hoge bloeddruk"
+            },
+            {
+              "id": "contra_neurological",
+              "label": "Ernstige neurologische klachten"
+            }
+          ]
+        },
+        {
+          "id": "contraindication_notes",
+          "label": "Toelichting op aangevinkte punten",
+          "type": "text_long",
+          "required": false,
+          "help_text": ""
+        }
+      ]
+    },
+    {
+      "id": "welzijn",
+      "title": "6. Welzijn en leefstijl",
+      "description": "Helpt om de behandeling beter af te stemmen.",
+      "fields": [
+        {
+          "id": "sleep_quality",
+          "label": "Hoe ervaar je je slaapkwaliteit?",
+          "type": "dropdown",
+          "required": false,
+          "help_text": "",
+          "options": [
+            "Goed",
+            "Redelijk",
+            "Matig",
+            "Slecht"
+          ]
+        },
+        {
+          "id": "stress_level",
+          "label": "Hoe hoog is je stressniveau momenteel?",
+          "type": "dropdown",
+          "required": false,
+          "help_text": "",
+          "options": [
+            "Laag",
+            "Gemiddeld",
+            "Hoog"
+          ]
+        },
+        {
+          "id": "workload_posture",
+          "label": "Werkbelasting, houding en dagelijkse belasting",
+          "type": "text_long",
+          "required": false,
+          "help_text": ""
+        },
+        {
+          "id": "hydration_level",
+          "label": "Gemiddelde dagelijkse hydratatie",
+          "type": "dropdown",
+          "required": false,
+          "help_text": "",
+          "options": [
+            "Minder dan 1 liter",
+            "1-2 liter",
+            "Meer dan 2 liter"
+          ]
+        },
+        {
+          "id": "lifestyle_notes",
+          "label": "Overige leefstijlnotities",
+          "type": "text_long",
+          "required": false,
+          "help_text": ""
+        }
+      ]
+    },
+    {
+      "id": "toestemming",
+      "title": "7. Toestemming en AVG",
+      "description": "Lees en bevestig onderstaande verklaringen.",
+      "fields": [
+        {
+          "id": "consent_info_block",
+          "label": "Ik begrijp dat deze gegevens vertrouwelijk worden verwerkt volgens de AVG en uitsluitend worden gebruikt voor intake, behandeling en dossiervorming binnen de praktijk.",
+          "type": "info_block",
+          "required": false,
+          "help_text": ""
+        },
+        {
+          "id": "consent_privacy",
+          "label": "Ik geef toestemming voor het verwerken van mijn persoonsgegevens.",
+          "type": "checkbox",
+          "required": true,
+          "help_text": ""
+        },
+        {
+          "id": "consent_truthful",
+          "label": "Ik verklaar dat ik dit formulier naar waarheid heb ingevuld.",
+          "type": "checkbox",
+          "required": true,
+          "help_text": ""
+        },
+        {
+          "id": "consent_treatment",
+          "label": "Ik ga akkoord met behandeling binnen de grenzen van mijn gezondheidstoestand.",
+          "type": "checkbox",
+          "required": true,
+          "help_text": ""
+        },
+        {
+          "id": "consent_cancellation",
+          "label": "Ik heb kennisgenomen van de annuleringsvoorwaarde (kosteloos annuleren tot 24 uur vooraf).",
+          "type": "checkbox",
+          "required": true,
+          "help_text": ""
+        },
+        {
+          "id": "consent_notes",
+          "label": "Eventuele opmerkingen",
+          "type": "text_long",
+          "required": false,
+          "help_text": ""
+        }
+      ]
+    },
+    {
+      "id": "ondertekening",
+      "title": "8. Ondertekening",
+      "description": "Vul plaats en datum in en onderteken.",
+      "fields": [
+        {
+          "id": "sign_place",
+          "label": "Plaats",
+          "type": "text_short",
+          "required": true,
+          "help_text": ""
+        },
+        {
+          "id": "sign_date",
+          "label": "Datum",
+          "type": "date",
+          "required": true,
+          "help_text": ""
+        },
+        {
+          "id": "sign_signature_line",
+          "label": "Handtekening client",
+          "type": "signature_line",
+          "required": true,
+          "help_text": "Onderteken op de lijn."
+        }
+      ]
+    }
+  ]
+}

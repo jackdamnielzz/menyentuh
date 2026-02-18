@@ -12,3 +12,11 @@
 ## 2026-01-30
 - Moved website files from `src/` to repository root for deployment.
 - Updated docs to reference root-level file paths.
+
+## 2026-02-18
+- Updated contact form flow to use direct FormSubmit POST with redirect and inline feedback.
+- Added success feedback on return to the contact page.
+- Identified email delivery blockage: `info@menyentuh.nl` currently not receiving mail; FormSubmit activation pending until DNS/MX is fixed.
+- Audited public DNS for `menyentuh.nl`: NS points to Vercel, no MX/TXT/DMARC/DKIM records published.
+- Added TransIP mail DNS records in Vercel for `menyentuh.nl` (MX/SPF/DMARC/DKIM + autoconfig/autodiscover).
+- Verified DNS resolution via `nslookup` for MX/TXT/DMARC/DKIM and CNAMEs.
