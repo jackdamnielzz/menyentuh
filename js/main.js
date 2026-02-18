@@ -113,7 +113,7 @@ const showFormStatusFromQuery = () => {
   if (!feedback) return;
   const status = getUrlParam("form");
   if (status === "success") {
-    setFeedback("Dankjewel. Je bericht is verstuurd naar info@menyentuh.nl.", "success");
+    setFeedback("Dankjewel. Je bericht is verstuurd.", "success");
   }
 };
 
@@ -190,7 +190,32 @@ if (contactForm) {
     }
 
     setFeedback("Bericht wordt verstuurd...", "success");
-    contactForm.submit();
+
+    try {
+      const formData = new FormData(contactForm);
+      const response = await fetch(contactForm.action, {
+        method: "POST",
+        body: formData,
+        headers: {
+          Accept: "application/json",
+        },
+      });
+
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok || result.ok === false) {
+        throw new Error(result.error || "Versturen mislukt.");
+      }
+
+      setFeedback("Dankjewel. Je bericht is verstuurd.", "success");
+      contactForm.reset();
+    } catch (error) {
+      setFeedback(error.message || "Er ging iets mis. Probeer het opnieuw.", "error");
+    } finally {
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = originalButtonText;
+      }
+    }
   });
 }
 

@@ -20,3 +20,7 @@
 - Audited public DNS for `menyentuh.nl`: NS points to Vercel, no MX/TXT/DMARC/DKIM records published.
 - Added TransIP mail DNS records in Vercel for `menyentuh.nl` (MX/SPF/DMARC/DKIM + autoconfig/autodiscover).
 - Verified DNS resolution via `nslookup` for MX/TXT/DMARC/DKIM and CNAMEs.
+- Added Resend outbound DNS records in Vercel for `menyentuh.nl` (`resend._domainkey` TXT, `send` MX, `send` SPF TXT).
+- Verified Resend DNS propagation via `vercel dns ls` and `nslookup`.
+- Linked local repo to Vercel project and set `RESEND_API_KEY` for production/preview (sensitive) and development (standard).
+- Implemented Vercel `/api/contact` endpoint to send mail via Resend and switched contact form to submit via fetch with clear success/error feedback.
