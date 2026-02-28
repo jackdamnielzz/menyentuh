@@ -192,7 +192,7 @@ if (contactForm) {
     setFeedback("Bericht wordt verstuurd...", "success");
 
     try {
-      const formData = new FormData(contactForm);
+      const formData = new URLSearchParams(new FormData(contactForm));
       const response = await fetch(contactForm.action, {
         method: "POST",
         body: formData,
