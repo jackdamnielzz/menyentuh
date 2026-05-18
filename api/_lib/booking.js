@@ -143,6 +143,10 @@ const parseBody = (req) =>
 const BOOKABLE_DURATIONS = [30, 60];
 const GRID_MINUTES = 30;
 
+// Turnaround time kept free before and after every booking, so the
+// practice can wrap up one client and prepare for the next.
+const BUFFER_MINUTES = 20;
+
 const normalizeDuration = (value) => {
   const n = Number(value);
   return BOOKABLE_DURATIONS.includes(n) ? n : 60;
@@ -202,11 +206,15 @@ const generateSlots = ({
     if (!windows.length) continue;
 
     // Occupied ranges: confirmed bookings + time-specific blocks.
+    // Bookings are padded with BUFFER_MINUTES on both sides so a new
+    // booking can never start within the turnaround time of another.
     const occupied = [];
     for (const b of bookings) {
       if (b.slot_date !== date || b.status === "cancelled") continue;
       const a = toMinutes(b.slot_time);
-      if (a != null) occupied.push([a, a + (Number(b.duration_minutes) || 60)]);
+      if (a == null) continue;
+      const end = a + (Number(b.duration_minutes) || 60);
+      occupied.push([a - BUFFER_MINUTES, end + BUFFER_MINUTES]);
     }
     for (const o of overrides) {
       if (o.date !== date || o.kind !== "blocked" || !o.start_time) continue;
