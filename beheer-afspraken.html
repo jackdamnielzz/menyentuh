@@ -57,8 +57,9 @@
             <div class="adm-card">
               <h2 class="adm-card-title">Weekschema's</h2>
               <p class="adm-card-lead">
-                Vaste, terugkerende beschikbaarheid. Het systeem genereert hieruit
-                automatisch boekbare slots voor de komende weken.
+                Vaste, terugkerende beschikbaarheid — een tijdvenster per dag.
+                Bezoekers kiezen zelf of ze 30 of 60 minuten boeken; het systeem
+                toont elk moment waarop dat binnen het venster past.
               </p>
               <div class="adm-list" id="adm-schedules"></div>
               <form class="adm-inline-form" id="adm-schedule-form">
@@ -82,16 +83,6 @@
                   Tot
                   <input type="time" name="end_time" value="17:00" required />
                 </label>
-                <label>
-                  Sessieduur
-                  <select name="slot_minutes">
-                    <option value="30">30 min</option>
-                    <option value="45">45 min</option>
-                    <option value="60" selected>60 min</option>
-                    <option value="75">75 min</option>
-                    <option value="90">90 min</option>
-                  </select>
-                </label>
                 <button type="submit" class="btn btn-primary">Toevoegen</button>
               </form>
             </div>
@@ -100,8 +91,9 @@
             <div class="adm-card">
               <h2 class="adm-card-title">Losse aanpassingen</h2>
               <p class="adm-card-lead">
-                Voeg een extra slot toe op een specifieke datum, of blokkeer een
-                tijd of een hele dag (bijv. vakantie).
+                Voeg een extra tijdvenster toe op een specifieke datum, of blokkeer
+                een tijd of een hele dag (bijv. vakantie). <em>Lengte</em> is de duur
+                van het extra venster, of van de blokkering.
               </p>
               <div class="adm-list" id="adm-overrides"></div>
               <form class="adm-inline-form" id="adm-override-form">
@@ -121,14 +113,13 @@
                   <input type="time" name="start_time" />
                   <small id="adm-override-hint">Leeg laten = hele dag blokkeren</small>
                 </label>
-                <label data-open-only>
-                  Sessieduur
+                <label>
+                  Lengte
                   <select name="slot_minutes">
                     <option value="30">30 min</option>
-                    <option value="45">45 min</option>
                     <option value="60" selected>60 min</option>
-                    <option value="75">75 min</option>
                     <option value="90">90 min</option>
+                    <option value="120">120 min</option>
                   </select>
                 </label>
                 <button type="submit" class="btn btn-primary">Toevoegen</button>

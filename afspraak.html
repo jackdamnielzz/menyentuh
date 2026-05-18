@@ -72,28 +72,45 @@
       <section class="section section-muted">
         <div class="container">
           <div class="bk-app" id="bk-app">
-            <!-- Step 1 — date -->
-            <div class="bk-step" id="bk-step-date">
-              <h2 class="section-title">1. Kies een dag</h2>
+            <!-- Step 1 — duration -->
+            <div class="bk-step" id="bk-step-duration">
+              <h2 class="section-title">1. Kies de duur</h2>
+              <p class="bk-substep">Hoe lang wil je je sessie laten duren?</p>
+              <div class="bk-durations" id="bk-durations" role="list">
+                <button type="button" class="bk-duration" data-duration="30" role="listitem">
+                  <span class="bk-duration-min">30</span>
+                  <span class="bk-duration-label">minuten</span>
+                </button>
+                <button type="button" class="bk-duration" data-duration="60" role="listitem">
+                  <span class="bk-duration-min">60</span>
+                  <span class="bk-duration-label">minuten</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Step 2 — date -->
+            <div class="bk-step" id="bk-step-date" hidden>
+              <h2 class="section-title">2. Kies een dag</h2>
               <p class="bk-status" id="bk-loading">Beschikbare momenten worden geladen…</p>
               <div class="bk-dates" id="bk-dates" role="list"></div>
               <p class="bk-empty" id="bk-empty" hidden>
-                Er zijn op dit moment geen vrije momenten online. Stuur gerust een
+                Er zijn op dit moment geen vrije momenten van deze duur online. Probeer
+                een andere duur of stuur gerust een
                 <a href="https://wa.me/31657768109" target="_blank" rel="noopener noreferrer">WhatsApp-bericht</a>,
                 dan plannen we samen iets in.
               </p>
             </div>
 
-            <!-- Step 2 — time -->
+            <!-- Step 3 — time -->
             <div class="bk-step" id="bk-step-time" hidden>
-              <h2 class="section-title">2. Kies een tijd</h2>
+              <h2 class="section-title">3. Kies een tijd</h2>
               <p class="bk-substep" id="bk-time-label"></p>
               <div class="bk-times" id="bk-times" role="list"></div>
             </div>
 
-            <!-- Step 3 — details -->
+            <!-- Step 4 — details -->
             <div class="bk-step" id="bk-step-form" hidden>
-              <h2 class="section-title">3. Jouw gegevens</h2>
+              <h2 class="section-title">4. Jouw gegevens</h2>
               <p class="bk-chosen" id="bk-chosen"></p>
               <form class="form bk-form" id="bk-form" novalidate>
                 <input

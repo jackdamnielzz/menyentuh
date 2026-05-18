@@ -1,5 +1,6 @@
-// GET /api/booking/slots?from=YYYY-MM-DD&to=YYYY-MM-DD
-// Public endpoint. Returns the bookable slots for the given date range.
+// GET /api/booking/slots?from=YYYY-MM-DD&to=YYYY-MM-DD&duration=30|60
+// Public endpoint. Returns the bookable start times for the given date
+// range and the requested session length.
 
 const { sb } = require("../_lib/supabase");
 const {
@@ -8,6 +9,7 @@ const {
   nlNow,
   addDays,
   generateSlots,
+  normalizeDuration,
 } = require("../_lib/booking");
 
 // How far ahead visitors may book by default.
@@ -31,6 +33,8 @@ module.exports = async (req, res) => {
     if (to > addDays(from, MAX_WINDOW_DAYS)) to = addDays(from, MAX_WINDOW_DAYS);
     if (to < from) to = from;
 
+    const duration = normalizeDuration(url.searchParams.get("duration"));
+
     const [schedules, overrides, bookings] = await Promise.all([
       sb("weekly_schedules?select=*&active=eq.true"),
       sb(`slot_overrides?select=*&date=gte.${from}&date=lte.${to}`),
@@ -39,8 +43,15 @@ module.exports = async (req, res) => {
       ),
     ]);
 
-    const slots = generateSlots({ from, to, schedules, overrides, bookings });
-    return sendJson(res, 200, { ok: true, from, to, slots });
+    const slots = generateSlots({
+      from,
+      to,
+      schedules,
+      overrides,
+      bookings,
+      duration,
+    });
+    return sendJson(res, 200, { ok: true, from, to, duration, slots });
   } catch (error) {
     return sendJson(res, error.status || 500, {
       ok: false,

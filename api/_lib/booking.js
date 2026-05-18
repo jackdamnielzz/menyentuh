@@ -138,73 +138,92 @@ const parseBody = (req) =>
     });
   });
 
+// Visitors choose the session length themselves; start times sit on a grid
+// of GRID_MINUTES so a 30- and a 60-minute booking line up cleanly.
+const BOOKABLE_DURATIONS = [30, 60];
+const GRID_MINUTES = 30;
+
+const normalizeDuration = (value) => {
+  const n = Number(value);
+  return BOOKABLE_DURATIONS.includes(n) ? n : 60;
+};
+
 /**
- * Build the list of bookable slots for a date range.
+ * Build the list of bookable start times for a date range and a chosen
+ * session length. A weekly schedule (and an "open" override) defines an
+ * availability *window*; within it every grid-aligned start where the
+ * requested duration fits and nothing is occupied is bookable.
  *
  * @param {object} opts
- * @param {string} opts.from           inclusive start date "YYYY-MM-DD"
- * @param {string} opts.to             inclusive end date "YYYY-MM-DD"
- * @param {Array}  opts.schedules      rows from weekly_schedules
- * @param {Array}  opts.overrides      rows from slot_overrides
- * @param {Array}  opts.bookings       confirmed rows from bookings
+ * @param {string} opts.from        inclusive start date "YYYY-MM-DD"
+ * @param {string} opts.to          inclusive end date "YYYY-MM-DD"
+ * @param {Array}  opts.schedules   rows from weekly_schedules
+ * @param {Array}  opts.overrides   rows from slot_overrides
+ * @param {Array}  opts.bookings    confirmed rows from bookings
+ * @param {number} opts.duration    requested session length (30 or 60)
  * @returns {Array<{date,time,duration}>}
  */
-const generateSlots = ({ from, to, schedules = [], overrides = [], bookings = [] }) => {
+const generateSlots = ({
+  from,
+  to,
+  schedules = [],
+  overrides = [],
+  bookings = [],
+  duration = 60,
+}) => {
   const now = nlNow();
+  const dur = normalizeDuration(duration);
   const slots = [];
 
   for (let date = from; date <= to; date = addDays(date, 1)) {
     if (date < now.date) continue;
     const weekday = weekdayOf(date);
 
-    // candidate start time -> duration (minutes)
-    const candidates = new Map();
+    // A blocked override without a time closes the whole day.
+    const wholeDayBlocked = overrides.some(
+      (o) => o.date === date && o.kind === "blocked" && !o.start_time
+    );
+    if (wholeDayBlocked) continue;
 
+    // Availability windows: [startMinutes, endMinutes].
+    const windows = [];
     for (const s of schedules) {
       if (s.active === false) continue;
       if (Number(s.weekday) !== weekday) continue;
-      const startM = toMinutes(s.start_time);
-      const endM = toMinutes(s.end_time);
-      const step = Number(s.slot_minutes) || 60;
-      if (startM == null || endM == null || step <= 0) continue;
-      for (let t = startM; t + step <= endM; t += step) {
-        candidates.set(fromMinutes(t), step);
-      }
+      const a = toMinutes(s.start_time);
+      const b = toMinutes(s.end_time);
+      if (a != null && b != null && a < b) windows.push([a, b]);
     }
-
     for (const o of overrides) {
       if (o.date !== date || o.kind !== "open") continue;
-      const t = normTime(o.start_time);
-      if (t) candidates.set(t, Number(o.slot_minutes) || 60);
+      const a = toMinutes(o.start_time);
+      if (a != null) windows.push([a, a + (Number(o.slot_minutes) || 60)]);
     }
+    if (!windows.length) continue;
 
+    // Occupied ranges: confirmed bookings + time-specific blocks.
+    const occupied = [];
+    for (const b of bookings) {
+      if (b.slot_date !== date || b.status === "cancelled") continue;
+      const a = toMinutes(b.slot_time);
+      if (a != null) occupied.push([a, a + (Number(b.duration_minutes) || 60)]);
+    }
     for (const o of overrides) {
-      if (o.date !== date || o.kind !== "blocked") continue;
-      if (!o.start_time) {
-        candidates.clear(); // whole day blocked
-        break;
-      }
-      const t = normTime(o.start_time);
-      if (t) candidates.delete(t);
+      if (o.date !== date || o.kind !== "blocked" || !o.start_time) continue;
+      const a = toMinutes(o.start_time);
+      if (a != null) occupied.push([a, a + (Number(o.slot_minutes) || GRID_MINUTES)]);
     }
 
-    const dayBookings = bookings.filter(
-      (b) => b.slot_date === date && b.status !== "cancelled"
-    );
-
-    for (const [time, duration] of candidates) {
-      if (date === now.date && time <= now.time) continue;
-
-      const startM = toMinutes(time);
-      const endM = startM + duration;
-      const clash = dayBookings.some((b) => {
-        const bStart = toMinutes(b.slot_time);
-        const bEnd = bStart + (Number(b.duration_minutes) || 60);
-        return rangesOverlap(startM, endM, bStart, bEnd);
-      });
-      if (clash) continue;
-
-      slots.push({ date, time, duration });
+    const seen = new Set();
+    for (const [winStart, winEnd] of windows) {
+      for (let t = winStart; t + dur <= winEnd; t += GRID_MINUTES) {
+        const time = fromMinutes(t);
+        if (seen.has(time)) continue;
+        if (date === now.date && time <= now.time) continue;
+        if (occupied.some(([s, e]) => rangesOverlap(t, t + dur, s, e))) continue;
+        seen.add(time);
+        slots.push({ date, time, duration: dur });
+      }
     }
   }
 
@@ -229,4 +248,6 @@ module.exports = {
   formatDateNL,
   generateSlots,
   parseBody,
+  BOOKABLE_DURATIONS,
+  normalizeDuration,
 };

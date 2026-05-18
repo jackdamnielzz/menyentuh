@@ -6,6 +6,8 @@
   if (!app) return;
 
   const el = {
+    durations: document.getElementById("bk-durations"),
+    stepDate: document.getElementById("bk-step-date"),
     loading: document.getElementById("bk-loading"),
     empty: document.getElementById("bk-empty"),
     dates: document.getElementById("bk-dates"),
@@ -21,7 +23,7 @@
     doneDetail: document.getElementById("bk-done-detail"),
   };
 
-  const state = { byDate: new Map(), date: null, slot: null };
+  const state = { duration: null, byDate: new Map(), date: null, slot: null };
 
   // --- formatting helpers -------------------------------------------------
   const parseDate = (iso) => {
@@ -90,6 +92,24 @@
   };
 
   // --- step transitions ---------------------------------------------------
+  const selectDuration = (duration, btn) => {
+    state.duration = duration;
+    state.date = null;
+    state.slot = null;
+    [...el.durations.children].forEach((b) =>
+      b.classList.toggle("is-selected", b === btn)
+    );
+    el.stepDate.hidden = false;
+    el.stepTime.hidden = true;
+    el.stepForm.hidden = true;
+    el.stepDone.hidden = true;
+    el.loading.hidden = false;
+    el.empty.hidden = true;
+    el.dates.innerHTML = "";
+    loadSlots();
+    el.stepDate.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   const selectDate = (iso) => {
     state.date = iso;
     state.slot = null;
@@ -108,7 +128,8 @@
     state.slot = slot;
     [...el.times.children].forEach((b) => b.classList.remove("is-selected"));
     btn.classList.add("is-selected");
-    el.chosen.textContent = `${fmtLong(slot.date)} om ${slot.time} uur (${slot.duration} min)`;
+    el.chosen.textContent =
+      `${fmtLong(slot.date)} om ${slot.time} uur — ${slot.duration} minuten`;
     setFeedback("");
     el.stepForm.hidden = false;
     el.stepDone.hidden = true;
@@ -118,7 +139,7 @@
   // --- data ---------------------------------------------------------------
   const loadSlots = async () => {
     try {
-      const res = await fetch("/api/booking/slots");
+      const res = await fetch(`/api/booking/slots?duration=${state.duration}`);
       const data = await res.json().catch(() => ({}));
       if (!res.ok || data.ok === false) throw new Error("load failed");
 
@@ -133,12 +154,20 @@
         el.empty.hidden = false;
         return;
       }
+      el.empty.hidden = true;
       renderDates();
     } catch (error) {
       el.loading.hidden = true;
       el.empty.hidden = false;
     }
   };
+
+  // --- duration buttons ---------------------------------------------------
+  [...el.durations.children].forEach((btn) => {
+    btn.addEventListener("click", () =>
+      selectDuration(Number(btn.dataset.duration), btn)
+    );
+  });
 
   // --- submit -------------------------------------------------------------
   el.back.addEventListener("click", () => {
@@ -180,6 +209,7 @@
         body: JSON.stringify({
           date: state.slot.date,
           time: state.slot.time,
+          duration: state.slot.duration,
           behandeling,
           naam,
           email,
@@ -195,10 +225,12 @@
 
       const b = data.booking || {};
       el.doneDetail.textContent =
-        `${b.dateLabel || fmtLong(state.slot.date)} om ${b.time} uur — ${b.treatment}`;
+        `${b.dateLabel || fmtLong(state.slot.date)} om ${b.time} uur — ` +
+        `${b.treatment} (${b.duration} min)`;
       el.stepForm.hidden = true;
       el.stepTime.hidden = true;
-      document.getElementById("bk-step-date").hidden = true;
+      el.stepDate.hidden = true;
+      document.getElementById("bk-step-duration").hidden = true;
       el.stepDone.hidden = false;
       el.stepDone.scrollIntoView({ behavior: "smooth", block: "start" });
     } catch (error) {
@@ -207,16 +239,12 @@
       submitBtn.textContent = original;
       // The slot may now be gone — refresh availability in the background.
       if (/beschikbaar|voor/i.test(error.message || "")) {
-        state.byDate = new Map();
         el.loading.hidden = false;
         el.empty.hidden = true;
-        document.getElementById("bk-step-date").hidden = false;
         el.stepTime.hidden = true;
         el.stepForm.hidden = true;
         loadSlots();
       }
     }
   });
-
-  loadSlots();
 })();

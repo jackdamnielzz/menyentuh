@@ -88,8 +88,7 @@
       item.className = "adm-item" + (row.active ? "" : " is-inactive");
       item.innerHTML =
         `<span class="adm-item-main">${WEEKDAYS[row.weekday]} · ` +
-        `${fmtTime(row.start_time)}–${fmtTime(row.end_time)} · ` +
-        `${row.slot_minutes} min</span>` +
+        `${fmtTime(row.start_time)}–${fmtTime(row.end_time)}</span>` +
         `<span class="adm-item-actions"></span>`;
       const actions = item.querySelector(".adm-item-actions");
 
@@ -127,8 +126,10 @@
       const label =
         row.kind === "blocked"
           ? `Geblokkeerd · ${fmtDate(row.date)}` +
-            (row.start_time ? ` · ${fmtTime(row.start_time)}` : " · hele dag")
-          : `Extra slot · ${fmtDate(row.date)} · ${fmtTime(row.start_time)} · ${row.slot_minutes} min`;
+            (row.start_time
+              ? ` · ${fmtTime(row.start_time)} (${row.slot_minutes} min)`
+              : " · hele dag")
+          : `Extra venster · ${fmtDate(row.date)} · ${fmtTime(row.start_time)} · ${row.slot_minutes} min`;
       item.innerHTML =
         `<span class="adm-item-main">` +
         `<span class="adm-badge ${row.kind === "blocked" ? "is-block" : "is-open"}">` +
@@ -273,20 +274,9 @@
         weekday: Number(fd.get("weekday")),
         start_time: fd.get("start_time"),
         end_time: fd.get("end_time"),
-        slot_minutes: Number(fd.get("slot_minutes")),
       })
     );
   });
-
-  // Hide the duration field when blocking (it is only meaningful for slots).
-  const syncOverrideForm = () => {
-    const blocking = els.overrideKind.value === "blocked";
-    els.overrideForm
-      .querySelectorAll("[data-open-only]")
-      .forEach((node) => (node.hidden = blocking));
-  };
-  els.overrideKind.addEventListener("change", syncOverrideForm);
-  syncOverrideForm();
 
   els.overrideForm.addEventListener("submit", (event) => {
     event.preventDefault();

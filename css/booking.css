@@ -44,6 +44,61 @@
   text-decoration: underline;
 }
 
+/* Duration choice */
+.bk-durations {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 20px;
+}
+
+.bk-duration {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 130px;
+  padding: 22px 28px;
+  border: 1px solid rgba(45, 86, 71, 0.16);
+  border-radius: 18px;
+  background: var(--cream);
+  color: var(--text);
+  cursor: pointer;
+  font-family: var(--font-body);
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.bk-duration:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-soft);
+}
+
+.bk-duration:focus-visible {
+  outline: 2px solid var(--gold-500);
+  outline-offset: 2px;
+}
+
+.bk-duration.is-selected {
+  background: linear-gradient(140deg, #f2deb5, #eacb8c);
+  border-color: var(--gold-500);
+}
+
+.bk-duration-min {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  line-height: 1;
+  color: var(--green-900);
+}
+
+.bk-duration-label {
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
 /* Date strip */
 .bk-dates {
   display: flex;

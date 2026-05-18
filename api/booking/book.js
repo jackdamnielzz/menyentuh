@@ -13,6 +13,7 @@ const {
   nlNow,
   formatDateNL,
   generateSlots,
+  normalizeDuration,
 } = require("../_lib/booking");
 
 const PRACTICE_EMAIL = "info@menyentuh.nl";
@@ -61,6 +62,7 @@ module.exports = async (req, res) => {
 
   const date = (data.date || "").trim();
   const time = normTime(data.time || "");
+  const duration = normalizeDuration(data.duration);
   const name = (data.naam || "").trim();
   const email = (data.email || "").trim();
   const phone = (data.telefoon || "").trim();
@@ -105,6 +107,7 @@ module.exports = async (req, res) => {
       schedules,
       overrides,
       bookings,
+      duration,
     }).find((s) => s.time === time);
 
     if (!slot) {

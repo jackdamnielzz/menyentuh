@@ -114,10 +114,12 @@ Na het toevoegen één keer opnieuw deployen zodat de variabelen actief worden.
 | Gedeelde logica        | `api/_lib/supabase.js`, `api/_lib/booking.js`      |
 | Styling                | `css/booking.css`                                  |
 
-Beschikbare slots = weekschema's + losse extra slots − geblokkeerde tijden
-− reeds geboekte slots − momenten in het verleden. De berekening gebeurt
-server-side in `api/_lib/booking.js` (`generateSlots`), in de tijdzone
-Europe/Amsterdam.
+Een weekschema (en een "extra venster") is een **tijdvenster**. De bezoeker
+kiest zelf de duur — 30 of 60 minuten — en het systeem toont elk moment op
+een raster van 30 minuten waarop die duur binnen een venster past, en dat
+niet overlapt met een geblokkeerde tijd, een bestaande boeking of het
+verleden. De berekening gebeurt server-side in `api/_lib/booking.js`
+(`generateSlots`), in de tijdzone Europe/Amsterdam.
 
 ## Lokaal testen
 

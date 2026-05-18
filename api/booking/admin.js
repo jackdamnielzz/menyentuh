@@ -64,18 +64,16 @@ module.exports = async (req, res) => {
       }
 
       case "addSchedule": {
+        // A weekly schedule is an availability *window*; the visitor picks
+        // the session length (30/60 min) themselves when booking.
         const weekday = Number(payload.weekday);
         const start = normTime(payload.start_time);
         const end = normTime(payload.end_time);
-        const slot = Number(payload.slot_minutes) || 60;
         if (!(weekday >= 0 && weekday <= 6)) {
           return fail(res, 400, "Kies een geldige weekdag.");
         }
         if (!start || !end || start >= end) {
           return fail(res, 400, "Eindtijd moet na de starttijd liggen.");
-        }
-        if (slot < 15 || slot > 240) {
-          return fail(res, 400, "Sessieduur moet tussen 15 en 240 minuten zijn.");
         }
         const rows = await sb("weekly_schedules", {
           method: "POST",
@@ -84,7 +82,7 @@ module.exports = async (req, res) => {
             weekday,
             start_time: start,
             end_time: end,
-            slot_minutes: slot,
+            slot_minutes: 60, // kolom niet-null; niet meer gebruikt
             active: true,
           },
         });
