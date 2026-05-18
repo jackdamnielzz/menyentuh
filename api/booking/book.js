@@ -18,7 +18,7 @@ const {
 
 const PRACTICE_EMAIL = "info@menyentuh.nl";
 // Recipients of the new-booking notification.
-const BOOKING_NOTIFY_EMAILS = ["info@menyentuh.nl", "Qurina_gal@hotmail.com"];
+const BOOKING_NOTIFY_EMAILS = ["info@menyentuh.nl", "Quirina_gal@hotmail.com"];
 const FROM_ADDRESS = "Menyentuh <no-reply@menyentuh.nl>";
 
 const sendMail = async ({ to, replyTo, subject, text, html }) => {
