@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#17372c" />
+    <title>Afspraak plannen | Menyentuh</title>
+    <meta
+      name="description"
+      content="Plan zelf je massage-afspraak bij Menyentuh. Kies een datum en tijd die jou uitkomt bij Quirina Maas in Lelystad."
+    />
+    <!-- Open Graph -->
+    <meta property="og:title" content="Afspraak plannen | Menyentuh" />
+    <meta property="og:description" content="Plan zelf je massage-afspraak bij Menyentuh. Kies een datum en tijd die jou uitkomt bij Quirina Maas in Lelystad." />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="nl_NL" />
+    <meta property="og:site_name" content="Menyentuh" />
+    <meta property="og:image" content="assets/social-preview-1200x630.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Afspraak plannen | Menyentuh" />
+    <meta name="twitter:description" content="Plan zelf je massage-afspraak bij Menyentuh bij Quirina Maas in Lelystad." />
+    <meta name="twitter:image" content="assets/social-preview-1200x630.jpg" />
+    <!-- Favicon -->
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/booking.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="page-afspraak">
+    <a class="skip-link" href="#main">Ga naar inhoud</a>
+
+    <header class="site-header">
+      <div class="container header-inner">
+        <a href="index.html" class="logo">Menyentuh</a>
+        <button class="nav-toggle" aria-label="Menu openen" aria-expanded="false" aria-controls="main-nav">
+          <span class="nav-toggle-icon"></span>
+        </button>
+        <nav class="nav" id="main-nav" aria-label="Hoofdmenu">
+          <a class="nav-link" href="index.html">Home</a>
+          <a class="nav-link" href="behandelingen.html">Behandelingen</a>
+          <a class="nav-link" href="tarieven.html">Tarieven</a>
+          <a class="nav-link" href="reviews.html">Reviews</a>
+          <a class="nav-link is-active" aria-current="page" href="afspraak.html">Afspraak</a>
+          <a class="nav-link" href="contact.html">Contact</a>
+        </nav>
+        <a class="btn btn-whatsapp header-cta" href="https://wa.me/31657768109" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero">
+        <div class="container">
+          <div class="bk-hero-inner">
+            <span class="kicker">Afspraak</span>
+            <h1 class="hero-title">Plan zelf je moment van rust</h1>
+            <p class="hero-text">
+              Kies hieronder een dag en tijd die jou uitkomt. Je ontvangt direct een
+              bevestiging per e-mail. Annuleren kan kosteloos tot 24 uur vooraf.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-muted">
+        <div class="container">
+          <div class="bk-app" id="bk-app">
+            <!-- Step 1 — date -->
+            <div class="bk-step" id="bk-step-date">
+              <h2 class="section-title">1. Kies een dag</h2>
+              <p class="bk-status" id="bk-loading">Beschikbare momenten worden geladen…</p>
+              <div class="bk-dates" id="bk-dates" role="list"></div>
+              <p class="bk-empty" id="bk-empty" hidden>
+                Er zijn op dit moment geen vrije momenten online. Stuur gerust een
+                <a href="https://wa.me/31657768109" target="_blank" rel="noopener noreferrer">WhatsApp-bericht</a>,
+                dan plannen we samen iets in.
+              </p>
+            </div>
+
+            <!-- Step 2 — time -->
+            <div class="bk-step" id="bk-step-time" hidden>
+              <h2 class="section-title">2. Kies een tijd</h2>
+              <p class="bk-substep" id="bk-time-label"></p>
+              <div class="bk-times" id="bk-times" role="list"></div>
+            </div>
+
+            <!-- Step 3 — details -->
+            <div class="bk-step" id="bk-step-form" hidden>
+              <h2 class="section-title">3. Jouw gegevens</h2>
+              <p class="bk-chosen" id="bk-chosen"></p>
+              <form class="form bk-form" id="bk-form" novalidate>
+                <input
+                  type="text"
+                  name="_honey"
+                  class="form-honeypot"
+                  tabindex="-1"
+                  autocomplete="off"
+                  aria-hidden="true"
+                />
+
+                <label for="bk-behandeling">Behandeling <span class="required">*</span></label>
+                <select id="bk-behandeling" name="behandeling" required>
+                  <option value="" selected>Kies een behandeling</option>
+                  <option value="Zwangerschapsmassage">Zwangerschapsmassage</option>
+                  <option value="Hoofdpijnmassage">Hoofdpijnmassage</option>
+                  <option value="Ontspanningsmassage">Ontspanningsmassage</option>
+                  <option value="Ontspannende hoofdmassage">Ontspannende hoofdmassage</option>
+                  <option value="Integrale rug-, nek-, schoudermassage">Integrale rug-, nek-, schoudermassage</option>
+                  <option value="Weet ik nog niet">Weet ik nog niet — graag advies</option>
+                </select>
+
+                <label for="bk-naam">Naam <span class="required">*</span></label>
+                <input id="bk-naam" type="text" name="naam" autocomplete="name" placeholder="Jouw naam" required />
+
+                <label for="bk-email">E-mail <span class="required">*</span></label>
+                <input id="bk-email" type="email" name="email" autocomplete="email" placeholder="jij@email.nl" required />
+
+                <label for="bk-telefoon">Telefoon</label>
+                <input id="bk-telefoon" type="tel" name="telefoon" autocomplete="tel" placeholder="Je telefoonnummer (optioneel)" />
+
+                <label for="bk-opmerking">Opmerking</label>
+                <textarea id="bk-opmerking" name="opmerking" placeholder="Allergie, medische klacht of een wens? Laat het hier weten."></textarea>
+
+                <p class="form-hint">
+                  Heb je een allergie of medische klacht? Vermeld dit hier, zodat de
+                  behandeling veilig op jou afgestemd kan worden.
+                </p>
+
+                <div class="form-feedback" aria-live="polite" role="status" id="bk-feedback"></div>
+
+                <div class="form-actions">
+                  <button type="button" class="btn btn-ghost" id="bk-back">Terug</button>
+                  <button type="submit" class="btn btn-primary" data-submit-button>Bevestig afspraak</button>
+                </div>
+              </form>
+            </div>
+
+            <!-- Confirmation -->
+            <div class="bk-step bk-success" id="bk-step-done" hidden>
+              <div class="bk-success-mark" aria-hidden="true">✓</div>
+              <h2 class="section-title">Je afspraak is bevestigd</h2>
+              <p class="bk-chosen" id="bk-done-detail"></p>
+              <p class="section-lead">
+                Je ontvangt een bevestiging per e-mail. Tot snel in de praktijk in Lelystad.
+              </p>
+              <div class="hero-cta">
+                <a class="btn btn-primary" href="index.html">Terug naar home</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <div>
+          <h3>Menyentuh</h3>
+          <p>Massagepraktijk van Quirina Maas</p>
+        </div>
+        <div>
+          <h4>Contact</h4>
+          <p>E-mail: <a href="mailto:info@menyentuh.nl">info@menyentuh.nl</a></p>
+          <p>Instagram: <a href="https://www.instagram.com/menyentuh_qm" target="_blank" rel="noopener noreferrer">menyentuh_qm</a></p>
+        </div>
+        <div>
+          <h4>Openingstijden</h4>
+          <p>Maandag t/m zondag, op afspraak</p>
+        </div>
+      </div>
+    </footer>
+
+    <a
+      class="whatsapp-fab"
+      href="https://wa.me/31657768109"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Contact via WhatsApp"
+    >
+      WhatsApp
+    </a>
+
+    <script src="js/main.js"></script>
+    <script src="js/booking.js"></script>
+  </body>
+</html>

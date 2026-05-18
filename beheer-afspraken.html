@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#17372c" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Afspraken beheren | Menyentuh</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/booking.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="page-beheer">
+    <header class="site-header">
+      <div class="container header-inner">
+        <a href="index.html" class="logo">Menyentuh</a>
+        <span class="adm-tag">Beheer</span>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="section">
+        <div class="container adm">
+          <!-- Login -->
+          <div class="adm-login" id="adm-login">
+            <span class="kicker">Beheer</span>
+            <h1 class="section-title">Afspraken beheren</h1>
+            <p class="section-lead">Log in om tijdsloten en boekingen te beheren.</p>
+            <form class="form adm-login-form" id="adm-login-form" novalidate>
+              <label for="adm-password">Wachtwoord</label>
+              <input id="adm-password" type="password" name="password" autocomplete="current-password" required />
+              <div class="form-feedback" aria-live="polite" role="status" id="adm-login-feedback"></div>
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary" data-submit-button>Inloggen</button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Dashboard -->
+          <div class="adm-dash" id="adm-dash" hidden>
+            <div class="adm-dash-head">
+              <div>
+                <span class="kicker">Beheer</span>
+                <h1 class="section-title">Afspraken beheren</h1>
+              </div>
+              <button type="button" class="btn btn-ghost" id="adm-logout">Uitloggen</button>
+            </div>
+            <div class="form-feedback" aria-live="polite" role="status" id="adm-feedback"></div>
+
+            <!-- Weekly schedules -->
+            <div class="adm-card">
+              <h2 class="adm-card-title">Weekschema's</h2>
+              <p class="adm-card-lead">
+                Vaste, terugkerende beschikbaarheid. Het systeem genereert hieruit
+                automatisch boekbare slots voor de komende weken.
+              </p>
+              <div class="adm-list" id="adm-schedules"></div>
+              <form class="adm-inline-form" id="adm-schedule-form">
+                <label>
+                  Dag
+                  <select name="weekday" required>
+                    <option value="1">Maandag</option>
+                    <option value="2">Dinsdag</option>
+                    <option value="3">Woensdag</option>
+                    <option value="4">Donderdag</option>
+                    <option value="5">Vrijdag</option>
+                    <option value="6">Zaterdag</option>
+                    <option value="0">Zondag</option>
+                  </select>
+                </label>
+                <label>
+                  Van
+                  <input type="time" name="start_time" value="09:00" required />
+                </label>
+                <label>
+                  Tot
+                  <input type="time" name="end_time" value="17:00" required />
+                </label>
+                <label>
+                  Sessieduur
+                  <select name="slot_minutes">
+                    <option value="30">30 min</option>
+                    <option value="45">45 min</option>
+                    <option value="60" selected>60 min</option>
+                    <option value="75">75 min</option>
+                    <option value="90">90 min</option>
+                  </select>
+                </label>
+                <button type="submit" class="btn btn-primary">Toevoegen</button>
+              </form>
+            </div>
+
+            <!-- Overrides -->
+            <div class="adm-card">
+              <h2 class="adm-card-title">Losse aanpassingen</h2>
+              <p class="adm-card-lead">
+                Voeg een extra slot toe op een specifieke datum, of blokkeer een
+                tijd of een hele dag (bijv. vakantie).
+              </p>
+              <div class="adm-list" id="adm-overrides"></div>
+              <form class="adm-inline-form" id="adm-override-form">
+                <label>
+                  Type
+                  <select name="kind" id="adm-override-kind">
+                    <option value="open">Extra slot</option>
+                    <option value="blocked">Blokkeren</option>
+                  </select>
+                </label>
+                <label>
+                  Datum
+                  <input type="date" name="date" required />
+                </label>
+                <label>
+                  Tijd
+                  <input type="time" name="start_time" />
+                  <small id="adm-override-hint">Leeg laten = hele dag blokkeren</small>
+                </label>
+                <label data-open-only>
+                  Sessieduur
+                  <select name="slot_minutes">
+                    <option value="30">30 min</option>
+                    <option value="45">45 min</option>
+                    <option value="60" selected>60 min</option>
+                    <option value="75">75 min</option>
+                    <option value="90">90 min</option>
+                  </select>
+                </label>
+                <button type="submit" class="btn btn-primary">Toevoegen</button>
+              </form>
+            </div>
+
+            <!-- Bookings -->
+            <div class="adm-card">
+              <h2 class="adm-card-title">Boekingen</h2>
+              <p class="adm-card-lead">Alle geplande en geannuleerde afspraken.</p>
+              <div class="adm-list" id="adm-bookings"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="js/booking-admin.js"></script>
+  </body>
+</html>
