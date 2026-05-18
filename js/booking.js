@@ -10,7 +10,11 @@
     stepDate: document.getElementById("bk-step-date"),
     loading: document.getElementById("bk-loading"),
     empty: document.getElementById("bk-empty"),
-    dates: document.getElementById("bk-dates"),
+    calendar: document.getElementById("bk-calendar"),
+    calMonth: document.getElementById("bk-cal-month"),
+    calDays: document.getElementById("bk-cal-days"),
+    calPrev: document.getElementById("bk-cal-prev"),
+    calNext: document.getElementById("bk-cal-next"),
     stepTime: document.getElementById("bk-step-time"),
     times: document.getElementById("bk-times"),
     timeLabel: document.getElementById("bk-time-label"),
@@ -23,7 +27,14 @@
     doneDetail: document.getElementById("bk-done-detail"),
   };
 
-  const state = { duration: null, byDate: new Map(), date: null, slot: null };
+  const state = {
+    duration: null,
+    byDate: new Map(),
+    date: null,
+    slot: null,
+    viewYear: null,
+    viewMonth: null, // 1-12
+  };
 
   // --- formatting helpers -------------------------------------------------
   const parseDate = (iso) => {
@@ -31,17 +42,8 @@
     return new Date(Date.UTC(y, m - 1, d));
   };
 
-  const fmtWeekday = (iso) =>
-    new Intl.DateTimeFormat("nl-NL", { weekday: "short", timeZone: "UTC" }).format(
-      parseDate(iso)
-    );
-
-  const fmtDayMonth = (iso) =>
-    new Intl.DateTimeFormat("nl-NL", {
-      day: "numeric",
-      month: "short",
-      timeZone: "UTC",
-    }).format(parseDate(iso));
+  const pad2 = (n) => String(n).padStart(2, "0");
+  const isoOf = (y, m, d) => `${y}-${pad2(m)}-${pad2(d)}`;
 
   const fmtLong = (iso) =>
     new Intl.DateTimeFormat("nl-NL", {
@@ -51,6 +53,15 @@
       timeZone: "UTC",
     }).format(parseDate(iso));
 
+  const fmtMonth = (y, m) => {
+    const label = new Intl.DateTimeFormat("nl-NL", {
+      month: "long",
+      year: "numeric",
+      timeZone: "UTC",
+    }).format(new Date(Date.UTC(y, m - 1, 1)));
+    return label.charAt(0).toUpperCase() + label.slice(1);
+  };
+
   const setFeedback = (text, type) => {
     if (!el.feedback) return;
     el.feedback.textContent = text || "";
@@ -59,23 +70,68 @@
     el.feedback.classList.toggle("is-success", type === "success");
   };
 
-  // --- rendering ----------------------------------------------------------
-  const renderDates = () => {
-    el.dates.innerHTML = "";
+  // --- calendar -----------------------------------------------------------
+  const renderCalendar = () => {
+    const { viewYear: y, viewMonth: m } = state;
+    el.calMonth.textContent = fmtMonth(y, m);
+
     const dates = [...state.byDate.keys()].sort();
-    dates.forEach((iso) => {
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "bk-date";
-      btn.setAttribute("role", "listitem");
-      btn.dataset.date = iso;
-      btn.innerHTML =
-        `<span class="bk-date-wd">${fmtWeekday(iso)}</span>` +
-        `<span class="bk-date-dm">${fmtDayMonth(iso)}</span>` +
-        `<span class="bk-date-count">${state.byDate.get(iso).length} vrij</span>`;
-      btn.addEventListener("click", () => selectDate(iso));
-      el.dates.appendChild(btn);
-    });
+    const firstYM = dates[0].slice(0, 7);
+    const lastYM = dates[dates.length - 1].slice(0, 7);
+    const curYM = `${y}-${pad2(m)}`;
+    el.calPrev.disabled = curYM <= firstYM;
+    el.calNext.disabled = curYM >= lastYM;
+
+    el.calDays.innerHTML = "";
+
+    // Monday-based index (0 = Monday) of the 1st of the month.
+    const firstWeekday = (new Date(Date.UTC(y, m - 1, 1)).getUTCDay() + 6) % 7;
+    for (let i = 0; i < firstWeekday; i += 1) {
+      const pad = document.createElement("div");
+      pad.className = "bk-cal-pad";
+      el.calDays.appendChild(pad);
+    }
+
+    const daysInMonth = new Date(Date.UTC(y, m, 0)).getUTCDate();
+    for (let d = 1; d <= daysInMonth; d += 1) {
+      const iso = isoOf(y, m, d);
+      const slots = state.byDate.get(iso);
+
+      if (slots && slots.length) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "bk-cal-day is-available";
+        if (iso === state.date) btn.classList.add("is-selected");
+        btn.dataset.date = iso;
+        btn.setAttribute("role", "listitem");
+        btn.setAttribute("aria-label", `${fmtLong(iso)} — ${slots.length} vrije tijden`);
+        btn.innerHTML =
+          `<span class="bk-cal-num">${d}</span>` +
+          `<span class="bk-cal-free">${slots.length} vrij</span>`;
+        btn.addEventListener("click", () => selectDate(iso));
+        el.calDays.appendChild(btn);
+      } else {
+        const cell = document.createElement("div");
+        cell.className = "bk-cal-day is-disabled";
+        cell.innerHTML = `<span class="bk-cal-num">${d}</span>`;
+        el.calDays.appendChild(cell);
+      }
+    }
+  };
+
+  const shiftMonth = (delta) => {
+    let m = state.viewMonth + delta;
+    let y = state.viewYear;
+    if (m < 1) {
+      m = 12;
+      y -= 1;
+    } else if (m > 12) {
+      m = 1;
+      y += 1;
+    }
+    state.viewMonth = m;
+    state.viewYear = y;
+    renderCalendar();
   };
 
   const renderTimes = () => {
@@ -104,8 +160,8 @@
     el.stepForm.hidden = true;
     el.stepDone.hidden = true;
     el.loading.hidden = false;
+    el.calendar.hidden = true;
     el.empty.hidden = true;
-    el.dates.innerHTML = "";
     loadSlots();
     el.stepDate.scrollIntoView({ behavior: "smooth", block: "start" });
   };
@@ -113,9 +169,7 @@
   const selectDate = (iso) => {
     state.date = iso;
     state.slot = null;
-    [...el.dates.children].forEach((b) =>
-      b.classList.toggle("is-selected", b.dataset.date === iso)
-    );
+    renderCalendar();
     el.timeLabel.textContent = fmtLong(iso);
     renderTimes();
     el.stepTime.hidden = false;
@@ -151,25 +205,35 @@
 
       el.loading.hidden = true;
       if (state.byDate.size === 0) {
+        el.calendar.hidden = true;
         el.empty.hidden = false;
         return;
       }
       el.empty.hidden = true;
-      renderDates();
+
+      // Open the calendar on the month of the first available date.
+      const first = [...state.byDate.keys()].sort()[0];
+      state.viewYear = Number(first.slice(0, 4));
+      state.viewMonth = Number(first.slice(5, 7));
+      el.calendar.hidden = false;
+      renderCalendar();
     } catch (error) {
       el.loading.hidden = true;
+      el.calendar.hidden = true;
       el.empty.hidden = false;
     }
   };
 
-  // --- duration buttons ---------------------------------------------------
+  // --- events -------------------------------------------------------------
   [...el.durations.children].forEach((btn) => {
     btn.addEventListener("click", () =>
       selectDuration(Number(btn.dataset.duration), btn)
     );
   });
 
-  // --- submit -------------------------------------------------------------
+  el.calPrev.addEventListener("click", () => shiftMonth(-1));
+  el.calNext.addEventListener("click", () => shiftMonth(1));
+
   el.back.addEventListener("click", () => {
     el.stepForm.hidden = true;
     el.stepTime.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -240,6 +304,7 @@
       // The slot may now be gone — refresh availability in the background.
       if (/beschikbaar|voor/i.test(error.message || "")) {
         el.loading.hidden = false;
+        el.calendar.hidden = true;
         el.empty.hidden = true;
         el.stepTime.hidden = true;
         el.stepForm.hidden = true;

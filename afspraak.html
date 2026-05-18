@@ -95,7 +95,20 @@
             <div class="bk-step" id="bk-step-date" hidden>
               <h2 class="section-title">2. Kies een dag</h2>
               <p class="bk-status" id="bk-loading">Beschikbare momenten worden geladen…</p>
-              <div class="bk-dates" id="bk-dates" role="list"></div>
+              <div class="bk-calendar" id="bk-calendar" hidden>
+                <div class="bk-cal-head">
+                  <button type="button" class="bk-cal-nav" id="bk-cal-prev" aria-label="Vorige maand">‹</button>
+                  <span class="bk-cal-month" id="bk-cal-month" aria-live="polite"></span>
+                  <button type="button" class="bk-cal-nav" id="bk-cal-next" aria-label="Volgende maand">›</button>
+                </div>
+                <div class="bk-cal-grid bk-cal-weekdays" aria-hidden="true">
+                  <span>ma</span><span>di</span><span>wo</span><span>do</span><span>vr</span><span>za</span><span>zo</span>
+                </div>
+                <div class="bk-cal-grid" id="bk-cal-days" role="list"></div>
+                <p class="bk-cal-legend">
+                  <span class="bk-cal-legend-swatch"></span> = dag met vrije tijden
+                </p>
+              </div>
               <p class="bk-empty" id="bk-empty" hidden>
                 Er zijn op dit moment geen vrije momenten van deze duur online. Probeer
                 een andere duur of stuur gerust een
