@@ -504,6 +504,18 @@
   padding: 11px 22px;
 }
 
+/* Hour + minute time picker */
+.adm-time {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.adm-time-sep {
+  font-weight: 700;
+  color: var(--muted);
+}
+
 @media (max-width: 620px) {
   .adm-item {
     flex-direction: column;

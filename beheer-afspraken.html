@@ -78,11 +78,11 @@
                 </label>
                 <label>
                   Van
-                  <input type="time" name="start_time" value="09:00" required />
+                  <span class="adm-time" data-time="start" data-default="09:00"></span>
                 </label>
                 <label>
                   Tot
-                  <input type="time" name="end_time" value="17:00" required />
+                  <span class="adm-time" data-time="end" data-default="17:00"></span>
                 </label>
                 <button type="submit" class="btn btn-primary">Toevoegen</button>
               </form>
@@ -111,8 +111,8 @@
                 </label>
                 <label>
                   Tijd
-                  <input type="time" name="start_time" />
-                  <small id="adm-override-hint">Leeg laten = hele dag blokkeren</small>
+                  <span class="adm-time" data-time="time" data-optional="1"></span>
+                  <small id="adm-override-hint">Geen tijd = hele dag blokkeren</small>
                 </label>
                 <label>
                   Lengte

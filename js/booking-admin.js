@@ -242,6 +242,43 @@
     }
   };
 
+  // --- time fields --------------------------------------------------------
+  // Replace each .adm-time placeholder with an hour + minute dropdown, so
+  // picking a time is two quick clicks instead of a scroll spinner.
+  const buildTimeFields = () => {
+    document.querySelectorAll(".adm-time").forEach((host) => {
+      const name = host.dataset.time;
+      const optional = host.dataset.optional === "1";
+      const def = host.dataset.default || "";
+      const hourOpts = [];
+      if (optional) hourOpts.push('<option value="">—</option>');
+      for (let h = 6; h <= 23; h += 1) {
+        const v = String(h).padStart(2, "0");
+        hourOpts.push(`<option value="${v}">${v}</option>`);
+      }
+      const minOpts = ["00", "15", "30", "45"]
+        .map((m) => `<option value="${m}">${m}</option>`)
+        .join("");
+      host.innerHTML =
+        `<select name="${name}_hour"${optional ? "" : " required"}>` +
+        `${hourOpts.join("")}</select>` +
+        `<span class="adm-time-sep">:</span>` +
+        `<select name="${name}_minute">${minOpts}</select>`;
+      if (def) {
+        host.querySelector(`[name="${name}_hour"]`).value = def.slice(0, 2);
+        host.querySelector(`[name="${name}_minute"]`).value = def.slice(3, 5);
+      }
+    });
+  };
+  buildTimeFields();
+
+  // Combine an hour + minute pair from a form into "HH:MM" (or "" if empty).
+  const readTime = (fd, name) => {
+    const h = fd.get(`${name}_hour`);
+    if (!h) return "";
+    return `${h}:${fd.get(`${name}_minute`) || "00"}`;
+  };
+
   // --- events -------------------------------------------------------------
   els.loginForm.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -272,8 +309,8 @@
     run(() =>
       api("addSchedule", {
         weekday: Number(fd.get("weekday")),
-        start_time: fd.get("start_time"),
-        end_time: fd.get("end_time"),
+        start_time: readTime(fd, "start"),
+        end_time: readTime(fd, "end"),
       })
     );
   });
@@ -285,7 +322,7 @@
       api("addOverride", {
         kind: fd.get("kind"),
         date: fd.get("date"),
-        start_time: fd.get("start_time") || "",
+        start_time: readTime(fd, "time"),
         slot_minutes: Number(fd.get("slot_minutes")) || 60,
       })
     );
