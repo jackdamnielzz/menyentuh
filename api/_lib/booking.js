@@ -147,6 +147,19 @@ const GRID_MINUTES = 30;
 // practice can wrap up one client and prepare for the next.
 const BUFFER_MINUTES = 20;
 
+// Minimum notice: a slot must be at least this far in the future to be
+// bookable, so visitors cannot book last-minute without the practice
+// getting a chance to see it.
+const LEAD_TIME_MINUTES = 12 * 60;
+
+// Absolute minute count for a calendar date + time — used to compare
+// moments across day boundaries.
+const absMinutes = (dateStr, time) => {
+  const [y, m, d] = dateStr.split("-").map(Number);
+  const day = Date.UTC(y, m - 1, d) / 86400000;
+  return day * 1440 + (toMinutes(time) || 0);
+};
+
 const normalizeDuration = (value) => {
   const n = Number(value);
   return BOOKABLE_DURATIONS.includes(n) ? n : 60;
@@ -177,6 +190,7 @@ const generateSlots = ({
 }) => {
   const now = nlNow();
   const dur = normalizeDuration(duration);
+  const cutoff = absMinutes(now.date, now.time) + LEAD_TIME_MINUTES;
   const slots = [];
 
   for (let date = from; date <= to; date = addDays(date, 1)) {
@@ -227,7 +241,7 @@ const generateSlots = ({
       for (let t = winStart; t + dur <= winEnd; t += GRID_MINUTES) {
         const time = fromMinutes(t);
         if (seen.has(time)) continue;
-        if (date === now.date && time <= now.time) continue;
+        if (absMinutes(date, time) < cutoff) continue; // too soon / in the past
         if (occupied.some(([s, e]) => rangesOverlap(t, t + dur, s, e))) continue;
         seen.add(time);
         slots.push({ date, time, duration: dur });
@@ -258,4 +272,6 @@ module.exports = {
   parseBody,
   BOOKABLE_DURATIONS,
   normalizeDuration,
+  LEAD_TIME_MINUTES,
+  absMinutes,
 };

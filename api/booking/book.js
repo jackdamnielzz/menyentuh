@@ -14,6 +14,8 @@ const {
   formatDateNL,
   generateSlots,
   normalizeDuration,
+  absMinutes,
+  LEAD_TIME_MINUTES,
 } = require("../_lib/booking");
 
 const PRACTICE_EMAIL = "info@menyentuh.nl";
@@ -86,10 +88,12 @@ module.exports = async (req, res) => {
 
   try {
     const now = nlNow();
-    if (date < now.date || (date === now.date && time <= now.time)) {
+    const cutoff = absMinutes(now.date, now.time) + LEAD_TIME_MINUTES;
+    if (absMinutes(date, time) < cutoff) {
       return sendJson(res, 409, {
         ok: false,
-        error: "Dit tijdslot ligt in het verleden.",
+        error:
+          "Een afspraak moet minstens 12 uur van tevoren geboekt worden. Kies een later moment.",
       });
     }
 

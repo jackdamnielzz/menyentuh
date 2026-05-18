@@ -120,7 +120,9 @@ een raster van 30 minuten waarop die duur binnen een venster past, en dat
 niet overlapt met een geblokkeerde tijd, een bestaande boeking of het
 verleden. Rond elke boeking blijft bovendien een **omsteltijd van 20
 minuten** vrij (`BUFFER_MINUTES` in `api/_lib/booking.js`), zodat afspraken
-nooit strak tegen elkaar geboekt worden. De berekening gebeurt server-side
+nooit strak tegen elkaar geboekt worden. Een slot is daarnaast pas boekbaar
+als het **minstens 12 uur** in de toekomst ligt (`LEAD_TIME_MINUTES`), zodat
+er geen last-minute boekingen binnenkomen. De berekening gebeurt server-side
 in `generateSlots`, in de tijdzone Europe/Amsterdam.
 
 ## Lokaal testen
