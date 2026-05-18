@@ -17,6 +17,8 @@ const {
 } = require("../_lib/booking");
 
 const PRACTICE_EMAIL = "info@menyentuh.nl";
+// Recipients of the new-booking notification.
+const BOOKING_NOTIFY_EMAILS = ["info@menyentuh.nl", "Qurina_gal@hotmail.com"];
 const FROM_ADDRESS = "Menyentuh <no-reply@menyentuh.nl>";
 
 const sendMail = async ({ to, replyTo, subject, text, html }) => {
@@ -162,7 +164,7 @@ module.exports = async (req, res) => {
 
     await Promise.all([
       sendMail({
-        to: PRACTICE_EMAIL,
+        to: BOOKING_NOTIFY_EMAILS,
         replyTo: email,
         subject: `Nieuwe boeking — ${prettyDate} ${time}`,
         text: lines.join("\n"),
