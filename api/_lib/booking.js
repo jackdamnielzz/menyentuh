@@ -140,7 +140,7 @@ const parseBody = (req) =>
 
 // Visitors choose the session length themselves; start times sit on a grid
 // of GRID_MINUTES so a 30- and a 60-minute booking line up cleanly.
-const BOOKABLE_DURATIONS = [30, 60];
+const BOOKABLE_DURATIONS = [30, 60, 80];
 const GRID_MINUTES = 30;
 
 // Turnaround time kept free before and after every booking, so the
