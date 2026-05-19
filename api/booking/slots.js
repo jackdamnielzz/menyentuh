@@ -13,8 +13,8 @@ const {
 } = require("../_lib/booking");
 
 // How far ahead visitors may book by default.
-const DEFAULT_WINDOW_DAYS = 56;
-const MAX_WINDOW_DAYS = 120;
+const DEFAULT_WINDOW_DAYS = 180;
+const MAX_WINDOW_DAYS = 200;
 
 module.exports = async (req, res) => {
   if (req.method !== "GET") {
