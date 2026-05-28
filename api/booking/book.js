@@ -23,7 +23,7 @@ const PRACTICE_EMAIL = "info@menyentuh.nl";
 const BOOKING_NOTIFY_EMAILS = ["info@menyentuh.nl", "Quirina_gal@hotmail.com"];
 const FROM_ADDRESS = "Menyentuh <no-reply@menyentuh.nl>";
 
-const sendMail = async ({ to, replyTo, subject, text, html }) => {
+const sendMail = async ({ to, replyTo, subject, text, html, attachments }) => {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) return false;
   try {
@@ -40,12 +40,88 @@ const sendMail = async ({ to, replyTo, subject, text, html }) => {
         subject,
         text,
         html,
+        attachments,
       }),
     });
     return res.ok;
   } catch (error) {
     return false;
   }
+};
+
+// --- calendar invite (.ics) ---------------------------------------------
+const pad2 = (n) => String(n).padStart(2, "0");
+
+// Format a Date as a UTC iCalendar timestamp, e.g. 20260530T133000Z.
+const toICSStamp = (d) =>
+  `${d.getUTCFullYear()}${pad2(d.getUTCMonth() + 1)}${pad2(d.getUTCDate())}T` +
+  `${pad2(d.getUTCHours())}${pad2(d.getUTCMinutes())}${pad2(d.getUTCSeconds())}Z`;
+
+// Minutes that Europe/Amsterdam is ahead of UTC at a given instant (handles
+// the +1/+2 summer/winter switch automatically).
+const amsOffsetMinutes = (instant) => {
+  const parts = Object.fromEntries(
+    new Intl.DateTimeFormat("en-US", {
+      timeZone: "Europe/Amsterdam",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false,
+    })
+      .formatToParts(instant)
+      .map((p) => [p.type, p.value])
+  );
+  const asUTC = Date.UTC(
+    +parts.year,
+    +parts.month - 1,
+    +parts.day,
+    +parts.hour === 24 ? 0 : +parts.hour,
+    +parts.minute,
+    +parts.second
+  );
+  return (asUTC - instant.getTime()) / 60000;
+};
+
+// Convert an Amsterdam wall-clock "YYYY-MM-DD" + "HH:MM" to a UTC Date, so
+// the calendar event lands on the correct local moment everywhere.
+const amsToUTC = (dateStr, time) => {
+  const [y, m, d] = dateStr.split("-").map(Number);
+  const [hh, mm] = time.split(":").map(Number);
+  const guess = Date.UTC(y, m - 1, d, hh, mm);
+  const offset = amsOffsetMinutes(new Date(guess));
+  return new Date(guess - offset * 60000);
+};
+
+const icsEscape = (s) =>
+  String(s)
+    .replace(/\\/g, "\\\\")
+    .replace(/;/g, "\\;")
+    .replace(/,/g, "\\,")
+    .replace(/\r?\n/g, "\\n");
+
+// Build a minimal RFC 5545 VEVENT the customer can add to their own calendar.
+const buildICS = ({ uid, start, durationMin, summary, description, location }) => {
+  const end = new Date(start.getTime() + durationMin * 60000);
+  return [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//Menyentuh//Boeking//NL",
+    "CALSCALE:GREGORIAN",
+    "METHOD:PUBLISH",
+    "BEGIN:VEVENT",
+    `UID:${uid}`,
+    `DTSTAMP:${toICSStamp(new Date())}`,
+    `DTSTART:${toICSStamp(start)}`,
+    `DTEND:${toICSStamp(end)}`,
+    `SUMMARY:${icsEscape(summary)}`,
+    `DESCRIPTION:${icsEscape(description)}`,
+    `LOCATION:${icsEscape(location)}`,
+    "END:VEVENT",
+    "END:VCALENDAR",
+  ].join("\r\n");
 };
 
 module.exports = async (req, res) => {
@@ -84,6 +160,15 @@ module.exports = async (req, res) => {
   }
   if (!treatment) {
     return sendJson(res, 400, { ok: false, error: "Kies een behandeling." });
+  }
+  if (!phone) {
+    return sendJson(res, 400, { ok: false, error: "Vul je telefoonnummer in." });
+  }
+  if (!data.akkoord) {
+    return sendJson(res, 400, {
+      ok: false,
+      error: "Ga akkoord met de annuleringsvoorwaarden.",
+    });
   }
 
   try {
@@ -156,6 +241,25 @@ module.exports = async (req, res) => {
     // Notify the practice and the customer. Failure here must not lose
     // the booking — it is already stored.
     const prettyDate = formatDateNL(date);
+
+    // Calendar invite for the customer, so the appointment lands in their
+    // own agenda and they're far less likely to forget it.
+    const ics = buildICS({
+      uid: `${booking.id || `${date}-${time}`}@menyentuh.nl`,
+      start: amsToUTC(date, time),
+      durationMin: slot.duration,
+      summary: `Massage bij Menyentuh — ${treatment}`,
+      description:
+        `${treatment} (${slot.duration} minuten) bij Menyentuh.\n` +
+        "Annuleren of verzetten kan kosteloos tot 24 uur van tevoren — " +
+        "stuur even een berichtje.",
+      location: "Menyentuh, Lelystad",
+    });
+    const icsAttachment = {
+      filename: "afspraak-menyentuh.ics",
+      content: Buffer.from(ics, "utf8").toString("base64"),
+    };
+
     const lines = [
       `Datum: ${prettyDate}`,
       `Tijd: ${time} (${slot.duration} min)`,
@@ -190,6 +294,8 @@ module.exports = async (req, res) => {
           "Locatie: praktijk in Lelystad.",
           "Annuleren kan kosteloos tot 24 uur vooraf — stuur even een berichtje.",
           "",
+          "In de bijlage zit een agendabestand (.ics) om de afspraak in je eigen agenda te zetten.",
+          "",
           "Tot snel!",
           "Quirina — Menyentuh",
         ].join("\n"),
@@ -201,8 +307,11 @@ module.exports = async (req, res) => {
             `${escapeHtml(treatment)}</p>`,
           `<p>Locatie: praktijk in Lelystad.<br/>` +
             `Annuleren kan kosteloos tot 24 uur vooraf — stuur even een berichtje.</p>`,
+          `<p>In de bijlage zit een agendabestand (.ics) waarmee je de afspraak ` +
+            `met één tik in je eigen agenda zet.</p>`,
           `<p>Tot snel!<br/>Quirina — Menyentuh</p>`,
         ].join(""),
+        attachments: [icsAttachment],
       }),
     ]);
 

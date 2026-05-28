@@ -252,12 +252,18 @@
     const behandeling = (fd.get("behandeling") || "").trim();
     const naam = (fd.get("naam") || "").trim();
     const email = (fd.get("email") || "").trim();
+    const telefoon = (fd.get("telefoon") || "").trim();
+    const akkoord = Boolean(fd.get("akkoord"));
 
     if (!behandeling) return setFeedback("Kies een behandeling.", "error");
     if (!naam) return setFeedback("Vul je naam in.", "error");
     const emailField = document.getElementById("bk-email");
     if (!email || !emailField.validity.valid) {
       return setFeedback("Vul een geldig e-mailadres in.", "error");
+    }
+    if (!telefoon) return setFeedback("Vul je telefoonnummer in.", "error");
+    if (!akkoord) {
+      return setFeedback("Ga akkoord met de annuleringsvoorwaarden.", "error");
     }
 
     const submitBtn = el.form.querySelector("[data-submit-button]");
@@ -277,7 +283,8 @@
           behandeling,
           naam,
           email,
-          telefoon: (fd.get("telefoon") || "").trim(),
+          telefoon,
+          akkoord,
           opmerking: (fd.get("opmerking") || "").trim(),
           _honey: fd.get("_honey") || "",
         }),

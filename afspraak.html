@@ -159,8 +159,8 @@
                 <label for="bk-email">E-mail <span class="required">*</span></label>
                 <input id="bk-email" type="email" name="email" autocomplete="email" placeholder="jij@email.nl" required />
 
-                <label for="bk-telefoon">Telefoon</label>
-                <input id="bk-telefoon" type="tel" name="telefoon" autocomplete="tel" placeholder="Je telefoonnummer (optioneel)" />
+                <label for="bk-telefoon">Telefoon <span class="required">*</span></label>
+                <input id="bk-telefoon" type="tel" name="telefoon" autocomplete="tel" placeholder="Je telefoonnummer" required />
 
                 <label for="bk-opmerking">Opmerking</label>
                 <textarea id="bk-opmerking" name="opmerking" placeholder="Allergie, medische klacht of een wens? Laat het hier weten."></textarea>
@@ -169,6 +169,14 @@
                   Heb je een allergie of medische klacht? Vermeld dit hier, zodat de
                   behandeling veilig op jou afgestemd kan worden.
                 </p>
+
+                <label class="bk-consent" for="bk-akkoord">
+                  <input type="checkbox" id="bk-akkoord" name="akkoord" required />
+                  <span
+                    >Ik begrijp dat ik mijn afspraak kosteloos kan annuleren of
+                    verzetten tot uiterlijk 24 uur van tevoren. <span class="required">*</span></span
+                  >
+                </label>
 
                 <div class="form-feedback" aria-live="polite" role="status" id="bk-feedback"></div>
 
