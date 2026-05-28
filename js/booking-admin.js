@@ -18,6 +18,7 @@
     scheduleForm: document.getElementById("adm-schedule-form"),
     overrideForm: document.getElementById("adm-override-form"),
     overrideKind: document.getElementById("adm-override-kind"),
+    blockRangeForm: document.getElementById("adm-block-range-form"),
   };
 
   const WEEKDAYS = [
@@ -326,6 +327,32 @@
         slot_minutes: Number(fd.get("slot_minutes")) || 60,
       })
     );
+  });
+
+  els.blockRangeForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const fd = new FormData(els.blockRangeForm);
+    setFeedback(els.feedback, "");
+    try {
+      const data = await api("blockRange", {
+        from: fd.get("from"),
+        to: fd.get("to"),
+      });
+      await refresh();
+      const n = data.added || 0;
+      setFeedback(
+        els.feedback,
+        n === 0
+          ? "Deze dagen waren al geblokkeerd."
+          : `${n} dag${n === 1 ? "" : "en"} geblokkeerd.`,
+        "success"
+      );
+      els.blockRangeForm.reset();
+    } catch (error) {
+      if (error.message !== "auth") {
+        setFeedback(els.feedback, error.message || "Er ging iets mis.", "error");
+      }
+    }
   });
 
   // --- boot ---------------------------------------------------------------

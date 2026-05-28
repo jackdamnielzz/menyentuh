@@ -465,6 +465,12 @@
   letter-spacing: 0.06em;
 }
 
+.adm-divider {
+  margin: 24px 0 4px;
+  border: 0;
+  border-top: 1px solid var(--border, rgba(0, 0, 0, 0.12));
+}
+
 /* Inline add-forms */
 .adm-inline-form {
   display: flex;

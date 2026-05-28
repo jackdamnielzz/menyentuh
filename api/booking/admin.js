@@ -8,6 +8,7 @@ const {
   parseBody,
   isValidDate,
   normTime,
+  addDays,
 } = require("../_lib/booking");
 
 // Constant-time-ish string compare so the password check does not leak
@@ -128,6 +129,48 @@ module.exports = async (req, res) => {
           },
         });
         return sendJson(res, 200, { ok: true, row: rows[0] });
+      }
+
+      case "blockRange": {
+        // Block a whole range of days at once (e.g. a holiday week).
+        const from = (payload.from || "").trim();
+        const to = (payload.to || "").trim();
+        if (!isValidDate(from) || !isValidDate(to)) {
+          return fail(res, 400, "Kies een geldige begin- en einddatum.");
+        }
+        if (from > to) {
+          return fail(res, 400, "De einddatum moet op of na de begindatum liggen.");
+        }
+        // Cap the span so a typo can't try to insert thousands of rows.
+        const dates = [];
+        for (let date = from; date <= to; date = addDays(date, 1)) {
+          dates.push(date);
+          if (dates.length > 366) {
+            return fail(res, 400, "Kies een periode van maximaal één jaar.");
+          }
+        }
+        // Skip days that already have a whole-day block, so re-running the
+        // same range stays idempotent and doesn't pile up duplicates.
+        const existing = await sb(
+          `slot_overrides?select=date&kind=eq.blocked&start_time=is.null` +
+            `&date=gte.${from}&date=lte.${to}`
+        );
+        const blocked = new Set((existing || []).map((row) => row.date));
+        const toInsert = dates.filter((date) => !blocked.has(date));
+        if (!toInsert.length) {
+          return sendJson(res, 200, { ok: true, added: 0 });
+        }
+        const rows = await sb("slot_overrides", {
+          method: "POST",
+          prefer: "return=representation",
+          body: toInsert.map((date) => ({
+            date,
+            kind: "blocked",
+            start_time: null,
+            slot_minutes: 60,
+          })),
+        });
+        return sendJson(res, 200, { ok: true, added: rows.length });
       }
 
       case "deleteOverride": {
