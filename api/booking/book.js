@@ -198,7 +198,7 @@ const customerConfirmationHtml = ({
           <tr>
             <td class="mny-px" style="padding:28px 40px 0;font-family:${SANS};font-size:14.5px;line-height:1.65;color:#4f6660;">
               <p style="margin:0 0 14px;">Een dag voor je afspraak ontvang je nog een <strong style="color:#1f332c;">herinnering</strong> met alle nodige informatie. Houd ook dan je <strong style="color:#1f332c;">spam- of ongewenste-mailmap</strong> in de gaten.</p>
-              <p style="margin:0 0 14px;">Staat deze e-mail in je spam? Verplaats hem dan naar je inbox — daarna komen ook de herinnering en volgende berichten gewoon in je inbox binnen.</p>
+              <p style="margin:0 0 14px;">Staat deze e-mail bij spam of ongewenst? Markeer hem dan als <strong style="color:#1f332c;">&lsquo;geen spam&rsquo;</strong> en voeg de afzender (<strong style="color:#1f332c;">no-reply@menyentuh.nl</strong>) toe aan je contacten. Berichten van een afzender in je contacten belanden niet in spam, dus zo ontvang je ook de herinnering betrouwbaar in je inbox.</p>
               <p style="margin:0 0 14px;">In de bijlage zit een <strong style="color:#1f332c;">agendabestand (.ics)</strong> waarmee je de afspraak met &eacute;&eacute;n tik in je eigen agenda zet.</p>
               <p style="margin:0;">Annuleren of verzetten kan kosteloos tot 24 uur van tevoren — stuur even een berichtje.</p>
             </td>
@@ -404,7 +404,7 @@ module.exports = async (req, res) => {
           "",
           "Een dag voor je afspraak ontvang je nog een herinnering met alle nodige informatie. Houd ook dan je spam- of ongewenste-mailmap in de gaten.",
           "",
-          "Staat deze e-mail in je spam? Verplaats hem dan naar je inbox — daarna komen ook de herinnering en volgende berichten gewoon in je inbox binnen.",
+          "Staat deze e-mail bij spam of ongewenst? Markeer hem dan als 'geen spam' en voeg de afzender (no-reply@menyentuh.nl) toe aan je contacten. Berichten van een afzender in je contacten belanden niet in spam, dus zo ontvang je ook de herinnering betrouwbaar in je inbox.",
           "",
           "In de bijlage zit een agendabestand (.ics) om de afspraak in je eigen agenda te zetten.",
           "",
