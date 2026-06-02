@@ -329,6 +329,13 @@
   justify-content: center;
 }
 
+/* The lead is max-width:760px; without auto margins that block sits on the
+   left, so centre it within the confirmation card. */
+.bk-success .section-lead {
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .bk-success-mark {
   width: 64px;
   height: 64px;
