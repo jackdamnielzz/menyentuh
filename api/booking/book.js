@@ -124,6 +124,110 @@ const buildICS = ({ uid, start, durationMin, summary, description, location }) =
   ].join("\r\n");
 };
 
+// Branded HTML confirmation for the customer. Built table-first with inline
+// styles and solid colours so it renders consistently across Gmail, Apple
+// Mail and Outlook; the brand fonts are progressively enhanced via @import
+// and fall back to Georgia/Arial where web fonts aren't loaded.
+const customerConfirmationHtml = ({
+  name,
+  prettyDate,
+  time,
+  duration,
+  treatment,
+}) => {
+  const SERIF = "'Cormorant Garamond', Georgia, 'Times New Roman', serif";
+  const SANS = "'Manrope', Arial, 'Segoe UI', Helvetica, sans-serif";
+  const row = (label, value) =>
+    `<tr>` +
+    `<td style="padding:4px 0;font-family:${SANS};font-size:14px;color:#4f6660;width:96px;vertical-align:top;">${label}</td>` +
+    `<td style="padding:4px 0;font-family:${SANS};font-size:15px;color:#1f332c;font-weight:600;">${value}</td>` +
+    `</tr>`;
+
+  return `<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="x-apple-disable-message-reformatting" />
+<title>Bevestiging van je afspraak</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap');
+  body { margin:0 !important; padding:0 !important; width:100% !important; }
+  a { text-decoration:none; }
+  @media only screen and (max-width:600px) {
+    .mny-card { width:100% !important; border-radius:0 !important; }
+    .mny-px { padding-left:24px !important; padding-right:24px !important; }
+  }
+</style>
+</head>
+<body style="margin:0;padding:0;background:#e7f1ec;">
+  <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:#e7f1ec;font-size:1px;line-height:1px;">Bedankt voor je reservering — je afspraak bij Menyentuh is bevestigd.</div>
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#e7f1ec;">
+    <tr>
+      <td align="center" style="padding:30px 12px;">
+        <table role="presentation" class="mny-card" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px;max-width:600px;background:#fefcf7;border-radius:20px;overflow:hidden;box-shadow:0 14px 34px rgba(23,55,44,0.12);">
+          <tr>
+            <td style="background:#17372c;padding:36px 40px 30px;text-align:center;">
+              <div style="font-family:${SANS};font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#ddb36c;">Massagepraktijk &middot; Lelystad</div>
+              <div style="font-family:${SERIF};font-size:40px;font-weight:600;color:#fefcf7;line-height:1.05;margin-top:6px;">Menyentuh</div>
+            </td>
+          </tr>
+          <tr><td style="height:3px;background:#c99642;font-size:0;line-height:0;">&nbsp;</td></tr>
+          <tr>
+            <td class="mny-px" style="padding:36px 40px 6px;">
+              <p style="margin:0 0 14px;font-family:${SANS};font-size:16px;color:#1f332c;">Hoi ${name},</p>
+              <p style="margin:0 0 24px;font-family:${SANS};font-size:16px;line-height:1.6;color:#4f6660;">Bedankt voor je reservering. Je afspraak bij Menyentuh is bevestigd — ik kijk ernaar uit je te ontvangen.</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="mny-px" style="padding:0 40px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f3f8f5;border-radius:12px;">
+                <tr>
+                  <td style="padding:24px 26px;border-left:3px solid #c99642;border-radius:12px;">
+                    <div style="font-family:${SERIF};font-size:25px;font-weight:600;color:#17372c;margin-bottom:14px;line-height:1.2;">${treatment}</div>
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                      ${row("Datum", prettyDate)}
+                      ${row("Tijd", `${time} uur (${duration} minuten)`)}
+                      ${row("Locatie", "Praktijk in Lelystad")}
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td class="mny-px" style="padding:28px 40px 0;font-family:${SANS};font-size:14.5px;line-height:1.65;color:#4f6660;">
+              <p style="margin:0 0 14px;">Een dag voor je afspraak ontvang je nog een <strong style="color:#1f332c;">herinnering</strong> met alle nodige informatie.</p>
+              <p style="margin:0 0 14px;">In de bijlage zit een <strong style="color:#1f332c;">agendabestand (.ics)</strong> waarmee je de afspraak met &eacute;&eacute;n tik in je eigen agenda zet.</p>
+              <p style="margin:0;">Annuleren of verzetten kan kosteloos tot 24 uur van tevoren — stuur even een berichtje.</p>
+            </td>
+          </tr>
+          <tr>
+            <td class="mny-px" style="padding:24px 40px 38px;font-family:${SANS};font-size:15px;color:#1f332c;">
+              <p style="margin:0;">Tot snel!</p>
+              <p style="margin:6px 0 0;font-family:${SERIF};font-size:22px;color:#17372c;">Quirina &middot; Menyentuh</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="background:#17372c;padding:24px 40px;text-align:center;">
+              <div style="font-family:${SANS};font-size:13px;color:#cfe2d8;line-height:1.8;">
+                <a href="mailto:info@menyentuh.nl" style="color:#eacb8c;text-decoration:none;">info@menyentuh.nl</a>
+                &nbsp;&middot;&nbsp;
+                <a href="https://wa.me/31657768109" style="color:#eacb8c;text-decoration:none;">WhatsApp</a>
+                &nbsp;&middot;&nbsp;
+                <a href="https://www.instagram.com/menyentuh_qm" style="color:#eacb8c;text-decoration:none;">@menyentuh_qm</a>
+              </div>
+              <div style="font-family:${SANS};font-size:11px;color:#98b8a7;margin-top:10px;letter-spacing:0.5px;">Menyentuh &middot; Massagepraktijk &middot; Lelystad</div>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
+};
+
 module.exports = async (req, res) => {
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
@@ -287,7 +391,7 @@ module.exports = async (req, res) => {
         text: [
           `Hoi ${name},`,
           "",
-          "Je afspraak bij Menyentuh is bevestigd:",
+          "Bedankt voor je reservering! Je afspraak bij Menyentuh is bevestigd:",
           "",
           `  ${prettyDate}`,
           `  ${time} uur (${slot.duration} minuten)`,
@@ -296,23 +400,20 @@ module.exports = async (req, res) => {
           "Locatie: praktijk in Lelystad.",
           "Annuleren kan kosteloos tot 24 uur vooraf — stuur even een berichtje.",
           "",
+          "Een dag voor je afspraak ontvang je nog een herinnering met alle nodige informatie.",
+          "",
           "In de bijlage zit een agendabestand (.ics) om de afspraak in je eigen agenda te zetten.",
           "",
           "Tot snel!",
           "Quirina — Menyentuh",
         ].join("\n"),
-        html: [
-          `<p>Hoi ${escapeHtml(name)},</p>`,
-          `<p>Je afspraak bij <strong>Menyentuh</strong> is bevestigd:</p>`,
-          `<p><strong>${escapeHtml(prettyDate)}</strong><br/>` +
-            `${escapeHtml(time)} uur (${slot.duration} minuten)<br/>` +
-            `${escapeHtml(treatment)}</p>`,
-          `<p>Locatie: praktijk in Lelystad.<br/>` +
-            `Annuleren kan kosteloos tot 24 uur vooraf — stuur even een berichtje.</p>`,
-          `<p>In de bijlage zit een agendabestand (.ics) waarmee je de afspraak ` +
-            `met één tik in je eigen agenda zet.</p>`,
-          `<p>Tot snel!<br/>Quirina — Menyentuh</p>`,
-        ].join(""),
+        html: customerConfirmationHtml({
+          name: escapeHtml(name),
+          prettyDate: escapeHtml(prettyDate),
+          time: escapeHtml(time),
+          duration: slot.duration,
+          treatment: escapeHtml(treatment),
+        }),
         attachments: [icsAttachment],
       }),
     ]);
