@@ -294,7 +294,8 @@ module.exports = async (req, res) => {
       sb(
         `bookings?select=slot_date,slot_time,duration_minutes,status&status=eq.confirmed&slot_date=eq.${date}`
       ),
-      sb("recurring_blocks?select=*&active=eq.true"),
+      // Optional table — tolerate it not existing yet (see slots.js).
+      sb("recurring_blocks?select=*&active=eq.true").catch(() => []),
     ]);
 
     const slot = generateSlots({

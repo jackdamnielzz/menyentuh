@@ -41,7 +41,9 @@ module.exports = async (req, res) => {
       sb(
         `bookings?select=slot_date,slot_time,duration_minutes,status&status=eq.confirmed&slot_date=gte.${from}&slot_date=lte.${to}`
       ),
-      sb("recurring_blocks?select=*&active=eq.true"),
+      // Optional table — if it hasn't been created yet, just skip recurring
+      // blocks rather than taking down the whole availability.
+      sb("recurring_blocks?select=*&active=eq.true").catch(() => []),
     ]);
 
     const slots = generateSlots({

@@ -60,7 +60,11 @@ module.exports = async (req, res) => {
           sb("weekly_schedules?select=*&order=weekday.asc,start_time.asc"),
           sb("slot_overrides?select=*&order=date.asc,start_time.asc"),
           sb("bookings?select=*&order=slot_date.asc,slot_time.asc"),
-          sb("recurring_blocks?select=*&order=weekday.asc,start_time.asc"),
+          // Optional table — tolerate it not existing yet so the dashboard
+          // keeps working until the migration has been run.
+          sb("recurring_blocks?select=*&order=weekday.asc,start_time.asc").catch(
+            () => []
+          ),
         ]);
         return sendJson(res, 200, {
           ok: true,
