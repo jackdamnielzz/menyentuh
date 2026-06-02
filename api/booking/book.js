@@ -197,7 +197,8 @@ const customerConfirmationHtml = ({
           </tr>
           <tr>
             <td class="mny-px" style="padding:28px 40px 0;font-family:${SANS};font-size:14.5px;line-height:1.65;color:#4f6660;">
-              <p style="margin:0 0 14px;">Een dag voor je afspraak ontvang je nog een <strong style="color:#1f332c;">herinnering</strong> met alle nodige informatie.</p>
+              <p style="margin:0 0 14px;">Een dag voor je afspraak ontvang je nog een <strong style="color:#1f332c;">herinnering</strong> met alle nodige informatie. Houd ook dan je <strong style="color:#1f332c;">spam- of ongewenste-mailmap</strong> in de gaten.</p>
+              <p style="margin:0 0 14px;">Staat deze e-mail in je spam? Verplaats hem dan naar je inbox — daarna komen ook de herinnering en volgende berichten gewoon in je inbox binnen.</p>
               <p style="margin:0 0 14px;">In de bijlage zit een <strong style="color:#1f332c;">agendabestand (.ics)</strong> waarmee je de afspraak met &eacute;&eacute;n tik in je eigen agenda zet.</p>
               <p style="margin:0;">Annuleren of verzetten kan kosteloos tot 24 uur van tevoren — stuur even een berichtje.</p>
             </td>
@@ -401,7 +402,9 @@ module.exports = async (req, res) => {
           "Locatie: praktijk in Lelystad.",
           "Annuleren kan kosteloos tot 24 uur vooraf — stuur even een berichtje.",
           "",
-          "Een dag voor je afspraak ontvang je nog een herinnering met alle nodige informatie.",
+          "Een dag voor je afspraak ontvang je nog een herinnering met alle nodige informatie. Houd ook dan je spam- of ongewenste-mailmap in de gaten.",
+          "",
+          "Staat deze e-mail in je spam? Verplaats hem dan naar je inbox — daarna komen ook de herinnering en volgende berichten gewoon in je inbox binnen.",
           "",
           "In de bijlage zit een agendabestand (.ics) om de afspraak in je eigen agenda te zetten.",
           "",

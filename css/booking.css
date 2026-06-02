@@ -324,6 +324,11 @@
   text-align: center;
 }
 
+/* Keep the closing button centred under the centred confirmation text. */
+.bk-success .hero-cta {
+  justify-content: center;
+}
+
 .bk-success-mark {
   width: 64px;
   height: 64px;
