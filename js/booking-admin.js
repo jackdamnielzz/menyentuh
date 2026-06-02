@@ -14,11 +14,13 @@
     logout: document.getElementById("adm-logout"),
     schedules: document.getElementById("adm-schedules"),
     overrides: document.getElementById("adm-overrides"),
+    recurring: document.getElementById("adm-recurring"),
     bookings: document.getElementById("adm-bookings"),
     scheduleForm: document.getElementById("adm-schedule-form"),
     overrideForm: document.getElementById("adm-override-form"),
     overrideKind: document.getElementById("adm-override-kind"),
     blockRangeForm: document.getElementById("adm-block-range-form"),
+    recurringForm: document.getElementById("adm-recurring-form"),
   };
 
   const WEEKDAYS = [
@@ -149,6 +151,50 @@
     });
   };
 
+  const renderRecurring = (rows) => {
+    els.recurring.innerHTML = "";
+    if (!rows.length) {
+      els.recurring.innerHTML =
+        '<p class="adm-empty">Geen terugkerende blokkades.</p>';
+      return;
+    }
+    rows.forEach((row) => {
+      const item = document.createElement("div");
+      item.className = "adm-item" + (row.active ? "" : " is-inactive");
+      const when = row.start_time
+        ? `${fmtTime(row.start_time)} (${row.slot_minutes} min)`
+        : "hele dag";
+      item.innerHTML =
+        `<span class="adm-item-main">` +
+        `<span class="adm-badge is-block">Blok</span>` +
+        `Elke ${WEEKDAYS[row.weekday].toLowerCase()} · ${when}</span>` +
+        `<span class="adm-item-actions"></span>`;
+      const actions = item.querySelector(".adm-item-actions");
+
+      const toggle = document.createElement("button");
+      toggle.type = "button";
+      toggle.className = "adm-mini-btn";
+      toggle.textContent = row.active ? "Pauzeer" : "Activeer";
+      toggle.addEventListener("click", () =>
+        run(() =>
+          api("toggleRecurringBlock", { id: row.id, active: !row.active })
+        )
+      );
+
+      const del = document.createElement("button");
+      del.type = "button";
+      del.className = "adm-mini-btn is-danger";
+      del.textContent = "Verwijder";
+      del.addEventListener("click", () => {
+        if (!confirm("Deze terugkerende blokkade verwijderen?")) return;
+        run(() => api("deleteRecurringBlock", { id: row.id }));
+      });
+
+      actions.append(toggle, del);
+      els.recurring.appendChild(item);
+    });
+  };
+
   const renderBookings = (rows) => {
     els.bookings.innerHTML = "";
     const upcoming = rows.filter((r) => r.status !== "cancelled");
@@ -210,6 +256,7 @@
     const data = await api("list", {});
     renderSchedules(data.schedules || []);
     renderOverrides(data.overrides || []);
+    renderRecurring(data.recurring || []);
     renderBookings(data.bookings || []);
   };
 
@@ -353,6 +400,24 @@
         setFeedback(els.feedback, error.message || "Er ging iets mis.", "error");
       }
     }
+  });
+
+  els.recurringForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const fd = new FormData(els.recurringForm);
+    const weekdays = fd.getAll("weekday").map(Number);
+    if (!weekdays.length) {
+      setFeedback(els.feedback, "Kies minstens één dag.", "error");
+      return;
+    }
+    run(async () => {
+      await api("addRecurringBlock", {
+        weekdays,
+        start_time: readTime(fd, "rtime"),
+        slot_minutes: Number(fd.get("slot_minutes")) || 60,
+      });
+      els.recurringForm.reset();
+    });
   });
 
   // --- boot ---------------------------------------------------------------

@@ -37,6 +37,15 @@ create table if not exists slot_overrides (
   created_at  timestamptz not null default now()
 );
 
+create table if not exists recurring_blocks (
+  id          uuid primary key default gen_random_uuid(),
+  weekday     smallint not null check (weekday between 0 and 6), -- 0=zondag ... 6=zaterdag
+  start_time  time,                       -- leeg = hele weekdag dicht
+  slot_minutes smallint not null default 60,
+  active      boolean not null default true,
+  created_at  timestamptz not null default now()
+);
+
 create table if not exists bookings (
   id              uuid primary key default gen_random_uuid(),
   slot_date       date not null,
@@ -59,6 +68,7 @@ create unique index if not exists bookings_unique_confirmed_slot
 -- Tabellen op slot: alleen de server (service role key) mag erbij.
 alter table weekly_schedules enable row level security;
 alter table slot_overrides   enable row level security;
+alter table recurring_blocks enable row level security;
 alter table bookings         enable row level security;
 ```
 
@@ -97,8 +107,20 @@ Na het toevoegen één keer opnieuw deployen zodat de variabelen actief worden.
    - *Extra slot* — een eenmalig tijdstip op een specifieke datum.
    - *Blokkeren* — een tijd vrijhouden, of (tijd leeg laten) een hele
      dag dicht zetten, bijv. vakantie.
-4. Boekingen verschijnen onder **Boekingen**; daar kun je ze annuleren
+   - *Periode blokkeren* — alle hele dagen tussen twee data ineens dicht.
+4. Gebruik **Terugkerende blokkades** voor een vast patroon dat elke week
+   terugkomt: vink één of meer weekdagen aan en laat de tijd leeg voor een
+   hele dag (bijv. elke zaterdag dicht) of vul een tijd in om elke week dat
+   ene slot vrij te houden. Wil je een normaal-gesloten dag tóch een keer
+   openen, voeg dan een *Extra slot* op die datum toe — dat wint van de
+   terugkerende blokkade.
+5. Boekingen verschijnen onder **Boekingen**; daar kun je ze annuleren
    of verwijderen.
+
+> **Bestaande installatie bijwerken:** draai het hele schema-script gerust
+> opnieuw (alles staat op `create table if not exists`), of voer alleen de
+> tabel `recurring_blocks` en de bijbehorende `enable row level security`
+> uit. Zonder die tabel werkt het overige gewoon door.
 
 ---
 

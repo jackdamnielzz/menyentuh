@@ -184,12 +184,13 @@ module.exports = async (req, res) => {
 
     // Re-check availability against the live schedule to avoid booking a
     // slot that no longer exists or was taken in the meantime.
-    const [schedules, overrides, bookings] = await Promise.all([
+    const [schedules, overrides, bookings, recurring] = await Promise.all([
       sb("weekly_schedules?select=*&active=eq.true"),
       sb(`slot_overrides?select=*&date=eq.${date}`),
       sb(
         `bookings?select=slot_date,slot_time,duration_minutes,status&status=eq.confirmed&slot_date=eq.${date}`
       ),
+      sb("recurring_blocks?select=*&active=eq.true"),
     ]);
 
     const slot = generateSlots({
@@ -198,6 +199,7 @@ module.exports = async (req, res) => {
       schedules,
       overrides,
       bookings,
+      recurring,
       duration,
     }).find((s) => s.time === time);
 

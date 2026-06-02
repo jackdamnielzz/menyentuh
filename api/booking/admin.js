@@ -56,12 +56,19 @@ module.exports = async (req, res) => {
         return sendJson(res, 200, { ok: true });
 
       case "list": {
-        const [schedules, overrides, bookings] = await Promise.all([
+        const [schedules, overrides, bookings, recurring] = await Promise.all([
           sb("weekly_schedules?select=*&order=weekday.asc,start_time.asc"),
           sb("slot_overrides?select=*&order=date.asc,start_time.asc"),
           sb("bookings?select=*&order=slot_date.asc,slot_time.asc"),
+          sb("recurring_blocks?select=*&order=weekday.asc,start_time.asc"),
         ]);
-        return sendJson(res, 200, { ok: true, schedules, overrides, bookings });
+        return sendJson(res, 200, {
+          ok: true,
+          schedules,
+          overrides,
+          bookings,
+          recurring,
+        });
       }
 
       case "addSchedule": {
@@ -176,6 +183,50 @@ module.exports = async (req, res) => {
       case "deleteOverride": {
         if (!payload.id) return fail(res, 400, "Ontbrekend id.");
         await sb(`slot_overrides?id=eq.${payload.id}`, { method: "DELETE" });
+        return sendJson(res, 200, { ok: true });
+      }
+
+      case "addRecurringBlock": {
+        // A recurring block closes the same weekday (or weekday + time) every
+        // week. One row is stored per chosen weekday so each can be paused or
+        // removed on its own.
+        const weekdays = Array.isArray(payload.weekdays)
+          ? [...new Set(payload.weekdays.map(Number))].filter(
+              (w) => w >= 0 && w <= 6
+            )
+          : [];
+        if (!weekdays.length) {
+          return fail(res, 400, "Kies minstens één dag.");
+        }
+        const time = normTime(payload.start_time || "");
+        const slot = Number(payload.slot_minutes) || 60;
+        const rows = await sb("recurring_blocks", {
+          method: "POST",
+          prefer: "return=representation",
+          body: weekdays.map((weekday) => ({
+            weekday,
+            // No time = block the whole weekday.
+            start_time: time || null,
+            slot_minutes: slot,
+            active: true,
+          })),
+        });
+        return sendJson(res, 200, { ok: true, added: rows.length });
+      }
+
+      case "toggleRecurringBlock": {
+        if (!payload.id) return fail(res, 400, "Ontbrekend id.");
+        const rows = await sb(`recurring_blocks?id=eq.${payload.id}`, {
+          method: "PATCH",
+          prefer: "return=representation",
+          body: { active: Boolean(payload.active) },
+        });
+        return sendJson(res, 200, { ok: true, row: rows[0] });
+      }
+
+      case "deleteRecurringBlock": {
+        if (!payload.id) return fail(res, 400, "Ontbrekend id.");
+        await sb(`recurring_blocks?id=eq.${payload.id}`, { method: "DELETE" });
         return sendJson(res, 200, { ok: true });
       }
 

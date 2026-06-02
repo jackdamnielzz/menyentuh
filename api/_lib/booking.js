@@ -186,6 +186,7 @@ const generateSlots = ({
   schedules = [],
   overrides = [],
   bookings = [],
+  recurring = [],
   duration = 60,
 }) => {
   const now = nlNow();
@@ -197,20 +198,37 @@ const generateSlots = ({
     if (date < now.date) continue;
     const weekday = weekdayOf(date);
 
-    // A blocked override without a time closes the whole day.
-    const wholeDayBlocked = overrides.some(
+    // The whole day is closed when a one-off block, or a recurring weekday
+    // block, covers it without a start time. An explicitly added extra slot
+    // ("open" override) on that date always wins, so a normally-closed day
+    // (e.g. every Saturday) can still be opened by hand for one date.
+    const hasOpenOverride = overrides.some(
+      (o) => o.date === date && o.kind === "open"
+    );
+    const overrideWholeDay = overrides.some(
       (o) => o.date === date && o.kind === "blocked" && !o.start_time
     );
-    if (wholeDayBlocked) continue;
+    const recurringWholeDay = recurring.some(
+      (r) =>
+        r.active !== false && Number(r.weekday) === weekday && !r.start_time
+    );
+    if (overrideWholeDay || (recurringWholeDay && !hasOpenOverride)) continue;
+
+    // When a recurring block normally closes the whole day but an extra slot
+    // reopens it, only that extra slot counts — the regular weekly schedule
+    // stays suppressed for this date.
+    const onlyOpenWindows = recurringWholeDay;
 
     // Availability windows: [startMinutes, endMinutes].
     const windows = [];
-    for (const s of schedules) {
-      if (s.active === false) continue;
-      if (Number(s.weekday) !== weekday) continue;
-      const a = toMinutes(s.start_time);
-      const b = toMinutes(s.end_time);
-      if (a != null && b != null && a < b) windows.push([a, b]);
+    if (!onlyOpenWindows) {
+      for (const s of schedules) {
+        if (s.active === false) continue;
+        if (Number(s.weekday) !== weekday) continue;
+        const a = toMinutes(s.start_time);
+        const b = toMinutes(s.end_time);
+        if (a != null && b != null && a < b) windows.push([a, b]);
+      }
     }
     for (const o of overrides) {
       if (o.date !== date || o.kind !== "open") continue;
@@ -234,6 +252,13 @@ const generateSlots = ({
       if (o.date !== date || o.kind !== "blocked" || !o.start_time) continue;
       const a = toMinutes(o.start_time);
       if (a != null) occupied.push([a, a + (Number(o.slot_minutes) || GRID_MINUTES)]);
+    }
+    // Recurring weekday blocks with a start time close that slot every week.
+    for (const r of recurring) {
+      if (r.active === false) continue;
+      if (Number(r.weekday) !== weekday || !r.start_time) continue;
+      const a = toMinutes(r.start_time);
+      if (a != null) occupied.push([a, a + (Number(r.slot_minutes) || GRID_MINUTES)]);
     }
 
     const seen = new Set();

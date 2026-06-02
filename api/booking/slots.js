@@ -35,12 +35,13 @@ module.exports = async (req, res) => {
 
     const duration = normalizeDuration(url.searchParams.get("duration"));
 
-    const [schedules, overrides, bookings] = await Promise.all([
+    const [schedules, overrides, bookings, recurring] = await Promise.all([
       sb("weekly_schedules?select=*&active=eq.true"),
       sb(`slot_overrides?select=*&date=gte.${from}&date=lte.${to}`),
       sb(
         `bookings?select=slot_date,slot_time,duration_minutes,status&status=eq.confirmed&slot_date=gte.${from}&slot_date=lte.${to}`
       ),
+      sb("recurring_blocks?select=*&active=eq.true"),
     ]);
 
     const slots = generateSlots({
@@ -49,6 +50,7 @@ module.exports = async (req, res) => {
       schedules,
       overrides,
       bookings,
+      recurring,
       duration,
     });
     return sendJson(res, 200, { ok: true, from, to, duration, slots });

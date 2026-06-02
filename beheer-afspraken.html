@@ -145,6 +145,44 @@
               </form>
             </div>
 
+            <!-- Recurring blocks -->
+            <div class="adm-card">
+              <h2 class="adm-card-title">Terugkerende blokkades</h2>
+              <p class="adm-card-lead">
+                Blokkeer een dag of een tijdstip dat elke week terugkomt (bijv.
+                elke zaterdag, of elke maandag 12:00). Vink één of meer dagen aan.
+                Laat de tijd leeg om de hele dag te blokkeren.
+              </p>
+              <div class="adm-list" id="adm-recurring"></div>
+              <form class="adm-inline-form" id="adm-recurring-form">
+                <fieldset class="adm-weekdays">
+                  <legend>Dag(en)</legend>
+                  <label><input type="checkbox" name="weekday" value="1" />Ma</label>
+                  <label><input type="checkbox" name="weekday" value="2" />Di</label>
+                  <label><input type="checkbox" name="weekday" value="3" />Wo</label>
+                  <label><input type="checkbox" name="weekday" value="4" />Do</label>
+                  <label><input type="checkbox" name="weekday" value="5" />Vr</label>
+                  <label><input type="checkbox" name="weekday" value="6" />Za</label>
+                  <label><input type="checkbox" name="weekday" value="0" />Zo</label>
+                </fieldset>
+                <label>
+                  Tijd
+                  <span class="adm-time" data-time="rtime" data-optional="1"></span>
+                  <small>Geen tijd = hele dag blokkeren</small>
+                </label>
+                <label>
+                  Lengte
+                  <select name="slot_minutes">
+                    <option value="30">30 min</option>
+                    <option value="60" selected>60 min</option>
+                    <option value="90">90 min</option>
+                    <option value="120">120 min</option>
+                  </select>
+                </label>
+                <button type="submit" class="btn btn-primary">Toevoegen</button>
+              </form>
+            </div>
+
             <!-- Bookings -->
             <div class="adm-card">
               <h2 class="adm-card-title">Boekingen</h2>
