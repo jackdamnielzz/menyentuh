@@ -102,7 +102,8 @@ Na het toevoegen één keer opnieuw deployen zodat de variabelen actief worden.
    `BOOKING_ADMIN_PASSWORD`.
 2. Voeg onder **Weekschema's** de vaste beschikbaarheid toe
    (bijv. dinsdag 09:00–17:00, 60 min). Hieruit worden automatisch
-   boekbare slots voor de komende ~8 weken gegenereerd.
+   boekbare slots voor de komende ~6 maanden gegenereerd, en in elk geval
+   t/m `OPEN_UNTIL` in `api/booking/slots.js` (nu 31 maart 2027).
 3. Gebruik **Losse aanpassingen** voor uitzonderingen:
    - *Extra slot* — een eenmalig tijdstip op een specifieke datum.
    - *Blokkeren* — een tijd vrijhouden, of (tijd leeg laten) een hele

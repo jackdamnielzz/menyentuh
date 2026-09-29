@@ -15,6 +15,11 @@ const {
 // How far ahead visitors may book by default.
 const DEFAULT_WINDOW_DAYS = 180;
 const MAX_WINDOW_DAYS = 200;
+// The agenda is always open at least up to this date, even when it lies
+// beyond the rolling window (currently: all of Q1 2027).
+const OPEN_UNTIL = "2027-03-31";
+
+const later = (a, b) => (a > b ? a : b);
 
 module.exports = async (req, res) => {
   if (req.method !== "GET") {
@@ -29,8 +34,9 @@ module.exports = async (req, res) => {
     let from = url.searchParams.get("from");
     let to = url.searchParams.get("to");
     if (!isValidDate(from) || from < now.date) from = now.date;
-    if (!isValidDate(to)) to = addDays(from, DEFAULT_WINDOW_DAYS);
-    if (to > addDays(from, MAX_WINDOW_DAYS)) to = addDays(from, MAX_WINDOW_DAYS);
+    if (!isValidDate(to)) to = later(addDays(from, DEFAULT_WINDOW_DAYS), OPEN_UNTIL);
+    const maxTo = later(addDays(from, MAX_WINDOW_DAYS), OPEN_UNTIL);
+    if (to > maxTo) to = maxTo;
     if (to < from) to = from;
 
     const duration = normalizeDuration(url.searchParams.get("duration"));
