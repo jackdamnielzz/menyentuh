@@ -1015,6 +1015,20 @@ main {
   height: auto;
 }
 
+.treatment-card .treatment-cta {
+  margin-top: 16px;
+  align-self: flex-start;
+}
+
+.treatment-disclaimer {
+  max-width: 60ch;
+}
+
+.section-contraindications .hero-list {
+  max-width: 60ch;
+  margin-bottom: 18px;
+}
+
 .appointment {
   background: linear-gradient(165deg, rgba(255, 255, 255, 0.95), rgba(247, 250, 248, 0.88));
   border-radius: var(--radius-lg);
@@ -2587,4 +2601,8 @@ main {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+.hero-about-title {
+  margin: 0 0 12px;
 }

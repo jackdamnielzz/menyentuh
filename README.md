@@ -25,3 +25,12 @@ met Supabase als opslag. Installatie en databaseschema staan in
 - Styling boekingsmodule: `css/booking.css`
 - Interactie (tijdslot selecteren + mailto): `js/main.js`
 - Content per pagina: bestanden in de root
+
+## Caching
+HTML wordt met `Cache-Control: no-cache` geserveerd, zodat bezoekers na een
+deploy direct de nieuwe versie zien. Bestanden in `css/`, `js/` en `assets/`
+worden een jaar gecachet (zie `vercel.json`). Daarom:
+- Na een wijziging in een CSS- of JS-bestand: verhoog `?v=` in de links in
+  alle HTML-pagina's (bijv. `css/styles.css?v=20261009` → nieuwe datum).
+- Vervang een afbeelding nooit onder dezelfde bestandsnaam; geef de nieuwe
+  versie een nieuwe naam en pas de verwijzingen aan.

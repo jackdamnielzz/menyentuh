@@ -11,6 +11,7 @@ const {
   generateSlots,
   normalizeDuration,
 } = require("../_lib/booking");
+const { rejectIfLimited } = require("../_lib/rate-limit");
 
 // How far ahead visitors may book by default.
 const DEFAULT_WINDOW_DAYS = 180;
@@ -26,6 +27,9 @@ module.exports = async (req, res) => {
     res.setHeader("Allow", "GET");
     return sendJson(res, 405, { ok: false, error: "Method not allowed" });
   }
+
+  // Generous: a visitor switching treatments makes a handful of calls.
+  if (rejectIfLimited(req, res, "slots", 60, 60 * 1000)) return;
 
   try {
     const url = new URL(req.url, "http://localhost");

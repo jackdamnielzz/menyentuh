@@ -15,19 +15,19 @@
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="nl_NL" />
     <meta property="og:site_name" content="Menyentuh" />
-    <meta property="og:image" content="assets/social-preview-1200x630.jpg" />
+    <meta property="og:image" content="https://www.menyentuh.nl/assets/social-preview-1200x630.jpg" />
     <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Afspraak plannen | Menyentuh" />
     <meta name="twitter:description" content="Plan zelf je massage-afspraak bij Menyentuh bij Quirina Maas in Lelystad." />
-    <meta name="twitter:image" content="assets/social-preview-1200x630.jpg" />
+    <meta name="twitter:image" content="https://www.menyentuh.nl/assets/social-preview-1200x630.jpg" />
     <!-- Favicon -->
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="css/styles.css" />
-    <link rel="stylesheet" href="css/booking.css" />
-    <link rel="stylesheet" href="css/fonts.css" />
+    <link rel="stylesheet" href="css/styles.css?v=20261009" />
+    <link rel="stylesheet" href="css/booking.css?v=20261009" />
+    <link rel="stylesheet" href="css/fonts.css?v=20261009" />
   </head>
   <body class="page-afspraak">
     <a class="skip-link" href="#main">Ga naar inhoud</a>
@@ -57,7 +57,7 @@
             <span class="kicker">Afspraak</span>
             <h1 class="hero-title">Plan zelf je moment van rust</h1>
             <p class="hero-text">
-              Kies hieronder een dag en tijd die jou uitkomt. Je ontvangt direct een
+              Kies hieronder je behandeling en een dag en tijd die jou uitkomt. Je ontvangt direct een
               bevestiging per e-mail. Annuleren kan kosteloos tot 24 uur vooraf.
               Online plannen kan tot 12 uur voor de afspraak — wil je korter van
               tevoren terecht, stuur dan een
@@ -70,32 +70,51 @@
       <section class="section section-muted">
         <div class="container">
           <div class="bk-app" id="bk-app">
-            <!-- Step 1 — duration -->
-            <div class="bk-step" id="bk-step-duration">
-              <h2 class="section-title">1. Kies de duur</h2>
-              <p class="bk-substep">Hoe lang wil je je sessie laten duren?</p>
-              <div class="bk-durations" id="bk-durations" role="list">
-                <button type="button" class="bk-duration" data-duration="30" role="listitem">
-                  <span class="bk-duration-min">30</span>
-                  <span class="bk-duration-label">minuten</span>
-                  <span class="bk-duration-price">€35</span>
+            <!-- Step 1 — treatment -->
+            <div class="bk-step" id="bk-step-treatment">
+              <h2 class="section-title">1. Kies een behandeling</h2>
+              <p class="bk-substep">Welke massage wil je boeken?</p>
+              <!-- data-extendable: the 60-minute treatments that may be extended to 80 minutes. -->
+              <div class="bk-treatments" id="bk-treatments" role="list">
+                <button type="button" class="bk-treatment" role="listitem" data-slug="zwangerschapsmassage" data-name="Zwangerschapsmassage" data-duration="60" data-extendable>
+                  <span class="bk-treatment-name">Zwangerschapsmassage</span>
+                  <span class="bk-treatment-meta">60 min · €65</span>
                 </button>
-                <button type="button" class="bk-duration" data-duration="60" role="listitem">
-                  <span class="bk-duration-min">60</span>
-                  <span class="bk-duration-label">minuten</span>
-                  <span class="bk-duration-price">€65</span>
+                <button type="button" class="bk-treatment" role="listitem" data-slug="hoofdpijnmassage" data-name="Hoofdpijnmassage" data-duration="60" data-extendable>
+                  <span class="bk-treatment-name">Hoofdpijnmassage</span>
+                  <span class="bk-treatment-meta">60 min · €65</span>
                 </button>
-                <button type="button" class="bk-duration" data-duration="80" role="listitem">
-                  <span class="bk-duration-min">80</span>
-                  <span class="bk-duration-label">minuten</span>
-                  <span class="bk-duration-price">€85</span>
+                <button type="button" class="bk-treatment" role="listitem" data-slug="ontspanningsmassage" data-name="Ontspanningsmassage" data-duration="60" data-extendable>
+                  <span class="bk-treatment-name">Ontspanningsmassage</span>
+                  <span class="bk-treatment-meta">60 min · €65</span>
+                </button>
+                <button type="button" class="bk-treatment" role="listitem" data-slug="ontspannende-hoofdmassage" data-name="Ontspannende hoofdmassage" data-duration="30">
+                  <span class="bk-treatment-name">Ontspannende hoofdmassage</span>
+                  <span class="bk-treatment-meta">30 min · €35</span>
+                </button>
+                <button type="button" class="bk-treatment" role="listitem" data-slug="integrale-rug-nek-en-schoudermassage" data-name="Integrale rug-, nek- en schoudermassage" data-duration="60" data-extendable>
+                  <span class="bk-treatment-name">Integrale rug-, nek- en schoudermassage</span>
+                  <span class="bk-treatment-meta">60 min · €65</span>
                 </button>
               </div>
+              <p class="bk-substep">
+                Twijfel je welke massage bij je past? <a href="contact.html#contact-form">Vraag persoonlijk advies</a>.
+              </p>
             </div>
 
-            <!-- Step 2 — date -->
+            <!-- Step 2 — duration (filled in from the treatment) -->
+            <div class="bk-step" id="bk-step-duration" hidden>
+              <h2 class="section-title">2. Duur</h2>
+              <p class="bk-chosen" id="bk-duration-label"></p>
+              <label class="bk-consent bk-extend" for="bk-extend" id="bk-extend-wrap" hidden>
+                <input type="checkbox" id="bk-extend" />
+                <span>Verlengen naar 80 minuten (€85)</span>
+              </label>
+            </div>
+
+            <!-- Step 3 — date -->
             <div class="bk-step" id="bk-step-date" hidden>
-              <h2 class="section-title">2. Kies een dag</h2>
+              <h2 class="section-title">3. Kies een dag</h2>
               <p class="bk-status" id="bk-loading">Beschikbare momenten worden geladen…</p>
               <div class="bk-calendar" id="bk-calendar" hidden>
                 <div class="bk-cal-head">
@@ -113,23 +132,22 @@
               </div>
               <p class="bk-empty" id="bk-empty" hidden>
                 Er zijn op dit moment geen vrije momenten van deze duur online. Probeer
-                een andere duur of stuur gerust een
+                een andere behandeling of duur, of stuur gerust een
                 <a href="https://wa.me/31657768109" target="_blank" rel="noopener noreferrer">WhatsApp-bericht</a>,
                 dan plannen we samen iets in.
               </p>
             </div>
 
-            <!-- Step 3 — time -->
+            <!-- Step 4 — time -->
             <div class="bk-step" id="bk-step-time" hidden>
-              <h2 class="section-title">3. Kies een tijd</h2>
+              <h2 class="section-title">4. Kies een tijd</h2>
               <p class="bk-substep" id="bk-time-label"></p>
               <div class="bk-times" id="bk-times" role="list"></div>
             </div>
 
-            <!-- Step 4 — details -->
+            <!-- Step 5 — details, summary and confirm -->
             <div class="bk-step" id="bk-step-form" hidden>
-              <h2 class="section-title">4. Jouw gegevens</h2>
-              <p class="bk-chosen" id="bk-chosen"></p>
+              <h2 class="section-title">5. Jouw gegevens</h2>
               <form class="form bk-form" id="bk-form" novalidate>
                 <input
                   type="text"
@@ -139,17 +157,6 @@
                   autocomplete="off"
                   aria-hidden="true"
                 />
-
-                <label for="bk-behandeling">Behandeling <span class="required">*</span></label>
-                <select id="bk-behandeling" name="behandeling" required>
-                  <option value="" selected>Kies een behandeling</option>
-                  <option value="Zwangerschapsmassage">Zwangerschapsmassage</option>
-                  <option value="Hoofdpijnmassage">Hoofdpijnmassage</option>
-                  <option value="Ontspanningsmassage">Ontspanningsmassage</option>
-                  <option value="Ontspannende hoofdmassage">Ontspannende hoofdmassage</option>
-                  <option value="Integrale rug-, nek-, schoudermassage">Integrale rug-, nek-, schoudermassage</option>
-                  <option value="Weet ik nog niet">Weet ik nog niet — graag advies</option>
-                </select>
 
                 <label for="bk-naam">Naam <span class="required">*</span></label>
                 <input id="bk-naam" type="text" name="naam" autocomplete="name" placeholder="Jouw naam" required />
@@ -161,11 +168,11 @@
                 <input id="bk-telefoon" type="tel" name="telefoon" autocomplete="tel" placeholder="Je telefoonnummer" required />
 
                 <label for="bk-opmerking">Opmerking</label>
-                <textarea id="bk-opmerking" name="opmerking" placeholder="Allergie, medische klacht of een wens? Laat het hier weten."></textarea>
+                <textarea id="bk-opmerking" name="opmerking" placeholder="Een wens of vraag? Laat het hier weten."></textarea>
 
                 <p class="form-hint">
-                  Heb je een allergie of medische klacht? Vermeld dit hier, zodat de
-                  behandeling veilig op jou afgestemd kan worden.
+                  Heb je een allergie of medische klacht? Laat hier alleen weten dát je die hebt.
+                  De details bespreken we samen bij de intake, voordat de massage begint.
                 </p>
 
                 <label class="bk-consent" for="bk-akkoord">
@@ -183,8 +190,20 @@
                   <a href="privacy.html">privacyverklaring</a>.
                 </p>
 
+                <div class="bk-summary" aria-labelledby="bk-summary-title">
+                  <h3 id="bk-summary-title">Samenvatting</h3>
+                  <dl class="bk-summary-list">
+                    <dt>Behandeling</dt><dd id="bk-sum-treatment"></dd>
+                    <dt>Duur</dt><dd id="bk-sum-duration"></dd>
+                    <dt>Datum</dt><dd id="bk-sum-date"></dd>
+                    <dt>Tijd</dt><dd id="bk-sum-time"></dd>
+                    <dt>Prijs</dt><dd id="bk-sum-price"></dd>
+                    <dt>Locatie</dt><dd>Praktijk in Lelystad</dd>
+                  </dl>
+                </div>
+
                 <div class="form-actions">
-                  <button type="button" class="btn btn-ghost" id="bk-back">Terug</button>
+                  <button type="button" class="btn btn-ghost" id="bk-back">Wijzigen</button>
                   <button type="submit" class="btn btn-primary" data-submit-button>Bevestig afspraak</button>
                 </div>
               </form>
@@ -204,7 +223,8 @@
                 Tot snel in de praktijk in Lelystad.
               </p>
               <div class="hero-cta">
-                <a class="btn btn-primary" href="/">Terug naar de homepage</a>
+                <button type="button" class="btn btn-primary" id="bk-ics" hidden>Zet in je agenda</button>
+                <a class="btn btn-outline" href="/">Terug naar de homepage</a>
               </div>
             </div>
           </div>
@@ -243,7 +263,7 @@
       WhatsApp
     </a>
 
-    <script src="js/main.js"></script>
-    <script src="js/booking.js"></script>
+    <script src="js/main.js?v=20261009"></script>
+    <script src="js/booking.js?v=20261009"></script>
   </body>
 </html>

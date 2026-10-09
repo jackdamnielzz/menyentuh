@@ -5,8 +5,16 @@
   const app = document.getElementById("bk-app");
   if (!app) return;
 
+  // Price per session length, as listed on tarieven.html.
+  const PRICES = { 30: 35, 60: 65, 80: 85 };
+  const EXTENDED_DURATION = 80;
+
   const el = {
-    durations: document.getElementById("bk-durations"),
+    treatments: document.getElementById("bk-treatments"),
+    stepDuration: document.getElementById("bk-step-duration"),
+    durationLabel: document.getElementById("bk-duration-label"),
+    extendWrap: document.getElementById("bk-extend-wrap"),
+    extend: document.getElementById("bk-extend"),
     stepDate: document.getElementById("bk-step-date"),
     loading: document.getElementById("bk-loading"),
     empty: document.getElementById("bk-empty"),
@@ -19,15 +27,21 @@
     times: document.getElementById("bk-times"),
     timeLabel: document.getElementById("bk-time-label"),
     stepForm: document.getElementById("bk-step-form"),
-    chosen: document.getElementById("bk-chosen"),
+    sumTreatment: document.getElementById("bk-sum-treatment"),
+    sumDuration: document.getElementById("bk-sum-duration"),
+    sumDate: document.getElementById("bk-sum-date"),
+    sumTime: document.getElementById("bk-sum-time"),
+    sumPrice: document.getElementById("bk-sum-price"),
     form: document.getElementById("bk-form"),
     feedback: document.getElementById("bk-feedback"),
     back: document.getElementById("bk-back"),
     stepDone: document.getElementById("bk-step-done"),
     doneDetail: document.getElementById("bk-done-detail"),
+    ics: document.getElementById("bk-ics"),
   };
 
   const state = {
+    treatment: null, // { slug, name, duration, extendable }
     duration: null,
     byDate: new Map(),
     date: null,
@@ -148,13 +162,20 @@
   };
 
   // --- step transitions ---------------------------------------------------
-  const selectDuration = (duration, btn) => {
+  const showDuration = () => {
+    const { treatment, duration } = state;
+    el.durationLabel.textContent =
+      `${treatment.name} — ${duration} minuten · €${PRICES[duration]}`;
+    el.extendWrap.hidden = !treatment.extendable;
+  };
+
+  // Changing the session length invalidates the chosen date/time, so the
+  // availability is reloaded for the new length.
+  const setDuration = (duration) => {
     state.duration = duration;
     state.date = null;
     state.slot = null;
-    [...el.durations.children].forEach((b) =>
-      b.classList.toggle("is-selected", b === btn)
-    );
+    showDuration();
     el.stepDate.hidden = false;
     el.stepTime.hidden = true;
     el.stepForm.hidden = true;
@@ -163,7 +184,24 @@
     el.calendar.hidden = true;
     el.empty.hidden = true;
     loadSlots();
-    el.stepDate.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  const selectTreatment = (btn, { scroll = true } = {}) => {
+    state.treatment = {
+      slug: btn.dataset.slug,
+      name: btn.dataset.name,
+      duration: Number(btn.dataset.duration),
+      extendable: btn.hasAttribute("data-extendable"),
+    };
+    [...el.treatments.children].forEach((b) =>
+      b.classList.toggle("is-selected", b === btn)
+    );
+    el.extend.checked = false;
+    el.stepDuration.hidden = false;
+    setDuration(state.treatment.duration);
+    if (scroll) {
+      el.stepDuration.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   };
 
   const selectDate = (iso) => {
@@ -182,19 +220,38 @@
     state.slot = slot;
     [...el.times.children].forEach((b) => b.classList.remove("is-selected"));
     btn.classList.add("is-selected");
-    el.chosen.textContent =
-      `${fmtLong(slot.date)} om ${slot.time} uur — ${slot.duration} minuten`;
+    el.sumTreatment.textContent = state.treatment.name;
+    el.sumDuration.textContent = `${slot.duration} minuten`;
+    el.sumDate.textContent = fmtLong(slot.date);
+    el.sumTime.textContent = `${slot.time} uur`;
+    el.sumPrice.textContent = `€${PRICES[slot.duration]}`;
     setFeedback("");
     el.stepForm.hidden = false;
     el.stepDone.hidden = true;
     el.stepForm.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
+  // Offer the booking's calendar invite (built by the server) as a download.
+  const downloadICS = (ics) => {
+    const url = URL.createObjectURL(new Blob([ics], { type: "text/calendar" }));
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "afspraak-menyentuh.ics";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  };
+
   // --- data ---------------------------------------------------------------
+  let loadSeq = 0;
   const loadSlots = async () => {
+    // Ignore responses for a duration the visitor has since switched away from.
+    const seq = (loadSeq += 1);
     try {
       const res = await fetch(`/api/booking/slots?duration=${state.duration}`);
       const data = await res.json().catch(() => ({}));
+      if (seq !== loadSeq) return;
       if (!res.ok || data.ok === false) throw new Error("load failed");
 
       state.byDate = new Map();
@@ -218,6 +275,7 @@
       el.calendar.hidden = false;
       renderCalendar();
     } catch (error) {
+      if (seq !== loadSeq) return;
       el.loading.hidden = true;
       el.calendar.hidden = true;
       el.empty.hidden = false;
@@ -225,11 +283,21 @@
   };
 
   // --- events -------------------------------------------------------------
-  [...el.durations.children].forEach((btn) => {
-    btn.addEventListener("click", () =>
-      selectDuration(Number(btn.dataset.duration), btn)
-    );
+  [...el.treatments.children].forEach((btn) => {
+    btn.addEventListener("click", () => selectTreatment(btn));
   });
+
+  el.extend.addEventListener("change", () => {
+    setDuration(el.extend.checked ? EXTENDED_DURATION : state.treatment.duration);
+  });
+
+  // Treatment preselected via a link such as
+  // afspraak.html?behandeling=zwangerschapsmassage (see behandelingen.html).
+  const preselect = new URLSearchParams(window.location.search).get("behandeling");
+  const preselectBtn = [...el.treatments.children].find(
+    (b) => b.dataset.slug === preselect
+  );
+  if (preselectBtn) selectTreatment(preselectBtn, { scroll: false });
 
   el.calPrev.addEventListener("click", () => shiftMonth(-1));
   el.calNext.addEventListener("click", () => shiftMonth(1));
@@ -249,13 +317,11 @@
     }
 
     const fd = new FormData(el.form);
-    const behandeling = (fd.get("behandeling") || "").trim();
     const naam = (fd.get("naam") || "").trim();
     const email = (fd.get("email") || "").trim();
     const telefoon = (fd.get("telefoon") || "").trim();
     const akkoord = Boolean(fd.get("akkoord"));
 
-    if (!behandeling) return setFeedback("Kies een behandeling.", "error");
     if (!naam) return setFeedback("Vul je naam in.", "error");
     const emailField = document.getElementById("bk-email");
     if (!email || !emailField.validity.valid) {
@@ -280,7 +346,7 @@
           date: state.slot.date,
           time: state.slot.time,
           duration: state.slot.duration,
-          behandeling,
+          behandeling: state.treatment.name,
           naam,
           email,
           telefoon,
@@ -298,10 +364,15 @@
       el.doneDetail.textContent =
         `${b.dateLabel || fmtLong(state.slot.date)} om ${b.time} uur — ` +
         `${b.treatment} (${b.duration} min)`;
+      if (data.ics) {
+        el.ics.hidden = false;
+        el.ics.onclick = () => downloadICS(data.ics);
+      }
       el.stepForm.hidden = true;
       el.stepTime.hidden = true;
       el.stepDate.hidden = true;
-      document.getElementById("bk-step-duration").hidden = true;
+      el.stepDuration.hidden = true;
+      document.getElementById("bk-step-treatment").hidden = true;
       el.stepDone.hidden = false;
       el.stepDone.scrollIntoView({ behavior: "smooth", block: "start" });
     } catch (error) {

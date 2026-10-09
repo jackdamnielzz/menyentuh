@@ -14,9 +14,12 @@ const {
   formatDateNL,
   generateSlots,
   normalizeDuration,
+  isValidTreatmentDuration,
+  PRICES,
   absMinutes,
   LEAD_TIME_MINUTES,
 } = require("../_lib/booking");
+const { rejectIfLimited } = require("../_lib/rate-limit");
 
 const PRACTICE_EMAIL = "info@menyentuh.nl";
 // Recipients of the new-booking notification.
@@ -134,6 +137,7 @@ const customerConfirmationHtml = ({
   time,
   duration,
   treatment,
+  price,
 }) => {
   const SERIF = "'Cormorant Garamond', Georgia, 'Times New Roman', serif";
   const SANS = "'Manrope', Arial, 'Segoe UI', Helvetica, sans-serif";
@@ -188,6 +192,7 @@ const customerConfirmationHtml = ({
                     <table role="presentation" cellpadding="0" cellspacing="0" border="0">
                       ${row("Datum", prettyDate)}
                       ${row("Tijd", `${time} uur (${duration} minuten)`)}
+                      ${row("Prijs", `&euro;${price}`)}
                       ${row("Locatie", "Praktijk in Lelystad")}
                     </table>
                   </td>
@@ -235,6 +240,9 @@ module.exports = async (req, res) => {
     return sendJson(res, 405, { ok: false, error: "Method not allowed" });
   }
 
+  // At most 10 booking attempts per visitor per 10 minutes.
+  if (rejectIfLimited(req, res, "book", 10, 10 * 60 * 1000)) return;
+
   let data = {};
   try {
     data = await parseBody(req);
@@ -263,11 +271,14 @@ module.exports = async (req, res) => {
   if (!isValidEmail(email)) {
     return sendJson(res, 400, { ok: false, error: "Vul een geldig e-mailadres in." });
   }
-  if (!treatment) {
+  if (!isValidTreatmentDuration(treatment, Number(data.duration))) {
     return sendJson(res, 400, { ok: false, error: "Kies een behandeling." });
   }
-  if (!phone) {
+  if (!phone || phone.length > 30 || !/^[0-9+()\-.\s]+$/.test(phone)) {
     return sendJson(res, 400, { ok: false, error: "Vul je telefoonnummer in." });
+  }
+  if (name.length > 100 || email.length > 254 || notes.length > 2000) {
+    return sendJson(res, 400, { ok: false, error: "Een van de velden is te lang." });
   }
   if (!data.akkoord) {
     return sendJson(res, 400, {
@@ -356,7 +367,7 @@ module.exports = async (req, res) => {
       uid: `${booking.id || `${date}-${time}`}@menyentuh.nl`,
       start: amsToUTC(date, time),
       durationMin: slot.duration,
-      summary: `Massage bij Menyentuh — ${treatment}`,
+      summary: `Massage bij Menyentuh – ${treatment}`,
       description:
         `${treatment} (${slot.duration} minuten) bij Menyentuh.\n` +
         "Annuleren of verzetten kan kosteloos tot 24 uur van tevoren — " +
@@ -368,10 +379,12 @@ module.exports = async (req, res) => {
       content: Buffer.from(ics, "utf8").toString("base64"),
     };
 
+    const price = PRICES[slot.duration];
     const lines = [
       `Datum: ${prettyDate}`,
       `Tijd: ${time} (${slot.duration} min)`,
       `Behandeling: ${treatment}`,
+      `Prijs: €${price}`,
       `Naam: ${name}`,
       `E-mail: ${email}`,
       `Telefoon: ${phone || "-"}`,
@@ -397,7 +410,7 @@ module.exports = async (req, res) => {
           "",
           `  ${prettyDate}`,
           `  ${time} uur (${slot.duration} minuten)`,
-          `  ${treatment}`,
+          `  ${treatment} — €${price}`,
           "",
           "Locatie: praktijk in Lelystad.",
           "Annuleren kan kosteloos tot 24 uur vooraf — stuur even een berichtje.",
@@ -417,6 +430,7 @@ module.exports = async (req, res) => {
           time: escapeHtml(time),
           duration: slot.duration,
           treatment: escapeHtml(treatment),
+          price,
         }),
         attachments: [icsAttachment],
       }),
@@ -431,6 +445,7 @@ module.exports = async (req, res) => {
         treatment,
         dateLabel: prettyDate,
       },
+      ics,
     });
   } catch (error) {
     return sendJson(res, error.status || 500, {

@@ -10,6 +10,11 @@ const {
   normTime,
   addDays,
 } = require("../_lib/booking");
+const { hit, isLimited } = require("../_lib/rate-limit");
+
+// Wrong-password attempts allowed per client before it is locked out.
+const MAX_FAILED_LOGINS = 10;
+const FAILED_LOGIN_WINDOW_MS = 15 * 60 * 1000;
 
 // Constant-time-ish string compare so the password check does not leak
 // length/contents through timing.
@@ -43,7 +48,11 @@ module.exports = async (req, res) => {
     return fail(res, 413, "Aanvraag te groot.");
   }
 
+  if (isLimited(req, "admin-login", MAX_FAILED_LOGINS)) {
+    return fail(res, 429, "Te veel mislukte pogingen. Probeer het later opnieuw.");
+  }
   if (!safeEqual(String(data.password || ""), expected)) {
+    hit(req, "admin-login", MAX_FAILED_LOGINS, FAILED_LOGIN_WINDOW_MS);
     return fail(res, 401, "Onjuist wachtwoord.");
   }
 

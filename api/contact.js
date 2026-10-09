@@ -1,3 +1,5 @@
+const { rejectIfLimited } = require("./_lib/rate-limit");
+
 const MAX_BODY_SIZE = 1024 * 1024;
 
 const sendJson = (res, status, payload) => {
@@ -58,6 +60,9 @@ module.exports = async (req, res) => {
     return sendJson(res, 405, { ok: false, error: "Method not allowed" });
   }
 
+  // At most 5 messages per visitor per 10 minutes.
+  if (rejectIfLimited(req, res, "contact", 5, 10 * 60 * 1000)) return;
+
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
     return sendJson(res, 500, { ok: false, error: "Missing mail configuration" });
@@ -91,6 +96,15 @@ module.exports = async (req, res) => {
   }
   if (!message) {
     return sendJson(res, 400, { ok: false, error: "Schrijf een kort bericht." });
+  }
+  if (
+    name.length > 100 ||
+    email.length > 254 ||
+    phone.length > 30 ||
+    subject.length > 50 ||
+    message.length > 5000
+  ) {
+    return sendJson(res, 400, { ok: false, error: "Een van de velden is te lang." });
   }
 
   const text = [

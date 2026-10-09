@@ -1,7 +1,6 @@
 # Robots.txt for Menyentuh
 User-agent: *
 Allow: /
-Disallow: /beheer-afspraken.html
 Disallow: /api/
 
 Sitemap: https://www.menyentuh.nl/sitemap.xml

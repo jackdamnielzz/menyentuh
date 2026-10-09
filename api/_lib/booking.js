@@ -160,6 +160,26 @@ const absMinutes = (dateStr, time) => {
   return day * 1440 + (toMinutes(time) || 0);
 };
 
+// Bookable treatments with their standard length; `extendable` treatments
+// may also be booked as an 80-minute session. Keep in sync with the
+// treatment buttons on afspraak.html.
+const TREATMENTS = {
+  Zwangerschapsmassage: { duration: 60, extendable: true },
+  Hoofdpijnmassage: { duration: 60, extendable: true },
+  Ontspanningsmassage: { duration: 60, extendable: true },
+  "Ontspannende hoofdmassage": { duration: 30, extendable: false },
+  "Integrale rug-, nek- en schoudermassage": { duration: 60, extendable: true },
+};
+const EXTENDED_DURATION = 80;
+const PRICES = { 30: 35, 60: 65, 80: 85 };
+
+// True when `duration` is a valid length for the named treatment.
+const isValidTreatmentDuration = (treatment, duration) => {
+  const t = TREATMENTS[treatment];
+  if (!t) return false;
+  return duration === t.duration || (t.extendable && duration === EXTENDED_DURATION);
+};
+
 const normalizeDuration = (value) => {
   const n = Number(value);
   return BOOKABLE_DURATIONS.includes(n) ? n : 60;
@@ -297,6 +317,9 @@ module.exports = {
   parseBody,
   BOOKABLE_DURATIONS,
   normalizeDuration,
+  TREATMENTS,
+  PRICES,
+  isValidTreatmentDuration,
   LEAD_TIME_MINUTES,
   absMinutes,
 };
