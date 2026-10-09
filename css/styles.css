@@ -1795,6 +1795,39 @@ main {
   margin: 0;
 }
 
+.privacy-content {
+  max-width: 760px;
+  color: var(--muted);
+}
+
+.privacy-content h2 {
+  margin: 40px 0 12px;
+  font-size: clamp(1.5rem, 3vw, 1.9rem);
+}
+
+.privacy-content h3 {
+  margin: 24px 0 8px;
+  font-size: 1.25rem;
+}
+
+.privacy-content ul {
+  padding-left: 1.2em;
+}
+
+.privacy-content li {
+  margin-bottom: 8px;
+}
+
+.privacy-content a {
+  color: var(--green-900);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.privacy-updated {
+  font-size: 0.9rem;
+}
+
 .footer-legal a {
   color: inherit;
   text-decoration: underline;
