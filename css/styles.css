@@ -1783,6 +1783,24 @@ main {
   opacity: 0.85;
 }
 
+.footer-legal {
+  margin-top: 28px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(253, 253, 252, 0.18);
+  font-size: 0.88rem;
+  opacity: 0.85;
+}
+
+.footer-legal p {
+  margin: 0;
+}
+
+.footer-legal a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .whatsapp-fab {
   position: fixed;
   right: 24px;

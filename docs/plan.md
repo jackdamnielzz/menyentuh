@@ -6,7 +6,7 @@ Een statische, meertalige (Nederlands) website voor de massagepraktijk **Menyent
 [## Pagina’s](docs/plan.md:7)
 - **Home (Landing)**: hero, USP’s, behandelingen, voordelen, afspraak‑sectie met tijdslots, testimonials, CTA’s.
 - **Over**: visie, werkwijze, praktijkwaarden, korte bio.
-- **Behandelingen**: overzicht van massages + aromatherapie met beschrijvingen, duur en indicaties.
+- **Behandelingen**: overzicht van massages met beschrijvingen, duur en indicaties.
 - **Tarieven**: overzicht van prijzen per behandeling, duur en wat inbegrepen is.
 - **Contact**: contactgegevens, openingstijden, locatie, WhatsApp‑knop, formulier met afspraak‑aanvraag.
 

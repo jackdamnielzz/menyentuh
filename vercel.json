@@ -1,0 +1,12 @@
+{
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "menyentuh.nl" }],
+      "destination": "https://www.menyentuh.nl/:path*",
+      "statusCode": 301
+    },
+    { "source": "/index.html", "destination": "/", "statusCode": 301 },
+    { "source": "/over.html", "destination": "/", "statusCode": 301 }
+  ]
+}
