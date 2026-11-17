@@ -1,6 +1,7 @@
 // POST /api/booking/admin
 // Password-protected endpoint for managing schedules, overrides and bookings.
-// Body: { password, action, payload }
+// Body: { password | token, action, payload }
+// A password login returns a non-expiring device token (see _lib/admin-auth).
 
 const { sb } = require("../_lib/supabase");
 const {
@@ -11,6 +12,13 @@ const {
   addDays,
 } = require("../_lib/booking");
 const { hit, isLimited } = require("../_lib/rate-limit");
+const {
+  createToken,
+  verifyToken,
+  readCookie,
+  setTokenCookie,
+  clearTokenCookie,
+} = require("../_lib/admin-auth");
 
 // Wrong-password attempts allowed per client before it is locked out.
 const MAX_FAILED_LOGINS = 10;
@@ -48,21 +56,47 @@ module.exports = async (req, res) => {
     return fail(res, 413, "Aanvraag te groot.");
   }
 
+  const action = data.action;
+  const payload = data.payload || {};
+
+  // Logging out only clears this device's cookie; it needs no credentials.
+  if (action === "logout") {
+    clearTokenCookie(res);
+    return sendJson(res, 200, { ok: true });
+  }
+
   if (isLimited(req, "admin-login", MAX_FAILED_LOGINS)) {
     return fail(res, 429, "Te veel mislukte pogingen. Probeer het later opnieuw.");
   }
-  if (!safeEqual(String(data.password || ""), expected)) {
-    hit(req, "admin-login", MAX_FAILED_LOGINS, FAILED_LOGIN_WINDOW_MS);
-    return fail(res, 401, "Onjuist wachtwoord.");
-  }
 
-  const action = data.action;
-  const payload = data.payload || {};
+  // Accept either the password (first login) or a device token issued
+  // earlier (cookie first, localStorage copy in the body as backup).
+  const password = String(data.password || "");
+  const candidates = [readCookie(req), String(data.token || "")].filter(Boolean);
+  const token = candidates.find((t) => verifyToken(t, expected)) || candidates[0];
+  let newToken = null;
+  if (password) {
+    if (!safeEqual(password, expected)) {
+      hit(req, "admin-login", MAX_FAILED_LOGINS, FAILED_LOGIN_WINDOW_MS);
+      return fail(res, 401, "Onjuist wachtwoord.");
+    }
+    newToken = createToken(expected);
+    setTokenCookie(res, newToken);
+  } else if (token) {
+    if (!verifyToken(token, expected)) {
+      hit(req, "admin-login", MAX_FAILED_LOGINS, FAILED_LOGIN_WINDOW_MS);
+      clearTokenCookie(res);
+      return fail(res, 401, "Sessie verlopen. Log opnieuw in.");
+    }
+    setTokenCookie(res, token); // renew the cookie's lifetime
+  } else {
+    return fail(res, 401, "Niet ingelogd.");
+  }
 
   try {
     switch (action) {
       case "login":
-        return sendJson(res, 200, { ok: true });
+        return sendJson(res, 200, { ok: true, token: newToken || token });
 
       case "list": {
         const [schedules, overrides, bookings, recurring] = await Promise.all([

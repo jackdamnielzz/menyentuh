@@ -1,0 +1,17 @@
+{
+  "name": "Menyentuh Agenda",
+  "short_name": "Agenda",
+  "description": "Afspraken en beschikbaarheid van Menyentuh beheren.",
+  "lang": "nl",
+  "id": "/beheer-afspraken.html",
+  "start_url": "/beheer-afspraken.html",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#17372c",
+  "theme_color": "#17372c",
+  "icons": [
+    { "src": "/assets/app-icon-agenda-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/assets/app-icon-agenda-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/assets/app-icon-agenda-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

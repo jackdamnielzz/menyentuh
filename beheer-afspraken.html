@@ -7,6 +7,24 @@
     <meta name="robots" content="noindex, nofollow" />
     <title>Afspraken beheren | Menyentuh</title>
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <!-- Home-screen app ("Zet op beginscherm" on iPhone) -->
+    <link rel="manifest" href="/beheer.webmanifest" />
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon-agenda-180.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Agenda" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <style>
+      .adm-install-hint {
+        margin: 0 0 1.25rem;
+        padding: 0.85rem 1rem;
+        border-radius: 12px;
+        background: rgba(196, 154, 74, 0.12);
+        border: 1px solid rgba(196, 154, 74, 0.45);
+        font-size: 0.95rem;
+        line-height: 1.5;
+      }
+    </style>
     <link rel="stylesheet" href="css/styles.css?v=20261009" />
     <link rel="stylesheet" href="css/booking.css?v=20261009" />
     <link rel="stylesheet" href="css/fonts.css?v=20261009" />
@@ -47,6 +65,12 @@
               <button type="button" class="btn btn-ghost" id="adm-logout">Uitloggen</button>
             </div>
             <div class="form-feedback" aria-live="polite" role="status" id="adm-feedback"></div>
+            <p class="adm-install-hint" id="adm-install-hint" hidden>
+              <strong>Tip:</strong> zet deze pagina als app op je beginscherm: tik
+              in Safari op <em>Deel</em> (vierkantje met pijl) en kies
+              <em>Zet op beginscherm</em>. Open daarna de app en log daar één keer
+              in; vanaf dan blijf je ingelogd.
+            </p>
 
             <!-- Weekly schedules -->
             <div class="adm-card">
@@ -189,6 +213,6 @@
       </section>
     </main>
 
-    <script src="js/booking-admin.js?v=20261009"></script>
+    <script src="js/booking-admin.js?v=20261117"></script>
   </body>
 </html>

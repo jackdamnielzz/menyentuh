@@ -33,8 +33,35 @@
     "Zaterdag",
   ];
 
-  const STORE_KEY = "menyentuh-admin-pw";
-  let password = sessionStorage.getItem(STORE_KEY) || "";
+  // After one password login the server returns a device token that never
+  // expires. It lives in an HttpOnly cookie and, as a backup, here in
+  // localStorage, so the home-screen app opens straight into the dashboard.
+  const TOKEN_KEY = "menyentuh-admin-token";
+  const store = {
+    get: () => {
+      try {
+        return localStorage.getItem(TOKEN_KEY) || "";
+      } catch (error) {
+        return "";
+      }
+    },
+    set: (value) => {
+      try {
+        if (value) localStorage.setItem(TOKEN_KEY, value);
+        else localStorage.removeItem(TOKEN_KEY);
+      } catch (error) {
+        /* storage unavailable: the cookie still keeps her logged in */
+      }
+    },
+  };
+  // Clean up the password the old version kept in sessionStorage.
+  try {
+    sessionStorage.removeItem("menyentuh-admin-pw");
+  } catch (error) {
+    /* ignore */
+  }
+  let token = store.get();
+  let password = ""; // only set during the login request itself
 
   // --- helpers ------------------------------------------------------------
   const fmtTime = (t) => (t ? String(t).slice(0, 5) : "");
@@ -60,18 +87,23 @@
   };
 
   // POST an action to the admin API.
-  const api = async (action, payload) => {
+  const api = async (action, payload, { silent = false } = {}) => {
     const res = await fetch("/api/booking/admin", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ password, action, payload }),
+      credentials: "same-origin",
+      body: JSON.stringify({ password, token, action, payload }),
     });
     const data = await res.json().catch(() => ({}));
     if (res.status === 401) {
-      sessionStorage.removeItem(STORE_KEY);
-      password = "";
-      showLogin("Sessie verlopen. Log opnieuw in.");
-      throw new Error("auth");
+      // Keep a wrong-password message on the login form; otherwise the
+      // stored token is no longer valid (e.g. the password was changed).
+      if (!password) {
+        token = "";
+        store.set("");
+        showLogin(silent ? "" : data.error || "Log opnieuw in.");
+        throw new Error("auth");
+      }
     }
     if (!res.ok || data.ok === false) {
       throw new Error(data.error || "Er ging iets mis.");
@@ -334,22 +366,47 @@
     password = input.value;
     setFeedback(els.loginFeedback, "Inloggen…");
     try {
-      await api("login", {});
-      sessionStorage.setItem(STORE_KEY, password);
+      const data = await api("login", {});
+      token = data.token || "";
+      store.set(token);
       input.value = "";
       showDash();
     } catch (error) {
       if (error.message !== "auth") {
         setFeedback(els.loginFeedback, error.message || "Inloggen mislukt.", "error");
       }
+    } finally {
+      password = ""; // never keep the password around
     }
   });
 
-  els.logout.addEventListener("click", () => {
-    sessionStorage.removeItem(STORE_KEY);
-    password = "";
+  els.logout.addEventListener("click", async () => {
+    token = "";
+    store.set("");
+    try {
+      await api("logout", {});
+    } catch (error) {
+      /* cookie clear failed; token is gone locally anyway */
+    }
     showLogin();
   });
+
+  // When the home-screen app comes back to the foreground, reload the data
+  // so the agenda is always current.
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible" && !els.dash.hidden) {
+      refresh().catch(() => {});
+    }
+  });
+
+  // iPhone tip: Safari and the home-screen app keep separate logins, so show
+  // how to install the app (once) when she uses the page in plain Safari.
+  const installHint = document.getElementById("adm-install-hint");
+  const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
+  const isStandalone =
+    window.navigator.standalone === true ||
+    window.matchMedia("(display-mode: standalone)").matches;
+  if (installHint && isIOS && !isStandalone) installHint.hidden = false;
 
   els.scheduleForm.addEventListener("submit", (event) => {
     event.preventDefault();
@@ -421,9 +478,20 @@
   });
 
   // --- boot ---------------------------------------------------------------
-  if (password) {
-    showDash();
-  } else {
-    showLogin();
-  }
+  // Try the stored token / cookie straight away; fall back to the login form
+  // without an error message if this device was never logged in. Hide the
+  // form meanwhile so it doesn't flash up on every app start.
+  els.login.hidden = true;
+  (async () => {
+    try {
+      const data = await api("login", {}, { silent: true });
+      if (data.token) {
+        token = data.token;
+        store.set(token);
+      }
+      showDash();
+    } catch (error) {
+      if (error.message !== "auth") showLogin();
+    }
+  })();
 })();

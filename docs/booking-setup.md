@@ -91,6 +91,7 @@ Zet onder **Vercel → Project → Settings → Environment Variables**:
 | `SUPABASE_SERVICE_ROLE_KEY` | de `service_role` key uit stap 1                  |
 | `BOOKING_ADMIN_PASSWORD`    | zelfgekozen wachtwoord voor de beheerpagina       |
 | `RESEND_API_KEY`            | bestaat al — gebruikt voor de bevestigingsmails   |
+| `BOOKING_ADMIN_SESSION_SECRET` | optioneel — wijzig om alle ingelogde apparaten uit te loggen zonder het wachtwoord te veranderen |
 
 Na het toevoegen één keer opnieuw deployen zodat de variabelen actief worden.
 
@@ -125,12 +126,47 @@ Na het toevoegen één keer opnieuw deployen zodat de variabelen actief worden.
 
 ---
 
+## 4. Agenda-app op de iPhone (blijvend ingelogd)
+
+De beheerpagina werkt als app op het beginscherm, zonder App Store:
+
+1. Open `https://www.menyentuh.nl/beheer-afspraken.html` in **Safari**.
+2. Tik op **Deel** (vierkantje met pijl) → **Zet op beginscherm** → **Voeg toe**.
+   Er verschijnt een icoon "Agenda" met het gouden logo.
+3. Open de app via dat icoon en log **daar** één keer in met het wachtwoord.
+   Vanaf dan opent de app direct in het beheer, ook na weken of maanden.
+
+Hoe het werkt: na het inloggen geeft de server een ondertekende
+apparaat-sleutel die niet verloopt (`api/_lib/admin-auth.js`). Die staat in
+een HttpOnly-cookie die bij elk gebruik verlengd wordt, met een kopie in
+`localStorage` als reserve. Het wachtwoord zelf wordt niet bewaard. De
+gegevens worden bij elk openen of terugkeren naar de app live opgehaald.
+
+**Uitloggen / telefoon kwijt:** verander `BOOKING_ADMIN_PASSWORD` (of
+`BOOKING_ADMIN_SESSION_SECRET`) in Vercel en deploy opnieuw; daarmee worden
+alle uitgegeven sleutels in één keer ongeldig. De knop *Uitloggen* logt
+alleen dat ene apparaat uit.
+
+Lessen (iOS):
+- Een beginscherm-app heeft op iOS **eigen** cookies en opslag, los van
+  Safari. Inloggen in Safari telt dus niet voor de app; log in ín de app.
+- `sessionStorage` wordt gewist zodra de app sluit — gebruik het nooit voor
+  iets dat moet blijven staan (de oude versie bewaarde het wachtwoord daar,
+  waardoor ze steeds opnieuw moest inloggen).
+- Nieuwe iconen altijd onder een nieuwe bestandsnaam zetten (zie Caching in
+  de README); iOS haalt het icoon alleen op bij *Zet op beginscherm*, dus
+  na een nieuw icoon moet de app opnieuw worden toegevoegd.
+
+---
+
 ## Hoe het werkt
 
 | Onderdeel              | Bestand                                            |
 | ---------------------- | -------------------------------------------------- |
 | Boekingspagina         | `afspraak.html` + `js/booking.js`                  |
 | Beheerpagina           | `beheer-afspraken.html` + `js/booking-admin.js`    |
+| Beginscherm-app        | `beheer.webmanifest` + `assets/*-agenda-*.png`     |
+| Blijvend inloggen      | `api/_lib/admin-auth.js`                           |
 | Beschikbare slots (GET)| `api/booking/slots.js`                             |
 | Boeking maken (POST)   | `api/booking/book.js`                              |
 | Beheer-acties (POST)   | `api/booking/admin.js`                             |
