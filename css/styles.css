@@ -857,6 +857,36 @@ main {
   margin: 0;
 }
 
+/* Compact price grid for a treatment with several variants (duo massage):
+   rows = variant, columns = length. Keeps the meta box as short as the
+   single-price cards instead of one wrapped sentence per variant. */
+.treatment-card .meta-prices {
+  display: grid;
+  gap: 2px;
+}
+
+.treatment-card .meta-prices > span {
+  display: grid;
+  /* Fixed price columns so all rows line up (each row is its own grid). */
+  grid-template-columns: 1fr 3.4em 3.4em;
+  column-gap: 6px;
+  white-space: nowrap; /* "Aan huis" must not break over two lines */
+}
+
+.treatment-card .meta-prices > span > * {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.treatment-card .meta-prices > span > :first-child {
+  text-align: left;
+}
+
+.treatment-card .meta-prices [role="columnheader"] {
+  font-size: 0.85em;
+  color: var(--muted);
+}
+
 .treatment-card h3 {
   word-break: normal;
   overflow-wrap: normal;
