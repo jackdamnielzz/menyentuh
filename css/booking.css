@@ -402,6 +402,21 @@
   margin-top: 18px;
 }
 
+/* A label + input group inside the form, stacked like the other fields.
+   Any wrapper div in .form needs this, or label and input sit side by side. */
+.bk-field {
+  display: grid;
+  gap: 16px; /* same spacing as .form, so it matches the other fields */
+}
+
+.bk-field[hidden] {
+  display: none;
+}
+
+.bk-field .form-hint {
+  margin: 0;
+}
+
 .bk-form .form-actions {
   display: flex;
   gap: 14px;
