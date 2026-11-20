@@ -140,7 +140,7 @@ const parseBody = (req) =>
 
 // Visitors choose the session length themselves; start times sit on a grid
 // of GRID_MINUTES so a 30- and a 60-minute booking line up cleanly.
-const BOOKABLE_DURATIONS = [30, 60, 80];
+const BOOKABLE_DURATIONS = [30, 60, 80, 90];
 const GRID_MINUTES = 30;
 
 // Turnaround time kept free before and after every booking, so the
@@ -160,24 +160,45 @@ const absMinutes = (dateStr, time) => {
   return day * 1440 + (toMinutes(time) || 0);
 };
 
-// Bookable treatments with their standard length; `extendable` treatments
-// may also be booked as an 80-minute session. Keep in sync with the
-// treatment buttons on afspraak.html.
+// Duo massages may only be booked on Monday evenings. They use this fixed
+// window instead of the regular weekly schedule; bookings and blocks set in
+// the admin page still apply.
+const MONDAY_EVENING = { weekday: 1, start: "18:00", end: "22:00" };
+
+// Bookable treatments: `prices` maps every allowed length (minutes) to its
+// price in euros; the first entry is the standard length. `rule` limits
+// when the treatment can be planned; `home` means it takes place at the
+// client's address. Keep in sync with the buttons on afspraak.html and the
+// prices on tarieven.html / behandelingen.html.
+const STANDARD_PRICES = { 60: 65, 80: 85 };
 const TREATMENTS = {
-  Zwangerschapsmassage: { duration: 60, extendable: true },
-  Hoofdpijnmassage: { duration: 60, extendable: true },
-  Ontspanningsmassage: { duration: 60, extendable: true },
-  "Ontspannende hoofdmassage": { duration: 30, extendable: false },
-  "Integrale rug-, nek- en schoudermassage": { duration: 60, extendable: true },
+  Zwangerschapsmassage: { prices: STANDARD_PRICES },
+  Hoofdpijnmassage: { prices: STANDARD_PRICES },
+  Ontspanningsmassage: { prices: STANDARD_PRICES },
+  "Ontspannende hoofdmassage": { prices: { 30: 35 } },
+  "Integrale rug-, nek- en schoudermassage": { prices: STANDARD_PRICES },
+  "Duomassage in de praktijk": {
+    prices: { 60: 140, 90: 170 },
+    rule: "monday-evening",
+    location: "Massageruimte Herodicus massage, Albatroslaan 215, Lelystad",
+  },
+  "Duomassage bij jou thuis": {
+    prices: { 60: 200, 90: 240 },
+    rule: "monday-evening",
+    home: true,
+  },
 };
-const EXTENDED_DURATION = 80;
-const PRICES = { 30: 35, 60: 65, 80: 85 };
+const DEFAULT_LOCATION = "Praktijk in Lelystad";
 
 // True when `duration` is a valid length for the named treatment.
 const isValidTreatmentDuration = (treatment, duration) => {
   const t = TREATMENTS[treatment];
-  if (!t) return false;
-  return duration === t.duration || (t.extendable && duration === EXTENDED_DURATION);
+  return Boolean(t && t.prices[duration] != null);
+};
+
+const priceOf = (treatment, duration) => {
+  const t = TREATMENTS[treatment];
+  return t ? t.prices[duration] : undefined;
 };
 
 const normalizeDuration = (value) => {
@@ -208,7 +229,9 @@ const generateSlots = ({
   bookings = [],
   recurring = [],
   duration = 60,
+  rule = null,
 }) => {
+  const mondayEvening = rule === "monday-evening";
   const now = nlNow();
   const dur = normalizeDuration(duration);
   const cutoff = absMinutes(now.date, now.time) + LEAD_TIME_MINUTES;
@@ -217,6 +240,7 @@ const generateSlots = ({
   for (let date = from; date <= to; date = addDays(date, 1)) {
     if (date < now.date) continue;
     const weekday = weekdayOf(date);
+    if (mondayEvening && weekday !== MONDAY_EVENING.weekday) continue;
 
     // The whole day is closed when a one-off block, or a recurring weekday
     // block, covers it without a start time. An explicitly added extra slot
@@ -232,16 +256,25 @@ const generateSlots = ({
       (r) =>
         r.active !== false && Number(r.weekday) === weekday && !r.start_time
     );
-    if (overrideWholeDay || (recurringWholeDay && !hasOpenOverride)) continue;
+    if (overrideWholeDay) continue;
+
+    // Availability windows: [startMinutes, endMinutes].
+    const windows = [];
+    if (mondayEvening) {
+      // Fixed Monday-evening window. A recurring "closed every Monday" block
+      // is meant for the regular agenda, so it does not close this window;
+      // a one-off whole-day block (holiday) does, see above.
+      windows.push([toMinutes(MONDAY_EVENING.start), toMinutes(MONDAY_EVENING.end)]);
+    }
+
+    if (!mondayEvening && recurringWholeDay && !hasOpenOverride) continue;
 
     // When a recurring block normally closes the whole day but an extra slot
     // reopens it, only that extra slot counts — the regular weekly schedule
     // stays suppressed for this date.
     const onlyOpenWindows = recurringWholeDay;
 
-    // Availability windows: [startMinutes, endMinutes].
-    const windows = [];
-    if (!onlyOpenWindows) {
+    if (!mondayEvening && !onlyOpenWindows) {
       for (const s of schedules) {
         if (s.active === false) continue;
         if (Number(s.weekday) !== weekday) continue;
@@ -251,6 +284,7 @@ const generateSlots = ({
       }
     }
     for (const o of overrides) {
+      if (mondayEvening) break; // extra slots are for the regular agenda
       if (o.date !== date || o.kind !== "open") continue;
       const a = toMinutes(o.start_time);
       if (a != null) windows.push([a, a + (Number(o.slot_minutes) || 60)]);
@@ -318,7 +352,9 @@ module.exports = {
   BOOKABLE_DURATIONS,
   normalizeDuration,
   TREATMENTS,
-  PRICES,
+  DEFAULT_LOCATION,
+  MONDAY_EVENING,
+  priceOf,
   isValidTreatmentDuration,
   LEAD_TIME_MINUTES,
   absMinutes,

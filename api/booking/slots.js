@@ -1,4 +1,4 @@
-// GET /api/booking/slots?from=YYYY-MM-DD&to=YYYY-MM-DD&duration=30|60
+// GET /api/booking/slots?from=YYYY-MM-DD&to=YYYY-MM-DD&duration=30|60|80|90&behandeling=<name>
 // Public endpoint. Returns the bookable start times for the given date
 // range and the requested session length.
 
@@ -10,6 +10,7 @@ const {
   addDays,
   generateSlots,
   normalizeDuration,
+  TREATMENTS,
 } = require("../_lib/booking");
 const { rejectIfLimited } = require("../_lib/rate-limit");
 
@@ -44,6 +45,9 @@ module.exports = async (req, res) => {
     if (to < from) to = from;
 
     const duration = normalizeDuration(url.searchParams.get("duration"));
+    // Some treatments (duo massage) are only plannable at set moments.
+    const treatment = TREATMENTS[url.searchParams.get("behandeling") || ""];
+    const rule = (treatment && treatment.rule) || null;
 
     const [schedules, overrides, bookings, recurring] = await Promise.all([
       sb("weekly_schedules?select=*&active=eq.true"),
@@ -64,6 +68,7 @@ module.exports = async (req, res) => {
       bookings,
       recurring,
       duration,
+      rule,
     });
     return sendJson(res, 200, { ok: true, from, to, duration, slots });
   } catch (error) {

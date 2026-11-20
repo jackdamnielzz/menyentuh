@@ -184,6 +184,16 @@ als het **minstens 12 uur** in de toekomst ligt (`LEAD_TIME_MINUTES`), zodat
 er geen last-minute boekingen binnenkomen. De berekening gebeurt server-side
 in `generateSlots`, in de tijdzone Europe/Amsterdam.
 
+Behandelingen, toegestane duur en prijzen staan in `TREATMENTS` in
+`api/_lib/booking.js` (en als data-attributen op de knoppen in
+`afspraak.html`; houd die twee gelijk). De **duomassage** (in de praktijk of
+aan huis, 60 of 90 minuten) heeft `rule: "monday-evening"`: hij negeert het
+weekschema en is alleen boekbaar binnen `MONDAY_EVENING` (maandag 18:00–22:00).
+Boekingen, geblokkeerde tijden en eenmalig geblokkeerde dagen tellen wel mee;
+een terugkerende "hele maandag dicht"-blokkade niet. Bij de variant aan huis
+vraagt het formulier een adres; dat wordt als `Adres: …` in de opmerking van
+de boeking opgeslagen (er is geen aparte kolom).
+
 ## Lokaal testen
 
 `python -m http.server` serveert alleen de statische bestanden — de

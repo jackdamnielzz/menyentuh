@@ -15,7 +15,9 @@ const {
   generateSlots,
   normalizeDuration,
   isValidTreatmentDuration,
-  PRICES,
+  TREATMENTS,
+  DEFAULT_LOCATION,
+  priceOf,
   absMinutes,
   LEAD_TIME_MINUTES,
 } = require("../_lib/booking");
@@ -138,6 +140,7 @@ const customerConfirmationHtml = ({
   duration,
   treatment,
   price,
+  location,
 }) => {
   const SERIF = "'Cormorant Garamond', Georgia, 'Times New Roman', serif";
   const SANS = "'Manrope', Arial, 'Segoe UI', Helvetica, sans-serif";
@@ -193,7 +196,7 @@ const customerConfirmationHtml = ({
                       ${row("Datum", prettyDate)}
                       ${row("Tijd", `${time} uur (${duration} minuten)`)}
                       ${row("Prijs", `&euro;${price}`)}
-                      ${row("Locatie", "Praktijk in Lelystad")}
+                      ${row("Locatie", location)}
                     </table>
                   </td>
                 </tr>
@@ -261,6 +264,8 @@ module.exports = async (req, res) => {
   const phone = (data.telefoon || "").trim();
   const treatment = (data.behandeling || "").trim();
   const notes = (data.opmerking || "").trim();
+  const address = (data.adres || "").trim();
+  const treatmentInfo = TREATMENTS[treatment] || {};
 
   if (!isValidDate(date) || !time) {
     return sendJson(res, 400, { ok: false, error: "Kies een geldig tijdslot." });
@@ -277,7 +282,18 @@ module.exports = async (req, res) => {
   if (!phone || phone.length > 30 || !/^[0-9+()\-.\s]+$/.test(phone)) {
     return sendJson(res, 400, { ok: false, error: "Vul je telefoonnummer in." });
   }
-  if (name.length > 100 || email.length > 254 || notes.length > 2000) {
+  if (treatmentInfo.home && !address) {
+    return sendJson(res, 400, {
+      ok: false,
+      error: "Vul het adres in waar de massage plaatsvindt.",
+    });
+  }
+  if (
+    name.length > 100 ||
+    email.length > 254 ||
+    notes.length > 2000 ||
+    address.length > 200
+  ) {
     return sendJson(res, 400, { ok: false, error: "Een van de velden is te lang." });
   }
   if (!data.akkoord) {
@@ -318,6 +334,7 @@ module.exports = async (req, res) => {
       bookings,
       recurring,
       duration,
+      rule: treatmentInfo.rule || null,
     }).find((s) => s.time === time);
 
     if (!slot) {
@@ -340,7 +357,12 @@ module.exports = async (req, res) => {
           name,
           email,
           phone: phone || null,
-          notes: notes || null,
+          // No separate column for the home address: keep it with the notes
+          // so it shows up in the admin agenda.
+          notes:
+            [treatmentInfo.home && `Adres: ${address}`, notes]
+              .filter(Boolean)
+              .join("\n") || null,
           status: "confirmed",
         },
       });
@@ -360,6 +382,9 @@ module.exports = async (req, res) => {
     // Notify the practice and the customer. Failure here must not lose
     // the booking — it is already stored.
     const prettyDate = formatDateNL(date);
+    const location = treatmentInfo.home
+      ? `Bij jou thuis: ${address}`
+      : treatmentInfo.location || DEFAULT_LOCATION;
 
     // Calendar invite for the customer, so the appointment lands in their
     // own agenda and they're far less likely to forget it.
@@ -372,19 +397,22 @@ module.exports = async (req, res) => {
         `${treatment} (${slot.duration} minuten) bij Menyentuh.\n` +
         "Annuleren of verzetten kan kosteloos tot 24 uur van tevoren — " +
         "stuur even een berichtje.",
-      location: "Menyentuh, Lelystad",
+      location: treatmentInfo.home
+        ? address
+        : treatmentInfo.location || "Menyentuh, Lelystad",
     });
     const icsAttachment = {
       filename: "afspraak-menyentuh.ics",
       content: Buffer.from(ics, "utf8").toString("base64"),
     };
 
-    const price = PRICES[slot.duration];
+    const price = priceOf(treatment, slot.duration);
     const lines = [
       `Datum: ${prettyDate}`,
       `Tijd: ${time} (${slot.duration} min)`,
       `Behandeling: ${treatment}`,
       `Prijs: €${price}`,
+      `Locatie: ${location}`,
       `Naam: ${name}`,
       `E-mail: ${email}`,
       `Telefoon: ${phone || "-"}`,
@@ -412,7 +440,7 @@ module.exports = async (req, res) => {
           `  ${time} uur (${slot.duration} minuten)`,
           `  ${treatment} — €${price}`,
           "",
-          "Locatie: praktijk in Lelystad.",
+          `Locatie: ${location}.`,
           "Annuleren kan kosteloos tot 24 uur vooraf — stuur even een berichtje.",
           "",
           "Een dag voor je afspraak ontvang je nog een herinnering met alle nodige informatie. Houd ook dan je spam- of ongewenste-mailmap in de gaten.",
@@ -431,6 +459,7 @@ module.exports = async (req, res) => {
           duration: slot.duration,
           treatment: escapeHtml(treatment),
           price,
+          location: escapeHtml(location),
         }),
         attachments: [icsAttachment],
       }),

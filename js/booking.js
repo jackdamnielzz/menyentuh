@@ -5,9 +5,11 @@
   const app = document.getElementById("bk-app");
   if (!app) return;
 
-  // Price per session length, as listed on tarieven.html.
-  const PRICES = { 30: 35, 60: 65, 80: 85 };
-  const EXTENDED_DURATION = 80;
+  // Lengths and prices come from the treatment buttons' data attributes
+  // (see afspraak.html); the server checks them against its own list.
+  const DEFAULT_LOCATION = "Praktijk in Lelystad";
+  const priceFor = (t, duration) =>
+    duration === t.extend ? t.extendPrice : t.price;
 
   const el = {
     treatments: document.getElementById("bk-treatments"),
@@ -15,6 +17,11 @@
     durationLabel: document.getElementById("bk-duration-label"),
     extendWrap: document.getElementById("bk-extend-wrap"),
     extend: document.getElementById("bk-extend"),
+    extendText: document.getElementById("bk-extend-text"),
+    durationNote: document.getElementById("bk-duration-note"),
+    adresWrap: document.getElementById("bk-adres-wrap"),
+    adres: document.getElementById("bk-adres"),
+    sumLocation: document.getElementById("bk-sum-location"),
     stepDate: document.getElementById("bk-step-date"),
     loading: document.getElementById("bk-loading"),
     empty: document.getElementById("bk-empty"),
@@ -41,7 +48,7 @@
   };
 
   const state = {
-    treatment: null, // { slug, name, duration, extendable }
+    treatment: null, // { slug, name, duration, price, extend, extendPrice, home, location, note }
     duration: null,
     byDate: new Map(),
     date: null,
@@ -165,8 +172,14 @@
   const showDuration = () => {
     const { treatment, duration } = state;
     el.durationLabel.textContent =
-      `${treatment.name} — ${duration} minuten · €${PRICES[duration]}`;
-    el.extendWrap.hidden = !treatment.extendable;
+      `${treatment.name} — ${duration} minuten · €${priceFor(treatment, duration)}`;
+    el.extendWrap.hidden = !treatment.extend;
+    if (treatment.extend) {
+      el.extendText.textContent =
+        `Verlengen naar ${treatment.extend} minuten (€${treatment.extendPrice})`;
+    }
+    el.durationNote.hidden = !treatment.note;
+    el.durationNote.textContent = treatment.note || "";
   };
 
   // Changing the session length invalidates the chosen date/time, so the
@@ -191,8 +204,15 @@
       slug: btn.dataset.slug,
       name: btn.dataset.name,
       duration: Number(btn.dataset.duration),
-      extendable: btn.hasAttribute("data-extendable"),
+      price: Number(btn.dataset.price),
+      extend: Number(btn.dataset.extend) || null,
+      extendPrice: Number(btn.dataset.extendPrice) || null,
+      home: btn.hasAttribute("data-home"),
+      location: btn.dataset.location || DEFAULT_LOCATION,
+      note: btn.dataset.note || "",
     };
+    el.adresWrap.hidden = !state.treatment.home;
+    el.adres.required = state.treatment.home;
     [...el.treatments.children].forEach((b) =>
       b.classList.toggle("is-selected", b === btn)
     );
@@ -224,7 +244,10 @@
     el.sumDuration.textContent = `${slot.duration} minuten`;
     el.sumDate.textContent = fmtLong(slot.date);
     el.sumTime.textContent = `${slot.time} uur`;
-    el.sumPrice.textContent = `€${PRICES[slot.duration]}`;
+    el.sumPrice.textContent = `€${priceFor(state.treatment, slot.duration)}`;
+    el.sumLocation.textContent = state.treatment.home
+      ? "Bij jou thuis"
+      : state.treatment.location;
     setFeedback("");
     el.stepForm.hidden = false;
     el.stepDone.hidden = true;
@@ -249,7 +272,11 @@
     // Ignore responses for a duration the visitor has since switched away from.
     const seq = (loadSeq += 1);
     try {
-      const res = await fetch(`/api/booking/slots?duration=${state.duration}`);
+      const params = new URLSearchParams({
+        duration: state.duration,
+        behandeling: state.treatment.name,
+      });
+      const res = await fetch(`/api/booking/slots?${params}`);
       const data = await res.json().catch(() => ({}));
       if (seq !== loadSeq) return;
       if (!res.ok || data.ok === false) throw new Error("load failed");
@@ -288,7 +315,7 @@
   });
 
   el.extend.addEventListener("change", () => {
-    setDuration(el.extend.checked ? EXTENDED_DURATION : state.treatment.duration);
+    setDuration(el.extend.checked ? state.treatment.extend : state.treatment.duration);
   });
 
   // Treatment preselected via a link such as
@@ -328,6 +355,10 @@
       return setFeedback("Vul een geldig e-mailadres in.", "error");
     }
     if (!telefoon) return setFeedback("Vul je telefoonnummer in.", "error");
+    const adres = (fd.get("adres") || "").trim();
+    if (state.treatment.home && !adres) {
+      return setFeedback("Vul het adres in waar de massage plaatsvindt.", "error");
+    }
     if (!akkoord) {
       return setFeedback("Ga akkoord met de annuleringsvoorwaarden.", "error");
     }
@@ -351,6 +382,7 @@
           email,
           telefoon,
           akkoord,
+          adres: state.treatment.home ? adres : "",
           opmerking: (fd.get("opmerking") || "").trim(),
           _honey: fd.get("_honey") || "",
         }),

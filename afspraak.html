@@ -74,27 +74,38 @@
             <div class="bk-step" id="bk-step-treatment">
               <h2 class="section-title">1. Kies een behandeling</h2>
               <p class="bk-substep">Welke massage wil je boeken?</p>
-              <!-- data-extendable: the 60-minute treatments that may be extended to 80 minutes. -->
+              <!-- data-duration/data-price: standard length and price.
+                   data-extend/data-extend-price: optional longer session.
+                   data-home: takes place at the client's address (asks for it).
+                   Keep in sync with TREATMENTS in api/_lib/booking.js. -->
               <div class="bk-treatments" id="bk-treatments" role="list">
-                <button type="button" class="bk-treatment" role="listitem" data-slug="zwangerschapsmassage" data-name="Zwangerschapsmassage" data-duration="60" data-extendable>
+                <button type="button" class="bk-treatment" role="listitem" data-slug="zwangerschapsmassage" data-name="Zwangerschapsmassage" data-duration="60" data-price="65" data-extend="80" data-extend-price="85">
                   <span class="bk-treatment-name">Zwangerschapsmassage</span>
                   <span class="bk-treatment-meta">60 min · €65</span>
                 </button>
-                <button type="button" class="bk-treatment" role="listitem" data-slug="hoofdpijnmassage" data-name="Hoofdpijnmassage" data-duration="60" data-extendable>
+                <button type="button" class="bk-treatment" role="listitem" data-slug="hoofdpijnmassage" data-name="Hoofdpijnmassage" data-duration="60" data-price="65" data-extend="80" data-extend-price="85">
                   <span class="bk-treatment-name">Hoofdpijnmassage</span>
                   <span class="bk-treatment-meta">60 min · €65</span>
                 </button>
-                <button type="button" class="bk-treatment" role="listitem" data-slug="ontspanningsmassage" data-name="Ontspanningsmassage" data-duration="60" data-extendable>
+                <button type="button" class="bk-treatment" role="listitem" data-slug="ontspanningsmassage" data-name="Ontspanningsmassage" data-duration="60" data-price="65" data-extend="80" data-extend-price="85">
                   <span class="bk-treatment-name">Ontspanningsmassage</span>
                   <span class="bk-treatment-meta">60 min · €65</span>
                 </button>
-                <button type="button" class="bk-treatment" role="listitem" data-slug="ontspannende-hoofdmassage" data-name="Ontspannende hoofdmassage" data-duration="30">
+                <button type="button" class="bk-treatment" role="listitem" data-slug="ontspannende-hoofdmassage" data-name="Ontspannende hoofdmassage" data-duration="30" data-price="35">
                   <span class="bk-treatment-name">Ontspannende hoofdmassage</span>
                   <span class="bk-treatment-meta">30 min · €35</span>
                 </button>
-                <button type="button" class="bk-treatment" role="listitem" data-slug="integrale-rug-nek-en-schoudermassage" data-name="Integrale rug-, nek- en schoudermassage" data-duration="60" data-extendable>
+                <button type="button" class="bk-treatment" role="listitem" data-slug="integrale-rug-nek-en-schoudermassage" data-name="Integrale rug-, nek- en schoudermassage" data-duration="60" data-price="65" data-extend="80" data-extend-price="85">
                   <span class="bk-treatment-name">Integrale rug-, nek- en schoudermassage</span>
                   <span class="bk-treatment-meta">60 min · €65</span>
+                </button>
+                <button type="button" class="bk-treatment" role="listitem" data-slug="duomassage-praktijk" data-name="Duomassage in de praktijk" data-duration="60" data-price="140" data-extend="90" data-extend-price="170" data-location="Herodicus massage, Albatroslaan 215" data-note="Alleen op maandagavond">
+                  <span class="bk-treatment-name">Duomassage in de praktijk</span>
+                  <span class="bk-treatment-meta">60 min · €140 · alleen maandagavond</span>
+                </button>
+                <button type="button" class="bk-treatment" role="listitem" data-slug="duomassage-thuis" data-name="Duomassage bij jou thuis" data-duration="60" data-price="200" data-extend="90" data-extend-price="240" data-home data-note="Alleen op maandagavond">
+                  <span class="bk-treatment-name">Duomassage bij jou thuis</span>
+                  <span class="bk-treatment-meta">60 min · €200 · alleen maandagavond</span>
                 </button>
               </div>
               <p class="bk-substep">
@@ -108,8 +119,9 @@
               <p class="bk-chosen" id="bk-duration-label"></p>
               <label class="bk-consent bk-extend" for="bk-extend" id="bk-extend-wrap" hidden>
                 <input type="checkbox" id="bk-extend" />
-                <span>Verlengen naar 80 minuten (€85)</span>
+                <span id="bk-extend-text">Verlengen naar 80 minuten (€85)</span>
               </label>
+              <p class="bk-substep" id="bk-duration-note" hidden></p>
             </div>
 
             <!-- Step 3 — date -->
@@ -167,6 +179,11 @@
                 <label for="bk-telefoon">Telefoon <span class="required">*</span></label>
                 <input id="bk-telefoon" type="tel" name="telefoon" autocomplete="tel" placeholder="Je telefoonnummer" required />
 
+                <div id="bk-adres-wrap" hidden>
+                  <label for="bk-adres">Adres voor de massage <span class="required">*</span></label>
+                  <input id="bk-adres" type="text" name="adres" autocomplete="street-address" placeholder="Straat, huisnummer en plaats" maxlength="200" />
+                </div>
+
                 <label for="bk-opmerking">Opmerking</label>
                 <textarea id="bk-opmerking" name="opmerking" placeholder="Een wens of vraag? Laat het hier weten."></textarea>
 
@@ -198,7 +215,7 @@
                     <dt>Datum</dt><dd id="bk-sum-date"></dd>
                     <dt>Tijd</dt><dd id="bk-sum-time"></dd>
                     <dt>Prijs</dt><dd id="bk-sum-price"></dd>
-                    <dt>Locatie</dt><dd>Praktijk in Lelystad</dd>
+                    <dt>Locatie</dt><dd id="bk-sum-location">Praktijk in Lelystad</dd>
                   </dl>
                 </div>
 
