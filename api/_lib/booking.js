@@ -163,7 +163,7 @@ const absMinutes = (dateStr, time) => {
 // Duo massages may only be booked on Monday evenings. They use this fixed
 // window instead of the regular weekly schedule; bookings and blocks set in
 // the admin page still apply.
-const MONDAY_EVENING = { weekday: 1, start: "18:00", end: "22:00" };
+const MONDAY_EVENING = { weekday: 1, start: "20:00", end: "22:00" };
 
 // Bookable treatments: `prices` maps every allowed length (minutes) to its
 // price in euros; the first entry is the standard length. `rule` limits
