@@ -34,3 +34,17 @@ worden een jaar gecachet (zie `vercel.json`). Daarom:
   alle HTML-pagina's (bijv. `css/styles.css?v=20261009` → nieuwe datum).
 - Vervang een afbeelding nooit onder dezelfde bestandsnaam; geef de nieuwe
   versie een nieuwe naam en pas de verwijzingen aan.
+- Vergeten gebeurt makkelijk: op 20 november 2026 kreeg de duomassage-kaart
+  nieuwe CSS zonder `?v=`-ophoging, waardoor bezoekers de nieuwe HTML met de
+  oude CSS zagen (prijstabel als losse tekst op één regel). Controleer vóór
+  elke push met `git diff --name-only` of er iets in `css/` of `js/` is
+  veranderd; zo ja, verhoog `?v=` overal (`sed -i 's/?v=OUD/?v=NIEUW/g' *.html`).
+
+## Controleren vóór publiceren
+Bekijk elke zichtbare wijziging eerst als screenshot, op desktop én mobiel.
+Kijk dus niet alleen naar de code.
+- Desktop: `chrome --headless=new --window-size=1400,2600 --screenshot=uit.png file:///…/pagina.html`
+- Mobiel: Chrome headless heeft een minimale vensterbreedte, dus
+  `--window-size=390,…` geeft geen echte telefoonweergave. Zet de pagina in
+  een `<iframe style="width:375px">` in een los HTML-bestand en maak daar een
+  screenshot van (met `--allow-file-access-from-files`).
